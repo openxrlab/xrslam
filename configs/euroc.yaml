@@ -1,0 +1,67 @@
+# transform before output
+output:
+  q_bo: [ 0.0, 0.0, 0.0, 1.0 ] # x y z w
+  p_bo: [ 0.0, 0.0, 0.0 ] # x y z [m]
+
+# camera parameters
+camera:
+  noise: [
+    0.5, 0.0,
+    0.0, 0.5
+  ] # [pixel^2]
+  distortion: [ -0.28340811, 0.07395907, 0.00019359, 1.76187114e-05 ] # k1 k2 p1 p2
+  intrinsic: [458.654, 457.296, 367.215, 248.375] # fx fy cx cy
+  extrinsic:
+    q_bc: [ -7.7071797555374275e-03, 1.0499323370587278e-02, 7.0175280029197162e-01, 7.1230146066895372e-01 ] # x y z w
+    p_bc: [ -0.0216401454975, -0.064676986768, 0.00981073058949 ] # x y z [m]
+
+# imu parameters
+imu:
+  noise:
+    cov_g: [
+      2.8791302399999997e-08, 0.0, 0.0,
+      0.0, 2.8791302399999997e-08, 0.0,
+      0.0, 0.0, 2.8791302399999997e-08
+    ] # [(rad/s/sqrt(hz))^2]
+    cov_a: [
+      4.0e-6, 0.0, 0.0,
+      0.0, 4.0e-6, 0.0,
+      0.0, 0.0, 4.0e-6
+    ] # [(m/s^2/sqrt(hz))^2]
+    cov_bg: [
+      3.7608844899999997e-10, 0.0, 0.0,
+      0.0, 3.7608844899999997e-10, 0.0,
+      0.0, 0.0, 3.7608844899999997e-10
+    ] # [(rad/s^2/sqrt(hz))^2]
+    cov_ba: [
+      9.0e-6, 0.0, 0.0,
+      0.0, 9.0e-6, 0.0,
+      0.0, 0.0, 9.0e-6
+    ] # [(m/s^3/sqrt(hz))^2]
+  extrinsic:
+    q_bi: [ 0.0, 0.0, 0.0, 1.0 ] # x y z w
+    p_bi: [ 0.0, 0.0, 0.0 ] # x y z [m]
+
+sliding_window:
+  size: 10
+  force_keyframe_landmarks: 35
+
+feature_tracker:
+  min_keypoint_distance: 10.0 # [px]
+  max_keypoint_detection: 1000
+  max_init_frames: 60
+  max_frames: 20
+  predict_keypoints: true
+
+initializer:
+  keyframe_num: 8
+  keyframe_gap: 5
+  min_matches: 50
+  min_parallax: 10.0
+  min_triangulation: 20
+  min_landmarks: 30
+  refine_imu: true
+
+solver:
+  iteration_limit: 30
+  time_limit: 1.0e6 # [s]

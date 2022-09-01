@@ -1,0 +1,14 @@
+# default params
+
+min_keypoint_distance: 25.0
+max_keypoint_detection: 300
+max_frame: 100
+
+solver_time_limit: 0.1
+solver_iteration_limit: 10
+sliding_window_size: 5
+sliding_window_tracker_frequent: 3
+
+visual_localization: true
+visual_localization_ip: "10.156.16.69"
+visual_localization_port: 12345

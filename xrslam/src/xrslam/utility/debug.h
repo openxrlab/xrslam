@@ -30,12 +30,14 @@ void log_message(LogLevel level, const char *format, ...);
 
 #ifdef XRSLAM_DEBUG
 #define log_debug(...) log_message(XRSLAM_LOG_DEBUG, __VA_ARGS__)
-#define runtime_assert(condition, message)                                                                                         \
-    do {                                                                                                                           \
-        if (!(condition)) {                                                                                                        \
-            log_error("Assertion failed at " __FILE__ ":%d : %s\nWhen testing condition:\n    %s", __LINE__, message, #condition); \
-            abort();                                                                                                               \
-        }                                                                                                                          \
+#define runtime_assert(condition, message)                                     \
+    do {                                                                       \
+        if (!(condition)) {                                                    \
+            log_error("Assertion failed at " __FILE__                          \
+                      ":%d : %s\nWhen testing condition:\n    %s",             \
+                      __LINE__, message, #condition);                          \
+            abort();                                                           \
+        }                                                                      \
     } while (0)
 #else
 #define log_debug(...)

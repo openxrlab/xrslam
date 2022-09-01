@@ -10,7 +10,7 @@ There are some guides to use the AR application
 - `Start`: Start the SLAM system.
 - `Reset`: Reset the SLAM system if it is running.
 - `Debug`: Query current frame's localization. As its name indicates, it can be used to debug and develop new features as you like.
-- `SLAM/VLoc.`: switch to which mode: SLAM or VLoc. SLAM is the default mode. VLoc. mode need the localization service. Please refer to [XRARDemo](https://doc.openxrlab.org.cn/OpenXRLab_docment) for more detail.
+- `SLAM/VLoc.`: switch to which mode: SLAM or VLoc. SLAM is the default mode. VLoc. mode need the localization service. Please refer to [XRARDemo](http://doc.openxrlab.org.cn/openxrlab_document/) for more detail.
 
 After opening the App, we need to click the `Start` button to launch the SLAM. A toast labeling `Initializing the SLAM` will appear. In this step, you need to move in a curved trajectory to make the SLAM initialize well. When the SLAM system has successfully initialized, the toast will fade out. When there is a plane in the scene of view, we can add virtual objects such as cube to the scene by **tapping the screen**.
 

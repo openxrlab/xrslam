@@ -25,7 +25,7 @@ https://user-images.githubusercontent.com/44204704/187863786-efbc3804-a4d8-4727-
 
 ## Installation
 
-We provide detailed [installation tutorial](./docs/en/installation.md) for XRSLAM, users can install from scratch or use provided [dockerfile](./docker/Dockerfile).
+We provide detailed [installation tutorial](./docs/en/installation.md) for XRSLAM, users can install from scratch or use provided [Dockerfile](./Dockerfile).
 
 ## Getting Started
 

@@ -2,23 +2,43 @@
 
 We provide some tips for XRSLAM installation in this file.
 
-## Requirements
+## Build from Source
 
-+ C++17
-+ GCC9/Clang13
-+ CMake 3.15+
-+ [XRPrimer](https://github.com/openxrlab/xrprimer)
+### Requirements
 
-## Prepare environment
+* C++17
+* GCC9/Clang13
+* CMake 3.15+
+* [XRPrimer](https://github.com/openxrlab/xrprimer)
 
-Firstly, switch XRPrimer to the branch of the specified OpenCV version `git checkout xrslam-opencv3.4.7`
+Clone XRPrimer to keep the same root directory as XRSLAM, then switch the branch to the specified OpenCV version.
+
+```bash
+git clone https://github.com/openxrlab/xrprimer.git
+cd xrprimer
+git checkout xrslam-opencv3.4.7
+```
+
+If your project folder structure is different, need to change the XRPrimer path.
+
+```
+xrprimer
+├──
+...
+xrslam
+├── xrslam
+├── xrslam-pc
+├── xrslam-ios
+...
+```
+
 
 ### Linux/Mac
 
 - In XRPrimer, run
 
   ```bash
-  cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --target install -j8
+  cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_PRECOMPILED_HEADERS=OFF && cmake --build build --target install -j8
   ```
 
   to configure some common dependencies.
@@ -49,3 +69,35 @@ Firstly, switch XRPrimer to the branch of the specified OpenCV version `git chec
 - The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically.
   + Be sure that your iPhone is supported by checking the [supported devices list](./supported_devices.md)
   + If the project failed to build in Xcode, try to clean the build folder using `cmd+shift+k`
+
+## Docker image
+
+### Build an Image
+
+We provide a [Dockerfile](../../Dockerfile) to build an image.
+
+```bash
+docker build -t xrslam .
+```
+
+### Create a Container
+
+Create a container with command:
+
+```bash
+docker run -it xrslam /bin/bash
+```
+
+### Copy Dataset into Container
+
+```bash
+# b1e0d3f809f6 is container id, using 'docker ps -a' to find id
+docker cp data/EuRoC/MH_01_easy b1e0d3f809f6:MH_01_easy
+```
+
+### Run in Container without Visualization
+
+```
+cd xrslam
+`./build/xrslam-pc/player/xrslam-pc-player -H -c configs/euroc.yaml --tum trajectory.tum euroc:///MH_01_easy/mav0`
+```

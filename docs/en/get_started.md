@@ -8,20 +8,14 @@ Please refer to [data_preparation.md](./dataset_preparation.md) for data prepara
 
 ## Installation
 
-### Project Structure
+### Requirements
 
-It is recommended to set the XRPrimer root to ``$PROJECT``. If your folder structure is different, need to change the XRPrimer path.
+* C++17
+* GCC9/Clang13
+* CMake 3.15+
+* [XRPrimer](https://github.com/openxrlab/xrprimer)
 
-```
-xrprimer
-├──
-...
-xrslam
-├── xrslam
-├── xrslam-pc
-├── xrslam-ios
-...
-```
+Clone XRPrimer to keep the same root directory as XRSLAM.
 
 ### Build and Run
 
@@ -29,7 +23,7 @@ Firstly, switch XRPrimer to the branch of the specified OpenCV version `git chec
 
 #### Linux/Mac
 
-- In XRPrimer, run `cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --target install -j8` to configure some common dependencies.
+- In XRPrimer, run `cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_PRECOMPILED_HEADERS=OFF && cmake --build build --target install -j8` to configure some common dependencies.
 - In XRSLAM, run `cmake -B build && cmake --build build -j8` to generate the project using cmake.
 - Start the XRSLAM pc palyer  with command  `./build/xrslam-pc/player/xrslam-pc-player -c configs/euroc.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0`
 
@@ -43,7 +37,7 @@ For more information on installation, please refer to [installation.md](./instal
 
 ## Evaluation
 
-Please refer to [euroc_evaluation.md](./tutorials/euroc_evaluation.md) for data preparation.
+Please refer to [euroc_evaluation.md](./tutorials/euroc_evaluation.md) for evaluation.
 
 ## More information
 

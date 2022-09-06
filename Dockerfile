@@ -20,9 +20,9 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0
     && tar -zxvf cmake-3.19.0.tar.gz && rm -rf cmake-3.19.0.tar.gz \
     && cd cmake-3.19.0 && ./bootstrap && make -j4 && make install
 
-RUN git clone git@github.com:openxrlab/xrprimer.git -b xrslam-opencv3.4.7 \
-    && cd xrprimer && cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release \
+RUN git clone https://github.com/openxrlab/xrprimer.git -b xrslam-opencv3.4.7 \
+    && cd xrprimer && cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_PRECOMPILED_HEADERS=OFF \
     && cmake --build build --target install -j4
 
-RUN git clone git@github.com:openxrlab/xrslam.git \
+RUN git clone https://github.com/openxrlab/xrslam.git \
     && cd xrslam && cmake -B build && cmake --build build -j4

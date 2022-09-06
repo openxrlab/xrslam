@@ -107,6 +107,13 @@ class ViewController: UIViewController, SCNSceneRendererDelegate {
         textUI.layer.cornerRadius = 10
         textUI.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         loggerText.textAlignment = .center
+
+        button_start.backgroundColor = UIColor.systemRed;
+        button_debug.backgroundColor = UIColor.systemRed;
+        button_reset.backgroundColor = UIColor.systemRed;
+        button_start.layer.cornerRadius = 10;
+        button_debug.layer.cornerRadius = 10;
+        button_reset.layer.cornerRadius = 10;
     }
 
     override var shouldAutorotate: Bool {

@@ -16,7 +16,7 @@ cmake -B build  -D XRSLAM_TEST=ON && cmake --build build -j8
 ## Run
 
 ```bash
-./build/xrslam-test/test/test_version
-./build/xrslam-test/test/test_se3_cost_function
-./build/xrslam-test/test/test_feature_track
+./build/bin/test_version
+./build/bin/test_se3_cost_function
+./build/bin/test_feature_track
 ```

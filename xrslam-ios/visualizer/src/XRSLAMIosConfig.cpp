@@ -94,6 +94,10 @@ CommonIosConfig::CommonIosConfig(const std::string &fileContent) {
         assign(m_max_keypoint_detection, node);
     }
 
+    if (auto node = find_node(config, "max_frame", true)) {
+        assign(m_max_frame, node);
+    }
+
     if (auto node = find_node(config, "solver_time_limit", true)) {
         assign(m_solver_time_limit, node);
     }

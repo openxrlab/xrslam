@@ -1,5 +1,12 @@
-# XRSLAM
+<br/>
 
+<div align="center">
+    <img src="resources/XRSLAM.png" width="600"/>
+</div>
+
+<br/>
+
+<div align="left">
 <div align="left">
 
 [![actions](https://github.com/openxrlab/xrslam/workflows/build/badge.svg)](https://github.com/openxrlab/xrslam/actions)

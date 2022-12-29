@@ -81,6 +81,10 @@ public enum Model : String {
     iPhone13Pro        = "iPhone 13 Pro",
     iPhone13ProMax     = "iPhone 13 Pro Max",
     iPhoneSE3          = "iPhone SE 3rd gen",
+    iPhone14           = "iPhone 14",
+    iPhone14Plus       = "iPhone 14 Plus",
+    iPhone14Pro        = "iPhone 14 Pro",
+    iPhone14ProMax     = "iPhone 14 Pro Max",
 
     // Apple Watch
     AppleWatch1         = "Apple Watch 1gen",
@@ -255,6 +259,10 @@ var type: Model {
         "iPhone14,2" : .iPhone13Pro,
         "iPhone14,3" : .iPhone13ProMax,
         "iPhone14,6" : .iPhoneSE3,
+        "iPhone14,7":  .iPhone14,
+        "iPhone14,8":  .iPhone14Plus
+        "iPhone15,2":  .iPhone14Pro
+        "iPhone15,3":  .iPhone14ProMax
 
         // Apple Watch
         "Watch1,1" : .AppleWatch1,

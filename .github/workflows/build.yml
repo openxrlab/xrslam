@@ -30,9 +30,6 @@ jobs:
         shell: bash -l {0}
     container:
       image: openxrlab/xrslam_ci:ubuntu1804_x64_cpu_gcc9
-      credentials:
-        username: ${{secrets.DOCKERHUB_USERNAME}}
-        password: ${{secrets.DOCKERHUB_PWD}}
     steps:
       - uses: actions/checkout@v2
       - name: Build and install

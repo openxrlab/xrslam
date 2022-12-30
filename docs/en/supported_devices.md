@@ -24,3 +24,5 @@ XRSLAM allows real-time state estimation on iOS devices. But there is something 
 - iPhone 13
 - iPhone 13 Pro
 - iPhone 13 Pro Max
+- iPhone 14 Pro
+- iPhone 14 Pro Max

@@ -106,7 +106,7 @@ YamlConfig::YamlConfig(const std::string &filename) {
         throw LoadException(filename);
     }
 
-    if (auto intrinsic = find_node(config, "camera.intrinsic", true)) {
+    if (auto intrinsic = find_node(config, "cam0.intrinsics", true)) {
         require_vector(intrinsic, 4);
         m_camera_intrinsic.setIdentity();
         m_camera_intrinsic(0, 0) = intrinsic[0].as<double>();
@@ -115,15 +115,15 @@ YamlConfig::YamlConfig(const std::string &filename) {
         m_camera_intrinsic(1, 2) = intrinsic[3].as<double>();
     }
 
-    if (auto node = find_node(config, "camera.extrinsic.q_bc", true)) {
+    if (auto node = find_node(config, "cam0.extrinsic.q_bc", true)) {
         assign_vector(m_camera_to_body_rotation.coeffs(), node);
     }
 
-    if (auto node = find_node(config, "camera.extrinsic.p_bc", true)) {
+    if (auto node = find_node(config, "cam0.extrinsic.p_bc", true)) {
         assign_vector(m_camera_to_body_translation, node);
     }
 
-    if (auto node = find_node(config, "camera.noise", true)) {
+    if (auto node = find_node(config, "cam0.noise", true)) {
         assign_matrix(m_keypoint_noise_cov, node);
     }
 

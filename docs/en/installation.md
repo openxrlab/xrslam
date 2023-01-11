@@ -52,7 +52,7 @@ xrslam
 - Start the XRSLAM pc player with the command
 
   ```bash
-  ./build/xrslam-pc/player/xrslam-pc-player -c configs/euroc.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
+  ./build/xrslam-pc/player/xrslam-pc-player --sc configs/euroc_slam.yaml --dc configs/euroc_sensor.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
   ```
 
   + Click the first button "Stopped" of the player to automatically execute the program on the whole sequence.

@@ -105,14 +105,14 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     } catch (const YAML::ParserException &parse_error) {
         throw ParseException(parse_error.what());
     } catch (...) {
-        throw LoadException(filename);
+        throw LoadException(slam_config_filename);
     }
     try {
         device_config = YAML::LoadFile(device_config_filename);
     } catch (const YAML::ParserException &parse_error) {
         throw ParseException(parse_error.what());
     } catch (...) {
-        throw LoadException(filename);
+        throw LoadException(device_config_filename);
     }
 
     if (auto intrinsic = find_node(device_config, "cam0.intrinsics", true)) {

@@ -1,3 +1,5 @@
+%YAML:1.0
+
 imu:
   # inertial sensor noise model parameters (static)
   gyroscope_noise_density: 0.01       # [ rad / s / sqrt(Hz) ]
@@ -55,27 +57,3 @@ cam0:
     0.5, 0.0,
     0.0, 0.5
   ] # [pixel^2]
-
-sliding_window:
-  size: 10
-  force_keyframe_landmarks: 35
-
-feature_tracker:
-  min_keypoint_distance: 10.0 # [px]
-  max_keypoint_detection: 1000
-  max_init_frames: 60
-  max_frames: 20
-  predict_keypoints: true
-
-initializer:
-  keyframe_num: 8
-  keyframe_gap: 5
-  min_matches: 50
-  min_parallax: 10.0
-  min_triangulation: 20
-  min_landmarks: 30
-  refine_imu: true
-
-solver:
-  iteration_limit: 30
-  time_limit: 1.0e6 # [s]

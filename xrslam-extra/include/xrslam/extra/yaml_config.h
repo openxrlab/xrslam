@@ -27,7 +27,8 @@ class YamlConfig : public Config {
             : Exception("config \"" + config_path + "\" has wrong type") {}
     };
 
-    YamlConfig(const std::string &filename);
+    YamlConfig(const std::string &slam_config_filename,
+               const std::string &device_config_filename);
     ~YamlConfig();
 
     matrix<3> camera_intrinsic() const override;

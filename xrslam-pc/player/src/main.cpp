@@ -250,11 +250,15 @@ class PlayerVisualizer : public lightvis::LightVis {
 
 int main(int argc, char *argv[]) {
     argparse::ArgumentParser program("XRSLAM Player");
-    program.add_argument("-c", "--config")
-        .help("Configuration YAML file.")
+    program.add_argument("--sc", "--slamconfig")
+        .help("SLAM configuration YAML file.")
+        .nargs(1);
+    program.add_argument("--dc", "--deviceconfig")
+        .help("Device configuration YAML file.")
         .nargs(1);
     program.add_argument("--csv").help("Save CSV-format trajectory.").nargs(1);
     program.add_argument("--tum").help("Save TUM-format trajectory.").nargs(1);
+
     program.add_argument("-p", "--play")
         .help("Start playing immediately.")
         .default_value(false)
@@ -267,14 +271,15 @@ int main(int argc, char *argv[]) {
     program.parse_args(argc, argv);
 
     std::string input = program.get<std::string>("input");
-    std::string config = program.get<std::string>("-c");
+    std::string slam_config = program.get<std::string>("--sc");
+    std::string device_config = program.get<std::string>("--dc");
     std::string csv_output = program.get<std::string>("--csv");
     std::string tum_output = program.get<std::string>("--tum");
     bool play = program.get<bool>("-p");
     bool headless = program.get<bool>("-H");
 
     std::shared_ptr<xrslam::extra::YamlConfig> yaml_config =
-        std::make_shared<xrslam::extra::YamlConfig>(config);
+        std::make_shared<xrslam::extra::YamlConfig>(slam_config, device_config);
     std::unique_ptr<xrslam::XRSLAM> xrslam =
         std::make_unique<xrslam::XRSLAM>(yaml_config);
 

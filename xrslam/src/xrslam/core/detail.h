@@ -2,7 +2,7 @@
 #define XRSLAM_DETAIL_H
 
 #include <xrslam/common.h>
-#include <xrslam/xrslam.h>
+#include <xrslam/bridge.h>
 
 namespace xrslam {
 

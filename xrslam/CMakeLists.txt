@@ -11,6 +11,8 @@ set(XRSLAM_BINARY_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include)
 set(XRSLAM_TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 set(PUBLIC_HEADERS
+  ${XRSLAM_INCLUDE_DIR}/xrslam/bridge.h
+  ${XRSLAM_INCLUDE_DIR}/xrslam/dataset_reader.h
   ${XRSLAM_INCLUDE_DIR}/xrslam/inspection.h
   ${XRSLAM_INCLUDE_DIR}/xrslam/xrslam.h
   ${XRSLAM_BINARY_INCLUDE_DIR}/xrslam/version.h
@@ -39,6 +41,11 @@ set(PRIVATE_HEADERS
   ${XRSLAM_SOURCE_DIR}/xrslam/estimation/rotation_factor.h
   ${XRSLAM_SOURCE_DIR}/xrslam/estimation/solver.h
   ${XRSLAM_SOURCE_DIR}/xrslam/estimation/state.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/async_dataset_reader.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/euroc_dataset_reader.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/tum_dataset_reader.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/opencv_image.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/yaml_config.h
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/essential.h
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/homography.h
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/lie_algebra.h
@@ -65,6 +72,7 @@ set(PRIVATE_HEADERS
 )
 
 set(PRIVATE_SOURCES
+  ${XRSLAM_SOURCE_DIR}/xrslam/bridge.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/config.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/core/detail.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/core/feature_tracker.cpp
@@ -73,6 +81,12 @@ set(PRIVATE_SOURCES
   ${XRSLAM_SOURCE_DIR}/xrslam/core/sliding_window_tracker.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/estimation/preintegrator.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/estimation/solver.cpp
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/async_dataset_reader.cpp
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/dataset_reader.cpp
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/euroc_dataset_reader.cpp
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/opencv_image.cpp
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/tum_dataset_reader.cpp
+  ${XRSLAM_SOURCE_DIR}/xrslam/extra/yaml_config.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/essential.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/homography.cpp
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/lie_algebra.cpp
@@ -119,6 +133,8 @@ target_include_directories(xrslam
     ${XRSLAM_BINARY_INCLUDE_DIR}
   PRIVATE
     ${XRSLAM_SOURCE_DIR}
+    ${XRSLAM_SOURCE_DIR}/xrslam/extra/poisson_disk_filter.h
+    ${XRSLAM_SOURCE_DIR}/xrslam/extra/image_undistorter.h
 )
 
 target_link_libraries(xrslam
@@ -126,6 +142,9 @@ PUBLIC
   options::modern-cpp
   XRPrimer::xrprimer
   ${OpenCV_LIBS}
+  depends::yaml-cpp
+PRIVATE
+  XRPrimer::xrprimer
 )
 
 set(XRSLAM_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")

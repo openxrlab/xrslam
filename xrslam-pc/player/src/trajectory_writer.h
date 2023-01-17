@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <xrslam/xrslam.h>
+#include <xrslam/bridge.h>
 
 class TrajectoryWriter {
   public:

@@ -35,7 +35,7 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <xrslam/xrslam.h>
+#include <xrslam/bridge.h>
 #include <xrslam/utility/debug.h>
 
 #define XRSLAM_GRAVITY_NOMINAL 9.80665

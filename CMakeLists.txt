@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 project(xrslam-superbuild)
 
@@ -11,11 +11,12 @@ endif()
 find_package(XRPrimer REQUIRED)
 
 include(SuperBuildDepends)
+superbuild_depend(yaml-cpp)
 
 option(XRSLAM_DEBUG "..." ON)
 option(XRSLAM_ENABLE_DEBUG_INSPECTION "..." ON)
 option(XRSLAM_ENABLE_THREADING "..." OFF)
-option(XRSLAM_PC_HEADLESS_ONLY "..." OFF)
+option(XRSLAM_PC_HEADLESS_ONLY "..." ON)
 option(XRSLAM_IOS "..." OFF)
 option(XRSLAM_TEST "..." OFF)
 
@@ -31,7 +32,7 @@ if(NOT IOS)
 endif()
 
 add_subdirectory(xrslam)
-add_subdirectory(xrslam-extra)
+# add_subdirectory(xrslam-extra)
 
 if(XRSLAM_PC)
   add_subdirectory(xrslam-pc)

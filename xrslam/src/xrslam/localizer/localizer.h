@@ -3,7 +3,7 @@
 #include "json.h"
 #include <Eigen/Eigen>
 #include <opencv2/opencv.hpp>
-#include <xrslam/xrslam.h>
+#include <xrslam/bridge.h>
 
 namespace xrslam {
 

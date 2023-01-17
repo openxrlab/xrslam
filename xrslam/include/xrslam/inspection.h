@@ -3,7 +3,7 @@
 
 #include <any>
 #include <mutex>
-#include <xrslam/xrslam.h>
+#include <xrslam/bridge.h>
 
 namespace xrslam {
 

@@ -1,161 +1,166 @@
 #ifndef XRSLAM_XRSLAM_H
 #define XRSLAM_XRSLAM_H
 
-#include <Eigen/Eigen>
-#include <memory>
-#include <opencv2/core/eigen.hpp>
-#include <opencv2/opencv.hpp>
-#include <vector>
-#include <xrslam/version.h>
+#include <stdint.h>
 
+/******************************************************************************************/
+/************************************XRSLAM sensor data************************************/
+/******************************************************************************************/
 namespace xrslam {
+typedef enum XRSLAMSensorType {
+    XRSLAM_SENSOR_CAMERA = 0,
+    XRSLAM_SENSOR_DEPTH_CAMERA,
+    XRSLAM_SENSOR_ACCELERATION,
+    XRSLAM_SENSOR_GYROSCOPE,
+    XRSLAM_SENSOR_GRAVITY,
+    XRSLAM_SENSOR_ROTATION_VECTOR,
+    XRSLAM_SENSOR_UNKNOWN
+} XRSLAMSensorType;
 
-template <int Rows = Eigen::Dynamic, int Cols = Rows, bool UseRowMajor = false,
-          typename T = double>
-using matrix = typename std::conditional<
-    Rows != 1 && Cols != 1,
-    Eigen::Matrix<T, Rows, Cols,
-                  UseRowMajor ? Eigen::RowMajor : Eigen::ColMajor>,
-    Eigen::Matrix<T, Rows, Cols>>::type;
+typedef struct XRSLAMImageExtension {
+    double exposure_time;               // image exposure time
+    double default_focus_distance;      // default focus info
+    double focal_length;                // current focal length
+    double focus_distance;              // current focus distance
+} XRSLAMImageExtension;
 
-template <int Dimension = Eigen::Dynamic, bool RowVector = false,
-          typename T = double>
-using vector =
-    typename std::conditional<RowVector, matrix<1, Dimension, false, T>,
-                              matrix<Dimension, 1, false, T>>::type;
+typedef struct XRSLAMImage {
+    unsigned char* data;	            // contains the intensity value for each image pixel
+    double timeStamp;		            // timestamp in second
+    int stride;				            // image stride, number of bytes per row
+    int camera_id;                      // camera id
+    XRSLAMImageExtension *ext;          // ext info of image
+} XRSLAMImage;
 
-using quaternion = Eigen::Quaternion<double>;
+typedef struct XRSLAMDepthImage {
+    uint16_t* data;        // the warped depth data
+    uint16_t* confidence;  // the warped confidence
+    double timeStamp;      //  timestamp in second
+} XRSLAMDepthImage;
 
-struct Pose {
-    Pose() {
-        q.setIdentity();
-        p.setZero();
-    }
-    quaternion q;
-    vector<3> p;
-};
+typedef struct XRSLAMAcceleration {
+    double data[3];  		// acceleration raw data
+    double timestamp;		// timestamp in second
+} XRSLAMAcceleration;
 
-using OutputPose = Pose;
-using uchar = unsigned char;
+typedef struct XRSLAMGyroscope {
+    double data[3];  		// gyroscope raw data
+    double timestamp;		// timestamp in second
+} XRSLAMGyroscope;
 
-struct OutputState {
-    double t;
-    quaternion q;
-    vector<3> p;
-    vector<3> v;
-    vector<3> bg;
-    vector<3> ba;
-};
+typedef struct XRSLAMGravity {
+    double data[3];         // gravity direction
+    double timestamp;       // timestamp in second
+} XRSLAMGravity;
 
-struct OutputObject {
-    quaternion q;
-    vector<3> p;
-    int isolated;
-};
+typedef struct XRSLAMRotationVector {
+    double data[4];         // attitude of the device
+    double timestamp;       // timestamp in second
+} XRSLAMRotationVector;
 
-class Config {
-  public:
-    virtual ~Config();
 
-    virtual matrix<3> camera_intrinsic() const = 0;
-    virtual quaternion camera_to_body_rotation() const = 0;
-    virtual vector<3> camera_to_body_translation() const = 0;
-    virtual quaternion imu_to_body_rotation() const = 0;
-    virtual vector<3> imu_to_body_translation() const = 0;
+/******************************************************************************************/
+/************************************XRSLAM tracking result********************************/
+/******************************************************************************************/
 
-    virtual matrix<2> keypoint_noise_cov() const = 0;
-    virtual matrix<3> gyroscope_noise_cov() const = 0;
-    virtual matrix<3> accelerometer_noise_cov() const = 0;
-    virtual matrix<3> gyroscope_bias_noise_cov() const = 0;
-    virtual matrix<3> accelerometer_bias_noise_cov() const = 0;
+typedef enum XRSLAMResultType {
+    XRSLAM_RESULT_BODY_POSE = 0,
+    XRSLAM_RESULT_CAMERA_POSE,
+    XRSLAM_RESULT_STATE,
+    XRSLAM_RESULT_LANDMARKS,
+    XRSLAM_RESULT_FEATURES,
+    XRSLAM_RESULT_BIAS,
+    XRSLAM_RESULT_PLANES,
+    XRSLAM_RESULT_DEBUG_LOGS,
+    XRSLAM_RESULT_VERSION,
+    XRSLAM_RESULT_UNKNOWN
+} XRSLAMResultType;
 
-    virtual quaternion output_to_body_rotation() const;
-    virtual vector<3> output_to_body_translation() const;
+/* for a 3D point in world coordinate X_w, its 3D
+coordinate in the camera frame X_c = R * X_w + T */
+typedef struct XRSLAMPose {
+    double quaternion[4];   // quaternion of rotation: format [x, y, z, w]
+    double translation[3];  // translation vector T
+    double timestamp;       // timestamp
+} XRSLAMPose;
 
-    virtual size_t sliding_window_size() const;
-    virtual size_t sliding_window_force_keyframe_landmarks() const;
-    virtual size_t sliding_window_tracker_frequent() const;
+/* slam result */
+typedef enum XRSLAMState {
+    XRSLAM_STATE_INITIALIZING,            // SLAM is in initialize state
+    XRSLAM_STATE_TRACKING_SUCCESS,        // SLAM is in tracking state and track success
+    XRSLAM_STATE_TRACKING_FAIL,           // SLAM is in tracking state and track fail
+    XRSLAM_STATE_TRACKING_RESET,          // SLAM system need to reset
+    XRSLAM_STATE_TRACKING_RELOCALIZING,   // SLAM is in reloc state
+    XRSLAM_STATE_TRACKING_SUCCESS_NO_MAP  // SLAM Tracking succ, but map not expand OK
+} XRSLAMState;
 
-    virtual double feature_tracker_min_keypoint_distance() const;
-    virtual size_t feature_tracker_max_keypoint_detection() const;
-    virtual size_t feature_tracker_max_init_frames() const;
-    virtual size_t feature_tracker_max_frames() const;
-    virtual bool feature_tracker_predict_keypoints() const;
+/* landmark 3d position */
+typedef struct XRSLAMLandmark {
+    double x, y, z;  // x, y, z is world position of the point
+} XRSLAMLandmark;
+typedef struct XRSLAMLandmarks {
+    XRSLAMLandmark *landmarks;
+    int num_landmarks;
+}XRSLAMLandmarks;
 
-    virtual size_t initializer_keyframe_num() const;
-    virtual size_t initializer_keyframe_gap() const;
-    virtual size_t initializer_min_matches() const;
-    virtual double initializer_min_parallax() const;
-    virtual size_t initializer_min_triangulation() const;
-    virtual size_t initializer_min_landmarks() const;
-    virtual bool initializer_refine_imu() const;
+/* corner in image coordinate */
+typedef struct XRSLAMFeature { double x, y; } XRSLAMFeature;
+typedef struct XRSLAMFeatures {
+    XRSLAMFeature *features;
+    int num_features;
+}XRSLAMFeatures;
 
-    virtual bool visual_localization_enable() const;
-    virtual std::string visual_localization_config_ip() const;
-    virtual size_t visual_localization_config_port() const;
+typedef struct XRSLAMBias {
+    double data[3];
+} XRSLAMBias;
+typedef struct XRSLAMIMUBias {
+    XRSLAMBias acc_bias;
+    XRSLAMBias gyr_bias;
+} XRSLAMIMUBias;
 
-    virtual size_t solver_iteration_limit() const;
-    virtual double solver_time_limit() const;
+typedef struct XRSLAMStringOutput
+{
+    int str_length;
+    char *data;       // slam information
+}XRSLAMLogs;
 
-    virtual int random() const;
 
-    void log_config() const;
-};
+/******************************************************************************************/
+/************************************XRSLAM function interface*****************************/
+/******************************************************************************************/
 
-class Image {
-  public:
-    double t;
+/* @brief: create SLAM system with configuration files
+* @input param: slam parameter file path, device parameter file path
+* @return value: 1 success, otherwise 0
+* */
+int XRSLAMCreate(
+    const char* slam_config_path,       // slam configuration file path
+    const char* device_config_path      // device configuration file path
+    );
 
-    virtual uchar *get_rawdata() const = 0;
-    virtual size_t width() const = 0;
-    virtual size_t height() const = 0;
+/* @brief: push sensor data
+* @input param: sensor type, sensor data
+* */
+void XRSLAMPushSensorData(
+    XRSLAMSensorType sensor_type,       // sensor type
+    void *sensor_data               // sensor data
+    );
 
-    virtual size_t level_num() const { return 0; }
+/* @brief: end one frame input and run slam
+* */
+void XRSLAMRunOneFrame();
 
-    virtual double evaluate(const vector<2> &u, int level = 0) const = 0;
-    virtual double evaluate(const vector<2> &u, vector<2> &ddu,
-                            int level = 0) const = 0;
+/* @brief: get SLAM tracking result at time t
+* @input param: time t
+* @return value: slam tracking result
+* */
+void XRSLAMGetResult(
+    XRSLAMResultType result_type,   // result type
+    void *result_data               // result data
+    );
 
-    virtual ~Image() = default;
-    virtual void preprocess() {}
-    virtual void release_image_buffer() = 0;
-    virtual void detect_keypoints(std::vector<vector<2>> &keypoints,
-                                  size_t max_points = 0,
-                                  double keypoint_distance = 0.5) const = 0;
-    virtual void track_keypoints(const Image *next_image,
-                                 const std::vector<vector<2>> &curr_keypoints,
-                                 std::vector<vector<2>> &next_keypoints,
-                                 std::vector<char> &result_status) const = 0;
-};
-
-enum SysState { SYS_INITIALIZING = 0, SYS_TRACKING, SYS_CRASH, SYS_UNKNOWN };
-
-class XRSLAM {
-  public:
-    struct Detail;
-
-    XRSLAM(std::shared_ptr<Config> config);
-    ~XRSLAM();
-
-    Pose track_gyroscope(const double &t, const double &x, const double &y,
-                         const double &z);
-    Pose track_accelerometer(const double &t, const double &x, const double &y,
-                             const double &z);
-    Pose track_camera(std::shared_ptr<Image> image);
-    std::tuple<double, Pose> get_latest_camera_state() const;
-    SysState get_system_state() const;
-    size_t create_virtual_object();
-    OutputObject get_virtual_object_pose_by_id(size_t id);
-    void enable_global_localization();
-    void disable_global_localization();
-    void query_frame();
-    bool global_localization_initialized();
-    std::vector<std::string> get_logger_message();
-
-  private:
-    std::unique_ptr<Detail> detail;
-};
-
+/* @brief: destroy SLAM system
+* */
+void XRSLAMDestroy();
 } // namespace xrslam
-
-#endif // XRSLAM_XRSLAM_H
+#endif  // XRSLAM_XRSLAM_H

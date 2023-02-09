@@ -260,9 +260,9 @@ var type: Model {
         "iPhone14,3" : .iPhone13ProMax,
         "iPhone14,6" : .iPhoneSE3,
         "iPhone14,7":  .iPhone14,
-        "iPhone14,8":  .iPhone14Plus
-        "iPhone15,2":  .iPhone14Pro
-        "iPhone15,3":  .iPhone14ProMax
+        "iPhone14,8":  .iPhone14Plus,
+        "iPhone15,2":  .iPhone14Pro,
+        "iPhone15,3":  .iPhone14ProMax,
 
         // Apple Watch
         "Watch1,1" : .AppleWatch1,

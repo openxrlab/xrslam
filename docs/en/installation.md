@@ -1,8 +1,6 @@
-# Installation
+# Installation Tutorial for XRSLAM
 
-We provide some tips for XRSLAM installation in this file.
-
-## Build from Source
+## 1. Prerequisites
 
 ### Requirements
 
@@ -11,44 +9,46 @@ We provide some tips for XRSLAM installation in this file.
 * CMake 3.15+
 * [XRPrimer](https://github.com/openxrlab/xrprimer)
 
-Clone XRPrimer to keep the same root directory as XRSLAM, then switch the branch to the specified OpenCV version.
+### Build XRPrimer
 
-```bash
-git clone https://github.com/openxrlab/xrprimer.git
-cd xrprimer
-git checkout xrslam-opencv3.4.7
-```
-
-If your project folder structure is different, need to change the XRPrimer path.
-
-```
-xrprimer
-├──
-...
-xrslam
-├── xrslam
-├── xrslam-pc
-├── xrslam-ios
-...
-```
+- XRPrimer is a fundational library for XR-related algorithms provided by our team. First clone the project and check out to a specified version.
 
 
-### Linux/Mac
+  ```bash
+  git clone https://github.com/openxrlab/xrprimer.git
+  cd xrprimer
+  git checkout xrslam-opencv3.4.7
 
-- In XRPrimer, run
+  as below:
+
+  xrprimer
+  ├──
+  ...
+  xrslam
+  ├── xrslam
+  ├── xrslam-pc
+  ├── xrslam-ios
+  ...
+  ```
+
+
+- Then configure some common dependencies.
 
   ```bash
   cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_PRECOMPILED_HEADERS=OFF && cmake --build build --target install -j8
   ```
 
-  to configure some common dependencies.
-- In XRSLAM, run
+## 2. Build XRSLAM
+
+<details> <summary>Build XRSLAM on Linux/Mac</summary>
+
+- Generate the project using cmake.
 
   ```bash
+  cd /path/to/xrslam
   cmake -B build && cmake --build build -j8
   ```
 
-  to generate the project using cmake.
 - Start the XRSLAM pc player with the command
 
   ```bash
@@ -60,7 +60,9 @@ xrslam
   + Click the last button "Step" to run the program by inputting a single image of the sequence.
   + Click the left mouse button to rotate the viewing angle, and slide the mouse wheel to scale the viewing size.
 
-### iOS
+</details>
+
+<details> <summary>Build XRSLAM for iOS</summary>
 
 - In XRPrimer, run `./build-ios.sh` to configure some common dependencies.
 - In XRSLAM, run `./build-ios.sh` to generate the XCode project using cmake.
@@ -70,7 +72,9 @@ xrslam
   + Be sure that your iPhone is supported by checking the [supported devices list](./supported_devices.md)
   + If the project failed to build in Xcode, try to clean the build folder using `cmd+shift+k`
 
-## Docker image
+</details>
+
+## 3. Docker Support
 
 ### Build an Image
 

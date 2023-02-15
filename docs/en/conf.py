@@ -16,6 +16,9 @@ import shutil
 import subprocess
 import sys
 import sphinx_rtd_theme
+
+os.environ['READTHEDOCS_OUTPUT'] = '_build'
+
 def build_doxygen_docs(temp_dir='doxygen', cpp_dir='cpp_api'):
     """Build sphinx docs for C++"""
     cmd = ['doxygen', 'Doxyfile.in']

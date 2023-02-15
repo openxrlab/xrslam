@@ -27,9 +27,11 @@ class YamlConfig : public Config {
             : Exception("config \"" + config_path + "\" has wrong type") {}
     };
 
-    YamlConfig(const std::string &filename);
+    YamlConfig(const std::string &slam_config_filename,
+               const std::string &device_config_filename);
     ~YamlConfig();
 
+    vector<2> camera_resolution() const override;
     matrix<3> camera_intrinsic() const override;
     quaternion camera_to_body_rotation() const override;
     vector<3> camera_to_body_translation() const override;
@@ -68,6 +70,7 @@ class YamlConfig : public Config {
     double solver_time_limit() const override;
 
   private:
+    vector<2> m_camera_resolution;
     matrix<3> m_camera_intrinsic;
     quaternion m_camera_to_body_rotation;
     vector<3> m_camera_to_body_translation;

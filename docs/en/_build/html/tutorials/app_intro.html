@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AR Application on iPhone &mdash; XRSLAM  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            XRSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../get_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_api.html">C++ documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">XRSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">AR Application on iPhone</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/app_intro.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ar-application-on-iphone">
+<h1>AR Application on iPhone<a class="headerlink" href="#ar-application-on-iphone" title="Permalink to this heading">¶</a></h1>
+<div align='center'>
+<img src="../../images/App_intro.png" width="100%" height="100%">
+</div>
+<p>There are some guides to use the AR application</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Info</span> <span class="pre">Board</span></code>: Print various information about the status of SLAM.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Start</span></code>: Start the SLAM system.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Reset</span></code>: Reset the SLAM system if it is running.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Debug</span></code>: Query current frame’s localization. As its name indicates, it can be used to debug and develop new features as you like.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SLAM/VLoc.</span></code>: switch to which mode: SLAM or VLoc. SLAM is the default mode. VLoc. mode need the localization service. Please refer to <a class="reference external" href="http://doc.openxrlab.org.cn/openxrlab_document/">XRARDemo</a> for more detail.</p></li>
+</ul>
+<p>After opening the App, we need to click the <code class="docutils literal notranslate"><span class="pre">Start</span></code> button to launch the SLAM. A toast labeling <code class="docutils literal notranslate"><span class="pre">Initializing</span> <span class="pre">the</span> <span class="pre">SLAM</span></code> will appear. In this step, you need to move in a curved trajectory to make the SLAM initialize well. When the SLAM system has successfully initialized, the toast will fade out. When there is a plane in the scene of view, we can add virtual objects such as cube to the scene by <strong>tapping the screen</strong>.</p>
+<p>It should be noted that the position where virtual object placed is determined by the center of the 3D point cloud in the middle area of the current frame, so the virtual object may not be well placed on the plane. As for virtual objects, you can easily customize your own AR demo by adding custom 3D models and updating the corresponding codes.</p>
+<p>Finally, please be careful of the matters related to the <a class="reference internal" href="../supported_devices.html"><span class="doc std std-doc">supported devices</span></a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XRSLAM Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

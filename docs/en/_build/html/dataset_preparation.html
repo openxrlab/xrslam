@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Preparation &mdash; XRSLAM  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XRSLAM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XRSLAM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Data Preparation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dataset_preparation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-preparation">
+<h1>Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this heading">¶</a></h1>
+<p><a class="reference external" href="https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets">EuRoC Dataset</a> contains stereo images, synchronized IMU measurements, and accurate motion and structure ground truth. In XRSLAM, we only use Monocular camera and IMU data. The bottom figures are the representative images of the Machine hall and Vicon room, where the EuRoC dataset was collected.</p>
+<p>It is recommended to construct your folder structure like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
+├── EuRoC
+│   ├── MH_01_easy
+│           |── mav0
+│                |──...
+│   └── MH_02_easy
+│   └── ...
+</pre></div>
+</div>
+<p>Take EuRoC as an example, download a sequence (ASL format)  and uncompress it. You can also download the compressed zip file through the link below.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Dataset</th>
+<th>ASL Dataset Formatcol</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Machine Hall 01</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy.zip">download</a></td>
+<td>Dataset machine hall “easy”</td>
+</tr>
+<tr>
+<td><em>Machine Hall 02</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_02_easy/MH_02_easy.zip">download</a></td>
+<td>Dataset machine hall “easy”</td>
+</tr>
+<tr>
+<td><em>Machine Hall 03</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_03_medium/MH_03_medium.zip">download</a></td>
+<td>Dataset machine hall “medium”</td>
+</tr>
+<tr>
+<td><em>Machine Hall 04</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_04_difficult/MH_04_difficult.zip">download</a></td>
+<td>Dataset machine hall “difficult”</td>
+</tr>
+<tr>
+<td><em>Machine Hall 05</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_05_difficult/MH_05_difficult.zip">download</a></td>
+<td>Dataset machine hall “difficult”</td>
+</tr>
+<tr>
+<td><em>Vicon Room 1 01</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_01_easy/V1_01_easy.zip">download</a></td>
+<td>Dataset Vicon room 1 “easy”</td>
+</tr>
+<tr>
+<td><em>Vicon Room 1 02</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_02_medium/V1_02_medium.zip">download</a></td>
+<td>Dataset Vicon room 1 “medium”</td>
+</tr>
+<tr>
+<td><em>Vicon Room 1 03</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_03_difficult/V1_03_difficult.zip">download</a></td>
+<td>Dataset Vicon room 1 “difficult”</td>
+</tr>
+<tr>
+<td><em>Vicon Room 2 01</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room2/V2_01_easy/V2_01_easy.zip">download</a></td>
+<td>Dataset Vicon room 2 “easy”</td>
+</tr>
+<tr>
+<td><em>Vicon Room 2 02</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room2/V2_02_medium/V2_02_medium.zip">download</a></td>
+<td>Dataset Vicon room 2 “medium”</td>
+</tr>
+<tr>
+<td><em>Vicon Room 2 03</em></td>
+<td><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room2/V2_03_difficult/V2_03_difficult.zip">download</a></td>
+<td>Dataset Vicon room 2 “difficult”</td>
+</tr>
+</tbody>
+</table>
+<div align='center'><img src="../images/Machine-hall.png" width="55%" height="100%"><img src="../images/Vicon-room.png" width="38.7%" height="100%"></div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XRSLAM Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -169,6 +169,12 @@ Pose XRSLAM::Detail::predict_pose(const double &t) {
         }
     }
 
+    std::unique_lock<std::mutex> lk(latest_mutex_);
+    if (t > latest_timestamp_) {
+        latest_pose_ = output_pose;
+        latest_timestamp_ = t;
+    }
+
     return output_pose;
 }
 
@@ -226,6 +232,11 @@ std::tuple<double, Pose> XRSLAM::Detail::get_latest_state() const {
     }
 
     return {timestamp, output_pose};
+}
+
+std::tuple<double, Pose> XRSLAM::Detail::get_latest_pose() {
+    std::unique_lock<std::mutex> lk(latest_mutex_);
+    return {latest_timestamp_, latest_pose_};
 }
 
 } // namespace xrslam

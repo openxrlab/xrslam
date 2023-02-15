@@ -1,0 +1,54 @@
+%YAML:1.0
+imu:
+  # inertial sensor noise model parameters (static)
+  gyroscope_noise_density: 0.01       # [ rad / s / sqrt(Hz) ]
+  gyroscope_random_walk: 0.0001       # [ rad / s^2 / sqrt(Hz) ]
+  accelerometer_noise_density: 0.1    # [ m / s^2 / sqrt(Hz) ]
+  accelerometer_random_walk: 0.001    # [ m / s^3 / sqrt(Hz) ]
+  accelerometer_bias: [0.0, 0.0, 0.0] # acc bias prior
+  gyroscope_bias: [0.0, 0.0, 0.0]     # gyro bias prior
+  extrinsic:
+    q_bi: [ 0.0, 0.0, 0.0, 1.0 ] # x y z w
+    p_bi: [ 0.0, 0.0, 0.0 ] # x y z [m]
+  noise:
+    cov_g: [
+      2.8791302399999997e-08, 0.0, 0.0,
+      0.0, 2.8791302399999997e-08, 0.0,
+      0.0, 0.0, 2.8791302399999997e-08]
+    cov_a: [
+      4.0e-6, 0.0, 0.0,
+      0.0, 4.0e-6, 0.0,
+      0.0, 0.0, 4.0e-6]
+    cov_bg: [
+      3.7608844899999997e-10, 0.0, 0.0,
+      0.0, 3.7608844899999997e-10, 0.0,
+      0.0, 0.0, 3.7608844899999997e-10]
+    cov_ba: [
+      9.0e-6, 0.0, 0.0,
+      0.0, 9.0e-6, 0.0,
+      0.0, 0.0, 9.0e-6]
+
+cam0:
+  # camera0 wrt. body frame
+  T_BS:
+    cols: 4
+    rows: 4
+    data: [-0.999525037869674, 0.0075019185074052, -0.0298901303164331, 0.045574835649698,
+           0.0296153438858632, -0.0343973606139314, -0.998969345370175, -0.071161801837997,
+           -0.00852232821165474, -0.999380079249883, 0.0341588512738562, -0.0446812541171444,
+           0, 0, 0, 1]
+  resolution: [512, 512]        # resolution of camera
+  camera_model: pinhole         # camera model
+  distortion_model: equidistant # distortion model
+  intrinsics: [190.97847715128717, 190.9733070521226, 254.93170605935475, 256.8974428996504] # fu, fv, cu, cv
+  camera_distortion_flag: 1     # use distortion model or not
+  distortion: [0.0034823894022493434, 0.0007150348452162257, -0.0020532361418706202,
+    0.00020293673591811182] # k1, k2, p1, p2, xi
+  camera_readout_time: 0.0      # camera readout time
+  time_offset: 0.0              # camera time delay wrt. IMU
+  extrinsic:
+    q_bc: [ -0.0133554, -0.6947965, 0.7190413, 0.0076885 ] # x y z w
+    p_bc: [ 0.045574835649698, -0.071161801837997, -0.0446812541171444 ] # x y z [m]
+  noise: [
+    0.5, 0.0,
+    0.0, 0.5] # [pixel^2]

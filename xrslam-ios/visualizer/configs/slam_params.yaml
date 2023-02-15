@@ -1,0 +1,22 @@
+%YAML:1.0
+output:
+  q_bo: [ -0.7071068, 0.7071068, 0, 0 ] # x y z w
+  p_bo: [ 0.053617261855615515, -0.0016905232538204646, -0.0075510493739824724 ] # x y z [m]
+
+# SLAM configuration
+slam_configuration:
+  process_frequency: 3            # use one frame for every n frames
+  use_orb_track: 0                # 1 VIO detects and tracks with ORB feature, otherwise 0
+  static_initialization: 1        # 1 static initialization, otherwise 0
+  
+# SLAM configuration
+slam_parameters:
+  pixel_noise: 1.5                # pixel noise of SLAM
+
+# sensors configuration
+sensor_configuration:
+  max_cameras: 1                  # specify camera num
+
+# calibration configuration
+calibration_configuration:
+  calibrate_time_offset: 1        # calibrate time offset or not

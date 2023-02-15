@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['xrslam_5fresult_5fbias_132',['XRSLAM_RESULT_BIAS',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2a43d671682aa2d80f768bdc2747ba2775',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5fbody_5fpose_133',['XRSLAM_RESULT_BODY_POSE',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2a788e8973a8d9555610a610974e04646c',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5fcamera_5fpose_134',['XRSLAM_RESULT_CAMERA_POSE',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2a8d778de066d298581aa256ce988ac2db',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5fdebug_5flogs_135',['XRSLAM_RESULT_DEBUG_LOGS',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2ada2105a8c546ccf3d5b4826da0a95054',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5ffeatures_136',['XRSLAM_RESULT_FEATURES',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2aa12506b956d8b16745ae5d6a4fe93921',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5flandmarks_137',['XRSLAM_RESULT_LANDMARKS',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2af4d38b8e459c799ff637817eb715257c',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5fstate_138',['XRSLAM_RESULT_STATE',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2afe26d770603efb5ed5872dc34bb84aff',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5funknown_139',['XRSLAM_RESULT_UNKNOWN',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2aa8c7dec83f5590936a644ae1f7f44a1e',1,'XRSLAM.h']]],
+  ['xrslam_5fresult_5fversion_140',['XRSLAM_RESULT_VERSION',['../_x_r_s_l_a_m_8h.html#a0f680d7877d302077ee75ca060ca5bf2a4b543bb645b5126c4d24d7f25604feab',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5facceleration_141',['XRSLAM_SENSOR_ACCELERATION',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846ba17fc8f2d611430fbcb91575fcc84aa89',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5fcamera_142',['XRSLAM_SENSOR_CAMERA',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846ba257c73a736eda45f3a97f77ef0223613',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5fdepth_5fcamera_143',['XRSLAM_SENSOR_DEPTH_CAMERA',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846baed99edd5134461952e37af1072beaf31',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5fgravity_144',['XRSLAM_SENSOR_GRAVITY',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846ba894ea3a9f2490786d69464010f3191a5',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5fgyroscope_145',['XRSLAM_SENSOR_GYROSCOPE',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846bad6a3320e4ecb01ab20260216d369f514',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5frotation_5fvector_146',['XRSLAM_SENSOR_ROTATION_VECTOR',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846bacdd54d16e46d8c535e93c8a284e6b439',1,'XRSLAM.h']]],
+  ['xrslam_5fsensor_5funknown_147',['XRSLAM_SENSOR_UNKNOWN',['../_x_r_s_l_a_m_8h.html#a57e4bf7f4de8cc9e3e3523845051846baba2ecf3319974d5a6664ca7361fe9473',1,'XRSLAM.h']]],
+  ['xrslam_5fstate_5finitializing_148',['XRSLAM_STATE_INITIALIZING',['../_x_r_s_l_a_m_8h.html#ac75235264d5a0069a42515c7fd55e756a73d7fbf63ad5c47b940a2cf406991c1d',1,'XRSLAM.h']]],
+  ['xrslam_5fstate_5ftracking_5ffail_149',['XRSLAM_STATE_TRACKING_FAIL',['../_x_r_s_l_a_m_8h.html#ac75235264d5a0069a42515c7fd55e756a2f9345b290659aaf2cd8a8c2c06135fd',1,'XRSLAM.h']]],
+  ['xrslam_5fstate_5ftracking_5fsuccess_150',['XRSLAM_STATE_TRACKING_SUCCESS',['../_x_r_s_l_a_m_8h.html#ac75235264d5a0069a42515c7fd55e756a6bdee2e5a91b1fd370ea2e4f07d5986a',1,'XRSLAM.h']]]
+];

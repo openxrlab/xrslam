@@ -456,6 +456,7 @@ class LightVisDetail {
     }
 
     void draw_positions() {
+        auto lk = vis->lock();
         gl::glDisable(gl::GL_DEPTH_TEST);
         position_shader->bind();
         position_shader->set_uniform(
@@ -1122,9 +1123,19 @@ void LightVis::add_trajectory(std::vector<Eigen::Vector3f> &positions,
     detail->position_records.push_back(record);
 }
 
-void LightVis::add_camera(std::vector<Eigen::Vector3f> &positions, vector<3> &p,
-                          quaternion &q, matrix<3> K, Eigen::Vector4f &color,
-                          double size) {
+void LightVis::add_camera(std::vector<Eigen::Vector3f> &positions,
+                          Eigen::Vector4f &color) {
+    position_record_t record;
+    record.is_trajectory = true;
+    record.data = &positions;
+    record.color = &color;
+    record.colors = nullptr;
+    detail->position_records.push_back(record);
+}
+
+void LightVis::set_camera_position(std::vector<Eigen::Vector3f> &positions,
+                                   vector<3> &p, quaternion &q, matrix<3> K,
+                                   Eigen::Vector4f &color, double size) {
     positions.clear();
 
     Eigen::MatrixXf draw_point;
@@ -1162,13 +1173,6 @@ void LightVis::add_camera(std::vector<Eigen::Vector3f> &positions, vector<3> &p,
     for (int i = 0; i < 16; ++i) {
         positions.push_back(draw_point.col(i));
     }
-
-    position_record_t record;
-    record.is_trajectory = true;
-    record.data = &positions;
-    record.color = &color;
-    record.colors = nullptr;
-    detail->position_records.push_back(record);
 }
 
 void LightVis::add_separator() {
@@ -1203,6 +1207,11 @@ void LightVis::add_progress(const double &value) {
 void LightVis::load() {}
 
 void LightVis::unload() {}
+
+std::unique_lock<std::mutex> LightVis::lock() const 
+{
+    return std::unique_lock<std::mutex>(frame_mutex);
+}
 
 void LightVis::draw(int w, int h) {}
 

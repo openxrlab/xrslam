@@ -39,6 +39,10 @@ For more information on installation, please refer to [installation.md](./instal
 
 Please refer to [euroc_evaluation.md](./tutorials/euroc_evaluation.md) for evaluation.
 
+## API doc
+
+Please refer to [API doc](https://xrslam.readthedocs.io/en/latest/cpp_api/index.html) for XRSLAM API documentation.
+
 ## More information
 
 * [AR Demo](./tutorials/app_intro.md)

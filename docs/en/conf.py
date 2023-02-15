@@ -17,8 +17,6 @@ import subprocess
 import sys
 import sphinx_rtd_theme
 
-os.environ['READTHEDOCS_OUTPUT'] = '_build'
-
 def build_doxygen_docs(temp_dir='doxygen', cpp_dir='cpp_api'):
     """Build sphinx docs for C++"""
     cmd = ['doxygen', 'Doxyfile.in']
@@ -28,7 +26,12 @@ def build_doxygen_docs(temp_dir='doxygen', cpp_dir='cpp_api'):
         stderr=sys.stderr)
     # move generated results to _build
     doxygen_dir = os.path.join(temp_dir, 'html')
-    dst_dir = os.path.join('_build', 'html', cpp_dir)
+    output_env = os.getenv('READTHEDOCS_OUTPUT','null')
+    print("#### READTHEDOCS_OUTPUT: ",output_env)
+    if output_env == 'null':
+        dst_dir = os.path.join('_build', 'html', cpp_dir)
+    else:
+        dst_dir = os.path.join(os.environ.get('READTHEDOCS_OUTPUT'), 'html', cpp_dir)
     if os.path.exists(dst_dir):
         shutil.rmtree(dst_dir)
     shutil.copytree(doxygen_dir, dst_dir)

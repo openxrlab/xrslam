@@ -39,9 +39,45 @@ For more information on installation, please refer to [installation.md](./instal
 
 Please refer to [euroc_evaluation.md](./tutorials/euroc_evaluation.md) for evaluation.
 
-## API doc
+## API introduction
 
-Please refer to [API doc](https://xrslam.readthedocs.io/en/latest/cpp_api/index.html) for XRSLAM API documentation.
+The project folder structure  is as follows. 
+
+```
+xrslam
+├── xrslam
+├── xrslam-extra
+├── xrslam-interface
+├── xrslam-localization
+├── xrslam-pc
+├── xrslam-ios
+...
+```
+
++ xrslam : slam core functions are defined
++ xrslam-extra :  yaml_config and opencv image reading functions are defined
++ xrslam-interface : API functions
++ xrslam-localization : sfm-based relocalization functions are defined
++ xrslam-pc : contain examples for PC
++ xrslam-ios : contain examples for iOS
+
+After the project is compiled successfully,  **libxrslam-interface.a**  will be generated. Using this library and **xrslam-interface/include/XRSLAM.h** , you can build your own examples.
+
+#### Linux/Mac
+
+In xrslam-pc, we provide a  example on PC. You can refer to **xrslam-pc/player/src/main.cpp**.
+
+In addition to the slam function, this example also includes dataset reading (Euroc/TUM), trajectory file saving, and visualization functions.
+
+In order to understand the API usage more quickly, you can turn off the visualization and read the dataset in Euroc format. This mode only depends on the **libxrslam-interface.a** and **xrslam-interface/include/XRSLAM.h**, and does not contain additional auxiliary functions.
+
+#### iOS
+
+In xrslam-ios, we provide a  example on iOS. You can refer to **xrslam-ios/visualizer/src/XRSLAM.mm**.
+
+In addition to the slam function, this example also includes the creation of virtual objects and the sfm-based localization. The API of sfm-based localization can refer to **xrslam-localization/include/XRGlobalLocalizer.h**.
+
+Please refer to [API doc](https://xrslam.readthedocs.io/en/latest/cpp_api/index.html) for XRSLAM's API documentation.
 
 ## More information
 

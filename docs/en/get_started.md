@@ -63,13 +63,13 @@ xrslam
 
 #### Linux/Mac
 
-After the project is compiled successfully,  **build/xrslam-interface/libxrslam.so**  will be generated. Using this shared library and **xrslam-interface/include/XRSLAM.h** , you can build your own examples.
+After the project is compiled successfully,  **lib/libxrslam.so**  will be generated. Using this shared library and **include/XRSLAM.h** , you can build your own examples.
 
 In xrslam-pc, we provide a  example on PC. You can refer to **xrslam-pc/player/src/main.cpp**.
 
 In addition to the slam function, this example also includes dataset reading (Euroc/TUM), trajectory file saving, and visualization functions.
 
-In order to understand the API usage more quickly, you can turn off the visualization and read the dataset in Euroc format. This mode only depends on the **libxrslam-interface.a** and **xrslam-interface/include/XRSLAM.h**, and does not contain additional auxiliary functions.
+In order to understand the API usage more quickly, you can turn off the visualization and read the dataset in Euroc format. This mode only depends on the **lib/libxrslam.so** and **include/XRSLAM.h**, and does not contain additional auxiliary functions.
 
 #### iOS
 

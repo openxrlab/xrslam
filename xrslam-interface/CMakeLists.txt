@@ -53,6 +53,9 @@ if(XRSLAM_IOS)
                       )
 endif()
 
+# output include and libs
+file(COPY  "${CMAKE_SOURCE_DIR}/xrslam-interface/include/XRSLAM.h"  
+     DESTINATION  "${CMAKE_SOURCE_DIR}/include")
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 
 set(XRSLAM_INTERFACE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")

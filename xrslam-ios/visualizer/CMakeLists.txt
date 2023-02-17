@@ -65,7 +65,7 @@ add_executable(${EXECUTABLE_NAME}
 
 target_link_libraries(${EXECUTABLE_NAME}
     PRIVATE
-        xrslam-interface
+        xrslam
         xrslam-localization
 )
 

@@ -5,6 +5,6 @@ project(xrslam-ios)
 option(IOS_DEVELOPMENT_TEAM "Team ID for iOS app development" "XXXXXXXXXX")
 option(APP_IDENTIFIER_PREFIX "Common prefix for all iOS app identifiers" "xrslam")
 
-if(TARGET xrslam-interface  AND TARGET xrslam-localization)
+if(TARGET xrslam  AND TARGET xrslam-localization)
   add_subdirectory(visualizer)
 endif()

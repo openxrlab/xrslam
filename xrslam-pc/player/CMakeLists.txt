@@ -34,7 +34,7 @@ target_include_directories(xrslam-pc-player
 
 target_link_libraries(xrslam-pc-player
   PRIVATE
-    xrslam-interface
+    xrslam
     depends::argparse
 )
 

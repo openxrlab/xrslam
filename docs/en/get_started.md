@@ -61,9 +61,9 @@ xrslam
 + xrslam-pc : contain examples for PC
 + xrslam-ios : contain examples for iOS
 
-After the project is compiled successfully,  **libxrslam-interface.a**  will be generated. Using this library and **xrslam-interface/include/XRSLAM.h** , you can build your own examples.
-
 #### Linux/Mac
+
+After the project is compiled successfully,  **build/xrslam-interface/libxrslam.so**  will be generated. Using this shared library and **xrslam-interface/include/XRSLAM.h** , you can build your own examples.
 
 In xrslam-pc, we provide a  example on PC. You can refer to **xrslam-pc/player/src/main.cpp**.
 
@@ -73,7 +73,9 @@ In order to understand the API usage more quickly, you can turn off the visualiz
 
 #### iOS
 
-In xrslam-ios, we provide a  example on iOS. You can refer to **xrslam-ios/visualizer/src/XRSLAM.mm**.
+After the project is compiled successfully,  **build/iOS/xrslam-interface/Release-iphones/libxrslam.a**  will be generated. Using this static library and **xrslam-interface/include/XRSLAM.h** , you can build your own examples.
+
+In xrslam-ios, we provide a example on iOS. You can refer to **xrslam-ios/visualizer/src/XRSLAM.mm**.
 
 In addition to the slam function, this example also includes the creation of virtual objects and the sfm-based localization. The API of sfm-based localization can refer to **xrslam-localization/include/XRGlobalLocalizer.h**.
 

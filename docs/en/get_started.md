@@ -73,7 +73,7 @@ In order to understand the API usage more quickly, you can turn off the visualiz
 
 #### iOS
 
-After the project is compiled successfully,  **build/iOS/xrslam-interface/Release-iphones/libxrslam.a**  will be generated. Using this static library and **xrslam-interface/include/XRSLAM.h** , you can build your own examples.
+After the project is compiled successfully,  **lib/Release/libxrslam.a**  will be generated. Using this static library and **include/XRSLAM.h** , you can build your own examples.
 
 In xrslam-ios, we provide a example on iOS. You can refer to **xrslam-ios/visualizer/src/XRSLAM.mm**.
 

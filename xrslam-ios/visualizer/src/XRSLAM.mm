@@ -99,7 +99,7 @@ struct OutputState {
                 [[NSBundle mainBundle] pathForResource:@"configs/SENSESLAMSDK_165BA1A4-F959-4790-A891-C85DBF5D26EA"
                                                 ofType:@"lic"];
 
-            int num = XRSLAMCreate([slam_config_content UTF8String], [device_config_content UTF8String], [license_file UTF8String], "SenseSLAMSDK");
+            int num = XRSLAMCreate([slam_params UTF8String], [device_params UTF8String], [license_file UTF8String], "SenseSLAMSDK");
             XRGlobalLocalizerCreate([slam_config_content UTF8String], [device_config_content UTF8String]);
             std::cout<<"init xr slam: "<<num << std::endl;
         }

@@ -68,7 +68,7 @@ target_link_libraries(${EXECUTABLE_NAME}
         #xrslam
         xrslam-localization
         XRPrimer::xrprimer
-        ${CMAKE_SOURCE_DIR}/lib/iOS/OS/libxrslam.a
+        ${CMAKE_SOURCE_DIR}/lib/iOS/Release/libxrslam.a
         ${CMAKE_CURRENT_SOURCE_DIR}/OS/libbearssl.a
         ${CMAKE_CURRENT_SOURCE_DIR}/OS/libkestrel_base64_static.a
         ${CMAKE_CURRENT_SOURCE_DIR}/OS/libkestrel_bson_static.a

@@ -31,7 +31,7 @@ Firstly, switch XRPrimer to the branch of the specified OpenCV version `git chec
 
 - In XRPrimer, run `./build-ios.sh` to configure some common dependencies.
 - In XRSLAM, run `./build-ios.sh` to generate the XCode project using cmake.
-- The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically.
+- The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically. Before run  `xrslam-ios-visulaizer`,  you should run the target `xrslam`  first,  to make sure  `lib/iOS/Release/libxrslam.a` is exist.  However, if you want to use other versions of the `libxrslam.a ` library directly, you don't need to compile the target `xrslam` , just replace the  `lib/iOS/Release/libxrslam.a` .
 
 For more information on installation, please refer to [installation.md](./installation.md).
 
@@ -73,7 +73,7 @@ In order to understand the API usage more quickly, you can turn off the visualiz
 
 #### iOS
 
-After the project is compiled successfully,  **lib/Release/libxrslam.a**  will be generated. Using this static library and **include/XRSLAM.h** , you can build your own examples.
+After the project is compiled successfully,  **lib/iOS/Release/libxrslam.a**  will be generated. Using this static library and **include/XRSLAM.h** , you can build your own examples.
 
 In xrslam-ios, we provide a example on iOS. You can refer to **xrslam-ios/visualizer/src/XRSLAM.mm**.
 

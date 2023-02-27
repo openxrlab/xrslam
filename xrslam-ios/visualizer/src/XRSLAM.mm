@@ -86,22 +86,33 @@ struct OutputState {
             NSString *slam_params =
                 [[NSBundle mainBundle] pathForResource:@"configs/slam_params"
                                                 ofType:@"yaml"];
-            NSString* slam_config_content = [NSString stringWithContentsOfFile:slam_params encoding:NSUTF8StringEncoding error:NULL];
-            NSString *device_params =
-                [[NSBundle mainBundle] pathForResource:[@"configs/" stringByAppendingString:model]
-                     ofType:@"yaml"];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:device_params]) {
+            NSString *slam_config_content =
+                [NSString stringWithContentsOfFile:slam_params
+                                          encoding:NSUTF8StringEncoding
+                                             error:NULL];
+            NSString *device_params = [[NSBundle mainBundle]
+                pathForResource:[@"configs/" stringByAppendingString:model]
+                         ofType:@"yaml"];
+            if (![[NSFileManager defaultManager]
+                    fileExistsAtPath:device_params]) {
                 std::cout << "XRSLAM Do NOT Support This Device!" << std::endl;
                 return;
             }
-            NSString* device_config_content = [NSString stringWithContentsOfFile:device_params encoding:NSUTF8StringEncoding error:NULL];
-            NSString *license_file =
-                [[NSBundle mainBundle] pathForResource:@"configs/SENSESLAMSDK_165BA1A4-F959-4790-A891-C85DBF5D26EA"
-                                                ofType:@"lic"];
+            NSString *device_config_content =
+                [NSString stringWithContentsOfFile:device_params
+                                          encoding:NSUTF8StringEncoding
+                                             error:NULL];
+            NSString *license_file = [[NSBundle mainBundle]
+                pathForResource:
+                    @"configs/SENSESLAMSDK_165BA1A4-F959-4790-A891-C85DBF5D26EA"
+                         ofType:@"lic"];
 
-            int num = XRSLAMCreate([slam_config_content UTF8String], [device_config_content UTF8String], [license_file UTF8String], "SenseSLAMSDK");
-            XRGlobalLocalizerCreate([slam_config_content UTF8String], [device_config_content UTF8String]);
-            std::cout<<"init xr slam: "<<num << std::endl;
+            int num = XRSLAMCreate([slam_config_content UTF8String],
+                                   [device_config_content UTF8String],
+                                   [license_file UTF8String], "SenseSLAMSDK");
+            XRGlobalLocalizerCreate([slam_config_content UTF8String],
+                                    [device_config_content UTF8String]);
+            std::cout << "init xr slam: " << num << std::endl;
         }
         fov = 360.0 / 3.1415926535897 * atan2(314.618580309, 483.302341374);
     }
@@ -146,14 +157,14 @@ struct OutputState {
         image.stride = cvimage.step[0];
         XRSLAMPushSensorData(XRSLAM_SENSOR_CAMERA, &image);
         XRSLAMRunOneFrame();
-        
+
         XRSLAMState result;
         XRSLAMGetResult(XRSLAM_RESULT_STATE, &result);
-        if(result == XRSLAM_STATE_TRACKING_SUCCESS){
+        if (result == XRSLAM_STATE_TRACKING_SUCCESS) {
             XRSLAMPose pose_c;
             XRSLAMGetResult(XRSLAM_RESULT_CAMERA_POSE, &pose_c);
             XRGlobalLocalizerQueryLocalization(&image, &pose_c);
-            
+
             latest_state.t = pose_c.timestamp;
             XRSLAMPose pose_sfm = XRGlobalLocalizerTransformPose(pose_c);
             latest_state.pose.p[0] = pose_sfm.translation[0];
@@ -162,7 +173,7 @@ struct OutputState {
             latest_state.pose.q.x() = pose_sfm.quaternion[0];
             latest_state.pose.q.y() = pose_sfm.quaternion[1];
             latest_state.pose.q.z() = pose_sfm.quaternion[2];
-            latest_state.pose.q.w() = pose_sfm.quaternion[3]; 
+            latest_state.pose.q.w() = pose_sfm.quaternion[3];
         }
     }
 
@@ -173,7 +184,9 @@ struct OutputState {
     {
         XRSLAMGyroscope gyro;
         gyro.timestamp = t;
-        gyro.data[0] = x; gyro.data[1] = y; gyro.data[2] = z;
+        gyro.data[0] = x;
+        gyro.data[1] = y;
+        gyro.data[2] = z;
         XRSLAMPushSensorData(XRSLAM_SENSOR_GYROSCOPE, &gyro);
     }
 }
@@ -182,7 +195,9 @@ struct OutputState {
     {
         XRSLAMAcceleration acc;
         acc.timestamp = t;
-        acc.data[0] = x; acc.data[1] = y; acc.data[2] = z;
+        acc.data[0] = x;
+        acc.data[1] = y;
+        acc.data[2] = z;
         XRSLAMPushSensorData(XRSLAM_SENSOR_ACCELERATION, &acc);
     }
 }
@@ -211,10 +226,12 @@ struct OutputState {
 
 - (size_t)createVirtualObject {
     static int _id = 0;
-    if([self get_system_state] == SysState::SYS_TRACKING)
-    {
-        Eigen::Vector3f twc(latest_state.pose.p(0),latest_state.pose.p(1),latest_state.pose.p(2));
-        Eigen::Quaternionf pose_q(latest_state.pose.q.w(), latest_state.pose.q.x(),latest_state.pose.q.y(),latest_state.pose.q.z()); //wxyz
+    if ([self get_system_state] == SysState::SYS_TRACKING) {
+        Eigen::Vector3f twc(latest_state.pose.p(0), latest_state.pose.p(1),
+                            latest_state.pose.p(2));
+        Eigen::Quaternionf pose_q(
+            latest_state.pose.q.w(), latest_state.pose.q.x(),
+            latest_state.pose.q.y(), latest_state.pose.q.z()); // wxyz
         Eigen::Matrix3f Rcw = pose_q.toRotationMatrix().transpose();
         Eigen::Vector3f tcw = -Rcw * twc;
         float keypoint_radius = 0.2;
@@ -223,20 +240,23 @@ struct OutputState {
         XRSLAMGetResult(XRSLAM_RESULT_LANDMARKS, &landmarks);
         int near_landmarks = 0;
         for (int i = 0; i < landmarks.num_landmarks; ++i) {
-            Eigen::Vector3f cur_lk = Eigen::Vector3f(landmarks.landmarks[i].x, landmarks.landmarks[i].y, landmarks.landmarks[i].z);
+            Eigen::Vector3f cur_lk = Eigen::Vector3f(landmarks.landmarks[i].x,
+                                                     landmarks.landmarks[i].y,
+                                                     landmarks.landmarks[i].z);
             Eigen::Vector3f pc = Rcw * cur_lk + tcw;
-            pc(0)= pc(0)/pc(2);
-            pc(1)= pc(1)/pc(2);
-            if(pc(0)<-keypoint_radius || pc(0) > keypoint_radius || pc(1)<-keypoint_radius || pc(1) > keypoint_radius)
-            {
+            pc(0) = pc(0) / pc(2);
+            pc(1) = pc(1) / pc(2);
+            if (pc(0) < -keypoint_radius || pc(0) > keypoint_radius ||
+                pc(1) < -keypoint_radius || pc(1) > keypoint_radius) {
                 continue;
             }
             group_origin += cur_lk;
             near_landmarks++;
         }
-        if(near_landmarks <5) return -1;
+        if (near_landmarks < 5)
+            return -1;
         group_origin /= near_landmarks;
-        Eigen::Vector3f central_ray = ( twc - group_origin).normalized();
+        Eigen::Vector3f central_ray = (twc - group_origin).normalized();
         Eigen::Vector3f up = {0.0, 0.0, 1.0};
         Eigen::Vector3f right = up.cross(central_ray).normalized();
         Eigen::Vector3f backward = right.cross(up).normalized();
@@ -291,7 +311,7 @@ struct OutputState {
     {
         XRSLAMState result;
         XRSLAMGetResult(XRSLAM_RESULT_STATE, &result);
-        if(result == XRSLAM_STATE_INITIALIZING){
+        if (result == XRSLAM_STATE_INITIALIZING) {
             return SysState::SYS_INITIALIZING;
         } else if (result == XRSLAM_STATE_TRACKING_SUCCESS) {
             return SysState::SYS_TRACKING;

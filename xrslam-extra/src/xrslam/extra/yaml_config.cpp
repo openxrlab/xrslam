@@ -84,7 +84,8 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     m_output_to_body_rotation = Config::output_to_body_rotation();
     m_output_to_body_translation = Config::output_to_body_translation();
     m_sliding_window_size = Config::sliding_window_size();
-    m_sliding_window_tracker_frequent = Config::sliding_window_tracker_frequent();
+    m_sliding_window_tracker_frequent =
+        Config::sliding_window_tracker_frequent();
     m_sliding_window_force_keyframe_landmarks =
         Config::sliding_window_force_keyframe_landmarks();
     m_feature_tracker_min_keypoint_distance =
@@ -334,7 +335,9 @@ vector<3> YamlConfig::output_to_body_translation() const {
 
 size_t YamlConfig::sliding_window_size() const { return m_sliding_window_size; }
 
-size_t YamlConfig::sliding_window_tracker_frequent() const { return m_sliding_window_tracker_frequent; }
+size_t YamlConfig::sliding_window_tracker_frequent() const {
+    return m_sliding_window_tracker_frequent;
+}
 
 size_t YamlConfig::sliding_window_force_keyframe_landmarks() const {
     return m_sliding_window_force_keyframe_landmarks;

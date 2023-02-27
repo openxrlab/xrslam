@@ -6,7 +6,7 @@ Welcome to XRSLAM's documentation!
    :caption: Introduction
 
    get_started
-   
+
 .. toctree::
    :maxdepth: 2
    :caption: C++ API

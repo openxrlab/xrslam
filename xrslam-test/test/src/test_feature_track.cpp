@@ -29,7 +29,8 @@ TEST(test_feature_track, feature_track) {
 
     std::unique_ptr<Frame> frame = std::make_unique<Frame>();
     std::shared_ptr<xrslam::extra::YamlConfig> yaml_config =
-        std::make_shared<xrslam::extra::YamlConfig>(slam_config_path, device_config_path);
+        std::make_shared<xrslam::extra::YamlConfig>(slam_config_path,
+                                                    device_config_path);
     frame->K = yaml_config->camera_intrinsic();
     frame->image = read_image(filename1);
     frame->image->preprocess();

@@ -32,21 +32,29 @@ cam0:
   T_BS:
     cols: 4
     rows: 4
-    data: [0.0, -1.0, 0.0, 0.03290364,
-           -1.0, 0.0, 0.0, -0.00696553,
-           0.0, 0.0, -1.0,-0.00286231,
+    data: [0.0, -1.0, 0.0, 0.0229970087959,
+           -1.0, 0.0, 0.0, 0.0754115110747,
+           0.0, 0.0, -1.0, -0.0024726172229,
            0.0, 0.0, 0.0, 1.0]
   resolution: [640, 480]        # resolution of camera
   camera_model: pinhole         # camera model
   distortion_model: radtan      # distortion model
-  intrinsics: [448.96781816245402, 449.14399528627763, 321.34605334072404, 240.71641804985396] # fu, fv, cu, cv
+  intrinsics: [524.742906796, 524.638736552, 322.496951979, 235.249899518] # fu, fv, cu, cv
   camera_distortion_flag: 0     # use distortion model or not
   distortion: [0.0, 0.0, 0.0, 0.0] # k1, k2, p1, p2, xi
   camera_readout_time: 0.0      # camera readout time
   time_offset: 0.0              # camera time delay wrt. IMU
   extrinsic:
     q_bc: [-0.7071068, 0.7071068, 0, 0] # x y z w
-    p_bc: [0.03290364, -0.00696553, -0.00286231] # x y z [m]
+    p_bc: [0.0229970087959, 0.0754115110747, -0.0024726172229] # x y z [m]
   noise: [
     0.5, 0.0,
     0.0, 0.5] # [pixel^2]
+
+
+
+
+
+
+
+

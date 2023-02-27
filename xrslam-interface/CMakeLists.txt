@@ -36,7 +36,7 @@ target_include_directories(xrslam
 )
 
 if(XRSLAM_IOS)
-    # for PC static_lib merge 
+    # for PC static_lib merge
     # add_custom_command(TARGET xrslam POST_BUILD
     #                         COMMAND ar x $<TARGET_FILE:xrslam>
     #                         COMMAND ar x $<TARGET_FILE:xrslam-extra-opencv-image>
@@ -47,14 +47,14 @@ if(XRSLAM_IOS)
     #                         COMMAND ranlib $<TARGET_FILE:xrslam>
     #                         COMMAND rm *.o
     #                         )
-    # for IOS static_lib merge 
+    # for IOS static_lib merge
     add_custom_command(TARGET xrslam POST_BUILD
                        COMMAND libtool -static -o $<TARGET_FILE:xrslam> $<TARGET_FILE:xrslam> $<TARGET_FILE:xrslam-extra-opencv-image> $<TARGET_FILE:xrslam-extra-yaml-config> $<TARGET_FILE:xrslam-core> $<TARGET_LINKER_FILE:yaml-cpp>
                       )
 endif()
 
 # output include and libs
-file(COPY  "${CMAKE_SOURCE_DIR}/xrslam-interface/include/XRSLAM.h"  
+file(COPY  "${CMAKE_SOURCE_DIR}/xrslam-interface/include/XRSLAM.h"
      DESTINATION  "${CMAKE_SOURCE_DIR}/include")
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 if(XRSLAM_IOS)

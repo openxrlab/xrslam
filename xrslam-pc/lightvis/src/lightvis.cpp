@@ -1208,8 +1208,7 @@ void LightVis::load() {}
 
 void LightVis::unload() {}
 
-std::unique_lock<std::mutex> LightVis::lock() const 
-{
+std::unique_lock<std::mutex> LightVis::lock() const {
     return std::unique_lock<std::mutex>(frame_mutex);
 }
 

@@ -41,7 +41,7 @@ Please refer to [euroc_evaluation.md](./tutorials/euroc_evaluation.md) for evalu
 
 ## API introduction
 
-The project folder structure  is as follows. 
+The project folder structure  is as follows.
 
 ```
 xrslam

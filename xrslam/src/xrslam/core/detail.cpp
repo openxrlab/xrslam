@@ -117,7 +117,7 @@ Pose XRSLAM::Detail::track_camera(std::shared_ptr<Image> image) {
     frame->preintegration.cov_bg = config->gyroscope_bias_noise_cov();
 
     frames.emplace_back(std::move(frame));
-    
+
     Pose outpose = predict_pose(image->t);
     std::unique_lock<std::mutex> lk(latest_mutex_);
     if (image->t > latest_timestamp_) {

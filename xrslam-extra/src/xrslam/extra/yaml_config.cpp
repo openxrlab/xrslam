@@ -40,6 +40,13 @@ static void assign(bool &value, const YAML::Node &node) {
     value = node.as<bool>();
 }
 
+static void assign(std::string &value, const YAML::Node &node) {
+    if (!node.IsScalar()) {
+        throw YamlConfig::TypeErrorException(node.Tag());
+    }
+    value = node.as<std::string>();
+}
+
 static void assign(size_t &value, const YAML::Node &node) {
     if (!node.IsScalar()) {
         throw YamlConfig::TypeErrorException(node.Tag());
@@ -77,6 +84,7 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     m_output_to_body_rotation = Config::output_to_body_rotation();
     m_output_to_body_translation = Config::output_to_body_translation();
     m_sliding_window_size = Config::sliding_window_size();
+    m_sliding_window_tracker_frequent = Config::sliding_window_tracker_frequent();
     m_sliding_window_force_keyframe_landmarks =
         Config::sliding_window_force_keyframe_landmarks();
     m_feature_tracker_min_keypoint_distance =
@@ -97,6 +105,9 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     m_initializer_refine_imu = Config::initializer_refine_imu();
     m_solver_iteration_limit = Config::solver_iteration_limit();
     m_solver_time_limit = Config::solver_time_limit();
+    m_visual_localization_enable = Config::visual_localization_enable();
+    m_visual_localization_ip = Config::visual_localization_config_ip();
+    m_visual_localization_port = Config::visual_localization_config_port();
 
     YAML::Node slam_config;
     YAML::Node device_config;
@@ -184,6 +195,11 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
         assign(m_sliding_window_size, node);
     }
 
+    if (auto node =
+            find_node(slam_config, "sliding_window.tracker_frequent", false)) {
+        assign(m_sliding_window_tracker_frequent, node);
+    }
+
     if (auto node = find_node(
             slam_config, "sliding_window.force_keyframe_landmarks", false)) {
         assign(m_sliding_window_force_keyframe_landmarks, node);
@@ -245,8 +261,16 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     }
 
     if (auto node =
-            find_node(slam_config, "visual_localization_enable", false)) {
+            find_node(slam_config, "visual_localization.enable", false)) {
         assign(m_visual_localization_enable, node);
+    }
+
+    if (auto node = find_node(slam_config, "visual_localization.ip", false)) {
+        assign(m_visual_localization_ip, node);
+    }
+
+    if (auto node = find_node(slam_config, "visual_localization.port", false)) {
+        assign(m_visual_localization_port, node);
     }
 
     if (auto node = find_node(slam_config, "solver.iteration_limit", false)) {
@@ -310,6 +334,8 @@ vector<3> YamlConfig::output_to_body_translation() const {
 
 size_t YamlConfig::sliding_window_size() const { return m_sliding_window_size; }
 
+size_t YamlConfig::sliding_window_tracker_frequent() const { return m_sliding_window_tracker_frequent; }
+
 size_t YamlConfig::sliding_window_force_keyframe_landmarks() const {
     return m_sliding_window_force_keyframe_landmarks;
 }
@@ -364,6 +390,14 @@ bool YamlConfig::initializer_refine_imu() const {
 
 bool YamlConfig::visual_localization_enable() const {
     return m_visual_localization_enable;
+}
+
+std::string YamlConfig::visual_localization_config_ip() const {
+    return m_visual_localization_ip;
+}
+
+size_t YamlConfig::visual_localization_config_port() const {
+    return m_visual_localization_port;
 }
 
 size_t YamlConfig::solver_iteration_limit() const {

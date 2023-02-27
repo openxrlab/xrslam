@@ -48,6 +48,7 @@ class YamlConfig : public Config {
     vector<3> output_to_body_translation() const override;
 
     size_t sliding_window_size() const override;
+    size_t sliding_window_tracker_frequent() const override;
     size_t sliding_window_force_keyframe_landmarks() const override;
 
     double feature_tracker_min_keypoint_distance() const override;
@@ -65,6 +66,8 @@ class YamlConfig : public Config {
     bool initializer_refine_imu() const override;
 
     bool visual_localization_enable() const override;
+    std::string visual_localization_config_ip() const override;
+    size_t visual_localization_config_port() const override;
 
     size_t solver_iteration_limit() const override;
     double solver_time_limit() const override;
@@ -86,6 +89,7 @@ class YamlConfig : public Config {
     vector<3> m_output_to_body_translation;
 
     size_t m_sliding_window_size;
+    size_t m_sliding_window_tracker_frequent;
     size_t m_sliding_window_force_keyframe_landmarks;
 
     double m_feature_tracker_min_keypoint_distance;
@@ -103,6 +107,8 @@ class YamlConfig : public Config {
     bool m_initializer_refine_imu;
 
     bool m_visual_localization_enable;
+    std::string m_visual_localization_ip;
+    size_t m_visual_localization_port;
 
     size_t m_solver_iteration_limit;
     double m_solver_time_limit;

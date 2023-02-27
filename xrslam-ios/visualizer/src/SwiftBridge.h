@@ -1,1 +1,1 @@
-#import "XRSLAM.h"
+#import "XRSLAM2.h"

@@ -191,7 +191,7 @@ class ViewController: UIViewController, SCNSceneRendererDelegate {
             if nstate == 1 {
                 if system_mode == 1{
                     if let n_vloc_state = xrslamer?.global_localization_initialized() {
-                        if !n_vloc_state {
+                        if n_vloc_state == 0 {
                             DispatchQueue.main.async {
                                 var msg_list: Array<String> = Array()
                                 msg_list.append("Step 2: Trying to localize your position\n\n")

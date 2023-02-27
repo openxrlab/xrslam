@@ -124,7 +124,8 @@ void Frame::track_keypoints(Frame *next_frame, Config *config) {
         }
     }
     std::sort(angles.begin(), angles.end());
-    double misalignment = angles[angles.size() * 7 / 10];
+    double misalignment =
+        angles.size() > 0 ? angles[angles.size() * 7 / 10] : 0;
     inspect_debug(feature_tracker_angle_misalignment, angle_misalignment) {
         angle_misalignment = misalignment;
     }

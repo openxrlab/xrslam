@@ -118,8 +118,13 @@ Pose XRSLAM::Detail::track_camera(std::shared_ptr<Image> image) {
 
     frames.emplace_back(std::move(frame));
 
-    return predict_pose(image->t);
-    ;
+    Pose outpose = predict_pose(image->t);
+    std::unique_lock<std::mutex> lk(latest_mutex_);
+    if (image->t > latest_timestamp_) {
+        latest_pose_ = outpose;
+        latest_timestamp_ = image->t;
+    }
+    return outpose;
 }
 
 void XRSLAM::Detail::track_imu(const ImuData &imu) {
@@ -168,7 +173,6 @@ Pose XRSLAM::Detail::predict_pose(const double &t) {
             return frontend->localizer->transform(output_pose);
         }
     }
-
     return output_pose;
 }
 
@@ -226,6 +230,11 @@ std::tuple<double, Pose> XRSLAM::Detail::get_latest_state() const {
     }
 
     return {timestamp, output_pose};
+}
+
+std::tuple<double, Pose> XRSLAM::Detail::get_latest_pose() {
+    std::unique_lock<std::mutex> lk(latest_mutex_);
+    return {latest_timestamp_, latest_pose_};
 }
 
 } // namespace xrslam

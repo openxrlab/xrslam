@@ -1,0 +1,28 @@
+%YAML:1.0
+output:
+  q_bo: [ 0.0, 0.0, 0.0, 1.0 ] # x y z w
+  p_bo: [ 0.0, 0.0, 0.0 ] # x y z [m]
+
+sliding_window:
+  size: 10
+  force_keyframe_landmarks: 35
+
+feature_tracker:
+  min_keypoint_distance: 10.0 # [px]
+  max_keypoint_detection: 1000
+  max_init_frames: 60
+  max_frames: 20
+  predict_keypoints: true
+
+initializer:
+  keyframe_num: 8
+  keyframe_gap: 5
+  min_matches: 50
+  min_parallax: 10.0
+  min_triangulation: 20
+  min_landmarks: 30
+  refine_imu: true
+
+solver:
+  iteration_limit: 30
+  time_limit: 1.0e6 # [s]

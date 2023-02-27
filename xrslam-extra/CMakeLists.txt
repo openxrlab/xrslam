@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 project(xrslam-extra)
 
+add_compile_options(-fPIC)
+
 include(SuperBuildDepends)
 superbuild_depend(yaml-cpp)
 
@@ -16,7 +18,7 @@ target_include_directories(xrslam-extra-common
 )
 target_link_libraries(xrslam-extra-common
   INTERFACE
-    xrslam
+    xrslam-core
 )
 
 add_library(xrslam-extra-opencv-image

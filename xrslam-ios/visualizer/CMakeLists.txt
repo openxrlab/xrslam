@@ -17,11 +17,11 @@ set(MAIN_STORYBOARD Main)
 set(SWIFT_OBJC_BRIDGING_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/src/SwiftBridge.h)
 
 set(INFO_PLIST_TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Info.plist.in)
-
+include_directories(${CMAKE_SOURCE_DIR}/include/)
 set(XRSLAM_IOS_VISUALIZER_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAMIosConfig.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAMIosConfig.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM.h
+    ${CMAKE_SOURCE_DIR}/include/XRSLAM.h
+    ${CMAKE_SOURCE_DIR}/xrslam-localization/include/XRGlobalLocalizer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM.mm
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Camera.swift
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Motion.swift
@@ -65,8 +65,9 @@ add_executable(${EXECUTABLE_NAME}
 
 target_link_libraries(${EXECUTABLE_NAME}
     PRIVATE
-        xrslam-extra-opencv-image
-        xrslam-extra-yaml-config
+        xrslam
+        xrslam-localization
+        XRPrimer::xrprimer
 )
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES

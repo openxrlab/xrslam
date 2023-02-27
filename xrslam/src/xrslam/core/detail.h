@@ -3,6 +3,7 @@
 
 #include <xrslam/common.h>
 #include <xrslam/xrslam.h>
+#include <mutex>
 
 namespace xrslam {
 
@@ -37,6 +38,7 @@ struct XRSLAM::Detail {
     Pose track_camera(std::shared_ptr<Image> image);
 
     std::tuple<double, Pose> get_latest_state() const;
+    std::tuple<double, Pose> get_latest_pose();
 
     std::unique_ptr<FeatureTracker> feature_tracker;
     std::unique_ptr<FrontendWorker> frontend;
@@ -54,6 +56,10 @@ struct XRSLAM::Detail {
   private:
     void track_imu(const ImuData &imu);
     Pose predict_pose(const double &t);
+
+    std::mutex latest_mutex_;
+    double latest_timestamp_ = 0.0;
+    Pose latest_pose_;
 
     std::deque<GyroscopeData> gyroscopes;
     std::deque<AccelerometerData> accelerometers;

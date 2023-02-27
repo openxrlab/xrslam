@@ -71,4 +71,5 @@ class Visualizer : public lightvis::LightVis {
 };
 
 #endif
+
 #endif

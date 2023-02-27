@@ -55,12 +55,8 @@ void XRGlobalLocalizerEnable(int state);
  */
 XRSLAMPose XRGlobalLocalizerTransformPose(const XRSLAMPose &pose);
 
-/**
- * @brief destroy Global Localization system
- */
-void XRGlobalLocalizerDestroy();
-
 #ifdef __cplusplus
 }
 #endif
+
 #endif // _XR_GLOBAL_LOCALIZER_H_

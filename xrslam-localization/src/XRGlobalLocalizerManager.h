@@ -38,5 +38,7 @@ class XRGlobalLocalizerManager {
     std::unique_ptr<Localizer> localizer_;
     int global_localization_state_;
 };
+
 } // namespace xrslam
+
 #endif // XR_GLOBAL_LOCALIZER_MANAGER_H

@@ -20,3 +20,4 @@ visual_localization:
   enable: true
   ip: "10.156.16.69"
   port: 12345
+  

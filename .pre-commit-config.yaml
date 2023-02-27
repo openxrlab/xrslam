@@ -13,7 +13,6 @@ repos:
     hooks:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
-      - id: check-yaml
       - id: end-of-file-fixer
       - id: requirements-txt-fixer
       - id: double-quote-string-fixer

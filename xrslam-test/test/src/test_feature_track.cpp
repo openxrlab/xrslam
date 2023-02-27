@@ -22,13 +22,15 @@ std::shared_ptr<xrslam::Image> read_image(std::string filename) {
 }
 
 TEST(test_feature_track, feature_track) {
-    std::string config = "./configs/euroc.yaml";
+    std::string slam_config_path = "./configs/euroc_slam.yaml";
+    std::string device_config_path = "./configs/euroc_sensor.yaml";
     std::string filename1 = "./xrslam-test/data/1403715282262142976.png";
     std::string filename2 = "./xrslam-test/data/1403715282312143104.png";
 
     std::unique_ptr<Frame> frame = std::make_unique<Frame>();
     std::shared_ptr<xrslam::extra::YamlConfig> yaml_config =
-        std::make_shared<xrslam::extra::YamlConfig>(config);
+        std::make_shared<xrslam::extra::YamlConfig>(slam_config_path,
+                                                    device_config_path);
     frame->K = yaml_config->camera_intrinsic();
     frame->image = read_image(filename1);
     frame->image->preprocess();

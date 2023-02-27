@@ -88,7 +88,9 @@ set(PRIVATE_SOURCES
   ${XRSLAM_SOURCE_DIR}/xrslam/ar/virtual_object_manager.cpp
 )
 
-add_library(xrslam
+add_compile_options(-fPIC)
+
+add_library(xrslam-core
   ${PUBLIC_HEADERS}
   ${PUBLIC_SOURCES}
   ${PRIVATE_HEADERS}
@@ -96,14 +98,14 @@ add_library(xrslam
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  target_compile_options(xrslam
+  target_compile_options(xrslam-core
     PRIVATE
       -Qunused-arguments
       -mllvm
       -inline-threshold=5000
   )
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  target_compile_definitions(xrslam
+  target_compile_definitions(xrslam-core
     PUBLIC
       _ENABLE_EXTENDED_ALIGNED_STORAGE
     PRIVATE
@@ -112,16 +114,17 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   )
 endif()
 
-target_include_directories(xrslam
+target_include_directories(xrslam-core
   PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
     $<BUILD_INTERFACE:${XRSLAM_INCLUDE_DIR}>
     ${XRSLAM_BINARY_INCLUDE_DIR}
+    ${XRSLAM_SOURCE_DIR}
   PRIVATE
     ${XRSLAM_SOURCE_DIR}
 )
 
-target_link_libraries(xrslam
+target_link_libraries(xrslam-core
 PUBLIC
   options::modern-cpp
   XRPrimer::xrprimer

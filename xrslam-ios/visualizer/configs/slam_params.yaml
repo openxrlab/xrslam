@@ -1,0 +1,22 @@
+%YAML:1.0
+output:
+  q_bo: [ -0.7071068, 0.7071068, 0, 0 ] # x y z w
+  p_bo: [ 0.053617261855615515, -0.0016905232538204646, -0.0075510493739824724 ] # x y z [m]
+
+feature_tracker:
+  min_keypoint_distance: 25.0
+  max_keypoint_detection: 300
+  max_frames: 100
+
+solver:
+  time_limit: 0.1
+  iteration_limit: 10
+
+sliding_window:
+  size: 5
+  tracker_frequent: 3
+
+visual_localization:
+  enable: true
+  ip: "10.156.16.69"
+  port: 12345

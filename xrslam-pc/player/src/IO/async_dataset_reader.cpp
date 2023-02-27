@@ -20,7 +20,7 @@ DatasetReader::NextDataType AsyncDatasetReader::next() {
     double accelerometer_time = std::numeric_limits<double>::max();
     bool has_data = false;
     if (pending_images.size() > 0) {
-        image_time = pending_images.front()->t;
+        image_time = pending_images.front().first;
         has_data = true;
     }
     if (pending_gyroscopes.size() > 0) {
@@ -47,8 +47,11 @@ DatasetReader::NextDataType AsyncDatasetReader::next() {
         return CAMERA;
     }
 }
+void AsyncDatasetReader::get_image_resolution(int &width, int &height) {
+    reader->get_image_resolution(width, height);
+}
 
-std::shared_ptr<xrslam::Image> AsyncDatasetReader::read_image() {
+std::pair<double, cv::Mat> AsyncDatasetReader::read_image() {
     std::lock_guard lock(reader_mutex);
     auto r = pending_images.front();
     pending_images.pop();
@@ -56,14 +59,14 @@ std::shared_ptr<xrslam::Image> AsyncDatasetReader::read_image() {
     return r;
 }
 
-std::pair<double, xrslam::vector<3>> AsyncDatasetReader::read_gyroscope() {
+std::pair<double, XRSLAMGyroscope> AsyncDatasetReader::read_gyroscope() {
     std::lock_guard lock(reader_mutex);
     auto r = pending_gyroscopes.front();
     pending_gyroscopes.pop();
     return r;
 }
 
-std::pair<double, xrslam::vector<3>> AsyncDatasetReader::read_accelerometer() {
+std::pair<double, XRSLAMAcceleration> AsyncDatasetReader::read_accelerometer() {
     std::lock_guard lock(reader_mutex);
     auto r = pending_accelerometers.front();
     pending_accelerometers.pop();

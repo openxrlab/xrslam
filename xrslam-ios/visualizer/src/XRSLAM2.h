@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, SysState) {
 - (SysState)get_system_state;
 - (void)enable_global_localization;
 - (void)disable_global_localization;
-- (bool)global_localization_initialized;
+- (int)global_localization_initialized;
 - (void)query_frame;
 - (NSMutableArray *)get_logger_message;
 - (UIImage *)getLatestImage;

@@ -57,6 +57,7 @@ class Config {
   public:
     virtual ~Config();
 
+    virtual vector<2> camera_resolution() const = 0;
     virtual matrix<3> camera_intrinsic() const = 0;
     virtual quaternion camera_to_body_rotation() const = 0;
     virtual vector<3> camera_to_body_translation() const = 0;
@@ -130,6 +131,7 @@ class Image {
 
 enum SysState { SYS_INITIALIZING = 0, SYS_TRACKING, SYS_CRASH, SYS_UNKNOWN };
 
+// The following interfaces will be deprecated
 class XRSLAM {
   public:
     struct Detail;

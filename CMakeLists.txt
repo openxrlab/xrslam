@@ -22,7 +22,7 @@ option(XRSLAM_TEST "..." OFF)
 if(IOS)
   set(XRSLAM_IOS ON)
   set(XRSLAM_ENABLE_THREADING ON)
-  set(XRSLAM_ENABLE_DEBUG_INSPECTION OFF CACHE BOOL "..." FORCE)
+  #set(XRSLAM_ENABLE_DEBUG_INSPECTION OFF CACHE BOOL "..." FORCE)
 endif()
 
 
@@ -32,6 +32,8 @@ endif()
 
 add_subdirectory(xrslam)
 add_subdirectory(xrslam-extra)
+add_subdirectory(xrslam-interface)
+add_subdirectory(xrslam-localization)
 
 if(XRSLAM_PC)
   add_subdirectory(xrslam-pc)

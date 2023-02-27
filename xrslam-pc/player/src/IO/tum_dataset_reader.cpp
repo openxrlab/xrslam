@@ -1,25 +1,25 @@
-#include <euroc_dataset_reader.h>
-#include <xrslam/extra/opencv_image.h>
+#include <tum_dataset_reader.h>
 
-EurocDatasetReader::EurocDatasetReader(const std::string &euroc_path) {
-    CameraCsv camera_csv;
-    ImuCsv imu_csv;
+TUMDatasetReader::TUMDatasetReader(const std::string &tum_path) {
+    TUMCameraCsv camera_csv;
+    TUMImuCsv imu_csv;
 
-    camera_csv.load(euroc_path + "/cam0/data.csv");
-    imu_csv.load(euroc_path + "/imu0/data.csv");
+    camera_csv.load(tum_path + "/cam0/data.csv");
+    imu_csv.load(tum_path + "/imu0/data.csv");
 
     for (auto &item : camera_csv.items) {
+        // printf("read image %lf\n", item.t);
         image_data.emplace_back(item.t,
-                                euroc_path + "/cam0/data/" + item.filename);
+                                tum_path + "/cam0/data/" + item.filename);
         all_data.emplace_back(item.t, NextDataType::CAMERA);
     }
+    num_images = image_data.size();
 
     for (auto &item : imu_csv.items) {
-        xrslam::vector<3> gyr = {item.w.x, item.w.y, item.w.z};
+        XRSLAMGyroscope gyr = {{item.w.x, item.w.y, item.w.z}, item.t};
         gyroscope_data.emplace_back(item.t, gyr);
         all_data.emplace_back(item.t, NextDataType::GYROSCOPE);
-
-        xrslam::vector<3> acc = {item.a.x, item.a.y, item.a.z};
+        XRSLAMAcceleration acc = {{item.a.x, item.a.y, item.a.z}, item.t};
         accelerometer_data.emplace_back(item.t, acc);
         all_data.emplace_back(item.t, NextDataType::ACCELEROMETER);
     }
@@ -34,7 +34,7 @@ EurocDatasetReader::EurocDatasetReader(const std::string &euroc_path) {
               [](auto &a, auto &b) { return a.first < b.first; });
 }
 
-DatasetReader::NextDataType EurocDatasetReader::next() {
+DatasetReader::NextDataType TUMDatasetReader::next() {
     if (all_data.empty()) {
         return NextDataType::END;
     }
@@ -42,30 +42,40 @@ DatasetReader::NextDataType EurocDatasetReader::next() {
     return type;
 }
 
-std::shared_ptr<xrslam::Image> EurocDatasetReader::read_image() {
+void TUMDatasetReader::get_image_resolution(int &width, int &height) {
+    height = image_height;
+    width = image_width;
+}
+
+std::pair<double, cv::Mat> TUMDatasetReader::read_image() {
     if (image_data.empty()) {
-        return nullptr;
+        return {};
     }
     auto [t, filename] = image_data.front();
     cv::Mat img_distorted = cv::imread(filename, cv::IMREAD_GRAYSCALE);
+
     cv::Mat img;
-    cv::Mat dist_coeffs = (cv::Mat_<float>(4, 1) << -0.28340811, 0.07395907,
-                           0.00019359, 1.76187114e-05);
-    cv::Mat K = (cv::Mat_<float>(3, 3) << 458.654, 0, 367.215, 0, 457.296,
-                 248.375, 0, 0, 1);
-    cv::undistort(img_distorted, img, K, dist_coeffs);
-    std::shared_ptr<xrslam::extra::OpenCvImage> opencv_image =
-        std::make_shared<xrslam::extra::OpenCvImage>();
-    opencv_image->t = t;
-    opencv_image->image = img;
-    opencv_image->raw = img.clone();
+    if (!image_undistorter) {
+        xrslam::matrix<3> K;
+        K << 190.97847715128717, 0, 254.93170605935475, 0, 190.9733070521226,
+            256.8974428996504, 0, 0, 1;
+        std::vector<double> dist_coeffs = {
+            0.0034003170790442797, 0.001766278153469831, -0.00266312569781606,
+            0.0003299517423931039};
+        image_undistorter = std::make_unique<xrslam::extra::ImageUndistorter>(
+            img_distorted.cols, img_distorted.rows, K, dist_coeffs,
+            "equidistant");
+    }
+    image_undistorter->undistort_image(img_distorted, img);
+    image_height = img.rows;
+    image_width = img.cols;
 
     all_data.pop_front();
     image_data.pop_front();
-    return opencv_image;
+    return std::make_pair(t, img);
 }
 
-std::pair<double, xrslam::vector<3>> EurocDatasetReader::read_gyroscope() {
+std::pair<double, XRSLAMGyroscope> TUMDatasetReader::read_gyroscope() {
     if (gyroscope_data.empty()) {
         return {};
     }
@@ -76,7 +86,7 @@ std::pair<double, xrslam::vector<3>> EurocDatasetReader::read_gyroscope() {
     return item;
 }
 
-std::pair<double, xrslam::vector<3>> EurocDatasetReader::read_accelerometer() {
+std::pair<double, XRSLAMAcceleration> TUMDatasetReader::read_accelerometer() {
     if (accelerometer_data.empty()) {
         return {};
     }

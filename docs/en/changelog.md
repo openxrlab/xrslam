@@ -1,5 +1,14 @@
 # Changelog
 
+## XRSLAM Release v0.5.0
+
+**Highlights:**
+* [CHANGE] Redefine the function call interface of XRSLAM
+* [CHANGE] Use the newly defined interface to call XRSLAM in the example of ios and PC.
+* [CHANGE] Refactoring the PC example.
+* [CHANGE] Unified the configuration file format
+* [ADD] Add API interface documentation
+
 ## XRSLAM Release v0.4.0
 
 **Highlights:**

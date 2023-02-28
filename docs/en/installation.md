@@ -1,6 +1,8 @@
-# Installation Tutorial for XRSLAM
+# Installation
 
-## 1. Prerequisites
+We provide some tips for XRSLAM installation in this file.
+
+## Build from Source
 
 ### Requirements
 
@@ -9,50 +11,48 @@
 * CMake 3.15+
 * [XRPrimer](https://github.com/openxrlab/xrprimer)
 
-### Build XRPrimer
+Clone XRPrimer to keep the same root directory as XRSLAM, then switch the branch to the specified OpenCV version.
 
-- XRPrimer is a fundational library for XR-related algorithms provided by our team. First clone the project and check out to a specified version.
+```bash
+git clone https://github.com/openxrlab/xrprimer.git
+cd xrprimer
+git checkout xrslam-opencv3.4.7
+```
+
+If your project folder structure is different, need to change the XRPrimer path.
+
+```
+xrprimer
+├──
+...
+xrslam
+├── xrslam
+├── xrslam-pc
+├── xrslam-ios
+...
+```
 
 
-  ```bash
-  git clone https://github.com/openxrlab/xrprimer.git
-  cd xrprimer
-  git checkout xrslam-opencv3.4.7
+### Linux/Mac
 
-  as below:
-
-  xrprimer
-  ├──
-  ...
-  xrslam
-  ├── xrslam
-  ├── xrslam-pc
-  ├── xrslam-ios
-  ...
-  ```
-
-
-- Then configure some common dependencies.
+- In XRPrimer, run
 
   ```bash
   cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_PRECOMPILED_HEADERS=OFF && cmake --build build --target install -j8
   ```
 
-## 2. Build XRSLAM
-
-<details> <summary>Build XRSLAM on Linux/Mac</summary>
-
-- Generate the project using cmake.
+  to configure some common dependencies.
+- In XRSLAM, run
 
   ```bash
-  cd /path/to/xrslam
   cmake -B build && cmake --build build -j8
   ```
 
+  to generate the project using cmake.
 - Start the XRSLAM pc player with the command
 
   ```bash
-  ./build/xrslam-pc/player/xrslam-pc-player -c configs/euroc.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
+  ./build/xrslam-pc/player/xrslam-pc-player -sc configs/euroc_slam.yaml -dc configs/euroc_sensor.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
   ```
 
   + Click the first button "Stopped" of the player to automatically execute the program on the whole sequence.
@@ -60,9 +60,7 @@
   + Click the last button "Step" to run the program by inputting a single image of the sequence.
   + Click the left mouse button to rotate the viewing angle, and slide the mouse wheel to scale the viewing size.
 
-</details>
-
-<details> <summary>Build XRSLAM for iOS</summary>
+### iOS
 
 - In XRPrimer, run `./build-ios.sh` to configure some common dependencies.
 - In XRSLAM, run `./build-ios.sh` to generate the XCode project using cmake.
@@ -72,9 +70,7 @@
   + Be sure that your iPhone is supported by checking the [supported devices list](./supported_devices.md)
   + If the project failed to build in Xcode, try to clean the build folder using `cmd+shift+k`
 
-</details>
-
-## 3. Docker Support
+## Docker image
 
 ### Build an Image
 
@@ -103,5 +99,5 @@ docker cp data/EuRoC/MH_01_easy b1e0d3f809f6:MH_01_easy
 
 ```
 cd xrslam
-`./build/xrslam-pc/player/xrslam-pc-player -H -c configs/euroc.yaml --tum trajectory.tum euroc:///MH_01_easy/mav0`
+`./build/xrslam-pc/player/xrslam-pc-player -sc configs/euroc_slam.yaml -dc configs/euroc_sensor.yaml --tum trajectory.tum euroc:///MH_01_easy/mav0`
 ```

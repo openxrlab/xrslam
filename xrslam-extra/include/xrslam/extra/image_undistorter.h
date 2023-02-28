@@ -3,6 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <xrslam/xrslam.h>
 
 namespace xrslam::extra {
 

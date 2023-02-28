@@ -14,9 +14,10 @@ class AsyncDatasetReader : public DatasetReader {
     ~AsyncDatasetReader();
 
     NextDataType next() override;
-    std::shared_ptr<xrslam::Image> read_image() override;
-    std::pair<double, xrslam::vector<3>> read_gyroscope() override;
-    std::pair<double, xrslam::vector<3>> read_accelerometer() override;
+    void get_image_resolution(int &width, int &height) override;
+    std::pair<double, cv::Mat> read_image() override;
+    std::pair<double, XRSLAMGyroscope> read_gyroscope() override;
+    std::pair<double, XRSLAMAcceleration> read_accelerometer() override;
 
   private:
     bool data_available() const;
@@ -28,9 +29,10 @@ class AsyncDatasetReader : public DatasetReader {
     std::mutex reader_mutex;
     std::condition_variable reader_cv;
 
-    std::queue<std::pair<double, xrslam::vector<3>>> pending_gyroscopes;
-    std::queue<std::pair<double, xrslam::vector<3>>> pending_accelerometers;
-    std::queue<std::shared_ptr<xrslam::Image>> pending_images;
+    std::queue<std::pair<double, XRSLAMGyroscope>> pending_gyroscopes;
+    std::queue<std::pair<double, XRSLAMAcceleration>> pending_accelerometers;
+    std::queue<std::pair<double, cv::Mat>> pending_images;
+
     bool EOD = false;
 };
 

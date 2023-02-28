@@ -10,17 +10,20 @@ class TUMDatasetReader : public DatasetReader {
   public:
     TUMDatasetReader(const std::string &filename);
     NextDataType next() override;
-    std::shared_ptr<xrslam::Image> read_image() override;
-    std::pair<double, xrslam::vector<3>> read_gyroscope() override;
-    std::pair<double, xrslam::vector<3>> read_accelerometer() override;
+    void get_image_resolution(int &width, int &height) override;
+    std::pair<double, cv::Mat> read_image() override;
+    std::pair<double, XRSLAMGyroscope> read_gyroscope() override;
+    std::pair<double, XRSLAMAcceleration> read_accelerometer() override;
     size_t num_images;
 
   private:
     std::deque<std::pair<double, NextDataType>> all_data;
-    std::deque<std::pair<double, xrslam::vector<3>>> gyroscope_data;
-    std::deque<std::pair<double, xrslam::vector<3>>> accelerometer_data;
+    std::deque<std::pair<double, XRSLAMGyroscope>> gyroscope_data;
+    std::deque<std::pair<double, XRSLAMAcceleration>> accelerometer_data;
     std::deque<std::pair<double, std::string>> image_data;
     std::unique_ptr<xrslam::extra::ImageUndistorter> image_undistorter;
+    int image_width;
+    int image_height;
 };
 
 struct TUMCameraCsv {
@@ -35,7 +38,7 @@ struct TUMCameraCsv {
         items.clear();
         if (FILE *csv = fopen(filename.c_str(), "r")) {
             char header_line[2048];
-            fscanf(csv, "%2047[^\n]", header_line);
+            int ret = fscanf(csv, "%2047[^\n]", header_line);
             char filename_buffer[2048];
             CameraData item;
             while (!feof(csv)) {
@@ -84,7 +87,7 @@ struct TUMImuCsv {
         items.clear();
         if (FILE *csv = fopen(filename.c_str(), "r")) {
             char header_line[2048];
-            fscanf(csv, "%2047[^\n]", header_line);
+            int ret = fscanf(csv, "%2047[^\n]", header_line);
             ImuData item;
             while (!feof(csv) &&
                    fscanf(csv, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", &item.t,

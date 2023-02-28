@@ -7,6 +7,7 @@
 #include <memory>
 #include <shader.h>
 #include <string>
+#include <mutex>
 
 namespace lightvis {
 
@@ -76,9 +77,11 @@ class LightVis {
     void add_trajectory(std::vector<Eigen::Vector3f> &positions,
                         std::vector<Eigen::Vector4f> &colors);
 
-    void add_camera(std::vector<Eigen::Vector3f> &positions, vector<3> &p,
-                    quaternion &q, matrix<3> K, Eigen::Vector4f &color,
-                    double size = 0.0005);
+    void add_camera(std::vector<Eigen::Vector3f> &positions,
+                    Eigen::Vector4f &color);
+    void set_camera_position(std::vector<Eigen::Vector3f> &positions,
+                             vector<3> &p, quaternion &q, matrix<3> K,
+                             Eigen::Vector4f &color, double size = 0.0005);
 
     void add_separator();
     void add_label(const std::string &label);
@@ -93,9 +96,11 @@ class LightVis {
     virtual bool mouse(const MouseStates &states);
     // virtual bool keyboard()
     virtual void gui(void *ctx, int w, int h);
+    std::unique_lock<std::mutex> lock() const;
 
   private:
     std::unique_ptr<LightVisDetail> detail;
+    mutable std::mutex frame_mutex;
 };
 
 int main();

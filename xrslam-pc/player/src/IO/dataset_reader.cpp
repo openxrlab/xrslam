@@ -1,8 +1,8 @@
-#include <async_dataset_reader.h>
 #include <dataset_reader.h>
 #include <euroc_dataset_reader.h>
-#include <optional>
 #include <tum_dataset_reader.h>
+#include <async_dataset_reader.h>
+#include <optional>
 
 std::optional<std::string> path_from_scheme(const std::string &string,
                                             const std::string &pattern) {

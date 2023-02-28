@@ -119,7 +119,7 @@ class XRSLAMer : CameraDelegate, MotionDelegate {
         xrslam.query_frame()
     }
 
-    func global_localization_initialized() -> Bool {
+    func global_localization_initialized() -> Int32 {
         return xrslam.global_localization_initialized()
     }
 

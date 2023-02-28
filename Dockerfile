@@ -25,4 +25,4 @@ RUN git clone https://github.com/openxrlab/xrprimer.git -b xrslam-opencv3.4.7 \
     && cmake --build build --target install -j4
 
 RUN git clone https://github.com/openxrlab/xrslam.git \
-    && cd xrslam && cmake -B build && cmake --build build -j4
+    && cd xrslam && cmake -B build -DXRSLAM_PC_HEADLESS_ONLY=ON && cmake --build build -j4

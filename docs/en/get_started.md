@@ -31,7 +31,7 @@ Firstly, switch XRPrimer to the branch of the specified OpenCV version `git chec
 
 - In XRPrimer, run `./build-ios.sh` to configure some common dependencies.
 - In XRSLAM, run `./build-ios.sh` to generate the XCode project using cmake.
-- The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically. 
+- The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically.
 
 For more information on installation, please refer to [installation.md](./installation.md).
 

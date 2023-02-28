@@ -69,7 +69,6 @@ xrslam
 - The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically.
   + Be sure that your iPhone is supported by checking the [supported devices list](./supported_devices.md)
   + If the project failed to build in Xcode, try to clean the build folder using `cmd+shift+k`
-  + Before run  `xrslam-ios-visulaizer`,  you should run the target `xrslam`  first,  to make sure  `lib/iOS/Release/libxrslam.a` is exist.  
 
 ## Docker image
 

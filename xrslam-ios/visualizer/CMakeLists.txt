@@ -21,8 +21,8 @@ include_directories(${CMAKE_SOURCE_DIR}/include/)
 set(XRSLAM_IOS_VISUALIZER_SOURCES
     ${CMAKE_SOURCE_DIR}/include/XRSLAM.h
     ${CMAKE_SOURCE_DIR}/xrslam-localization/include/XRGlobalLocalizer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM2.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM.mm
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM_iOS.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/XRSLAM_iOS.mm
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Camera.swift
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Motion.swift
     ${CMAKE_CURRENT_SOURCE_DIR}/src/NodeUtils.swift

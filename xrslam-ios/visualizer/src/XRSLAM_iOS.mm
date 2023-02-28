@@ -1,7 +1,7 @@
 //#import <thread>
 #import <opencv2/opencv.hpp>
 #import "XRSLAM.h"
-#import "XRSLAM2.h"
+#import "XRSLAM_iOS.h"
 #import "XRGlobalLocalizer.h"
 #import <UIKit/UIKit.h>
 #import <SceneKit/SceneKit.h>

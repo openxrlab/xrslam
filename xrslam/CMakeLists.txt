@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
-project(xrslam-library VERSION 0.4.0 LANGUAGES CXX)
+project(xrslam-library VERSION 0.5.0 LANGUAGES CXX)
 
 configure_file(cmake/version.h.in include/xrslam/version.h)
 

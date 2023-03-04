@@ -29,6 +29,7 @@ xrslam
 ├── xrslam
 ├── xrslam-pc
 ├── xrslam-ios
+├── xrslam-ros
 ...
 ```
 
@@ -69,6 +70,24 @@ xrslam
 - The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically.
   + Be sure that your iPhone is supported by checking the [supported devices list](./supported_devices.md)
   + If the project failed to build in Xcode, try to clean the build folder using `cmd+shift+k`
+
+### ROS
+- After compiling the shared library **lib/libxrslam.so**, then run
+
+  ```bash
+  cd xrslam-ros
+  catkin_make
+  source devel/setup.bash
+  ```
+  to build XRSLAM on ROS.
+
+- Open three terminals, launch the xrslam_ros, rviz and play the bag file respectively. Take MH_01 for example
+
+  ```bash
+  roslaunch xrslam_ros euroc.launch
+  roslaunch xrslam_ros rviz.launch
+  rosbag play YOUR_PATH_TO_DATASET/MH_01_easy.bag
+  ```
 
 ## Docker image
 

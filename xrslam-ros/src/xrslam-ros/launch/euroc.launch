@@ -1,0 +1,12 @@
+<launch>
+    <arg name="slam_config_path" default = "$(find xrslam_ros)/../../../configs/euroc_slam.yaml" />
+      <arg name="device_config_path" default = "$(find xrslam_ros)/../../../configs/euroc_sensor.yaml" />
+	  <arg name="trajectory_path" default = "$(find xrslam_ros)/trajectory.tum" />
+
+    <node name="xrslam_ros" pkg="xrslam_ros" type="xrslam_ros" output="log">
+        <param name="slam_config_path" type="string" value="$(arg slam_config_path)" />
+        <param name="device_config_path" type="string" value="$(arg device_config_path)" />
+        <param name="trajectory_file" type="string" value="$(arg trajectory_path)" />
+    </node>
+
+</launch>

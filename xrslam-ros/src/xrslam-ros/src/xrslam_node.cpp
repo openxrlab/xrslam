@@ -28,7 +28,6 @@ ros::Publisher pub_traj;
 ros::Publisher pub_pose;
 nav_msgs::Path traj_msg;
 
-
 void img_callback(const sensor_msgs::ImageConstPtr &image_msg) {
     image_buf.push(image_msg);
 }
@@ -149,7 +148,7 @@ int main(int argc, char **argv) {
     }
 
     traj_msg.header.frame_id = "map";
-    
+
     ros::Subscriber sub_image = n.subscribe(IMAGE_TOPIC, 100, img_callback);
     ros::Subscriber sub_imu = n.subscribe(IMU_TOPIC, 2000, imu_callback,
                                           ros::TransportHints().tcpNoDelay());

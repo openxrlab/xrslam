@@ -5,6 +5,8 @@ build-ios.conf
 build/**
 debug/**
 _build/**
+lib/**
+include/**
 
 # Xcode
 #
@@ -83,6 +85,12 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# Ros
+xrslam-ros/build/
+xrslam-ros/devel/
+xrslam-ros/.catkin_workspace
+xrslam-ros/src/CMakeLists.txt
 
 # Output
 trajectory.tum

@@ -33,6 +33,9 @@ Firstly, switch XRPrimer to the branch of the specified OpenCV version `git chec
 - In XRSLAM, run `./build-ios.sh` to generate the XCode project using cmake.
 - The target `xrslam-ios-visulaizer` is what you need to download to the iPhone, and an APP named `XRSLAM` will start automatically.
 
+#### ROS
+After the project is compiled successfully, you could use this shared library **lib/libxrslam.so** and **include/XRSLAM.h** to build XRSLAM on ROS.
+
 For more information on installation, please refer to [installation.md](./installation.md).
 
 ## Evaluation
@@ -51,6 +54,7 @@ xrslam
 ├── xrslam-localization
 ├── xrslam-pc
 ├── xrslam-ios
+├── xrslam-ros
 ...
 ```
 
@@ -60,6 +64,7 @@ xrslam
 + xrslam-localization : sfm-based relocalization functions are defined
 + xrslam-pc : contain examples for PC
 + xrslam-ios : contain examples for iOS
++ xrslam-ros : contain examples for ROS
 
 #### Linux/Mac
 

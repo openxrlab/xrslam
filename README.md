@@ -57,7 +57,15 @@ If you use this toolbox or benchmark in your research, please cite this project.
     year={2022}
 }
 ```
-
+If you use the Robust Visual-Inertial Odometry in your research, please cite:
+```bibtex
+@article{li2023rd,
+  title={RD-VIO: Robust Visual-Inertial Odometry for Mobile Augmented Reality in Dynamic Environments},
+  author={Li, Jinyu and Pan, Xiaokun and Huang, Gan and Zhang, Ziyang and Wang, Nan and Bao, Hujun and Zhang, Guofeng},
+  journal={arXiv preprint arXiv:2310.15072},
+  year={2023}
+}
+```
 ## Contributing
 
 We appreciate all contributions to improve XRSLAM.

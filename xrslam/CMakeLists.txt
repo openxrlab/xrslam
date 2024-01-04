@@ -44,6 +44,7 @@ set(PRIVATE_HEADERS
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/lie_algebra.h
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/stereo.h
   ${XRSLAM_SOURCE_DIR}/xrslam/geometry/wahba.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/geometry/pnp.h
   ${XRSLAM_SOURCE_DIR}/xrslam/map/frame.h
   ${XRSLAM_SOURCE_DIR}/xrslam/map/map.h
   ${XRSLAM_SOURCE_DIR}/xrslam/map/track.h
@@ -56,6 +57,8 @@ set(PRIVATE_HEADERS
   ${XRSLAM_SOURCE_DIR}/xrslam/utility/unique_timer.h
   ${XRSLAM_SOURCE_DIR}/xrslam/utility/worker.h
   ${XRSLAM_SOURCE_DIR}/xrslam/utility/logger.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/utility/parsac.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/utility/imu_parsac.h
   ${XRSLAM_SOURCE_DIR}/xrslam/ar/virtual_object_manager.h
   ${XRSLAM_SOURCE_DIR}/xrslam/localizer/base64.h
   ${XRSLAM_SOURCE_DIR}/xrslam/localizer/base64_convert.h

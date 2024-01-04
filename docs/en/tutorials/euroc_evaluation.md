@@ -4,16 +4,10 @@
 
 Download EuRoC dataset to YOUR_DATASET_FOLDER. Take [MH_01_easy ](http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy.zip)for example.
 
-Start the XRSLAM pc player using the following command line, and it will not show visualization.
+Start the XRSLAM pc player using the following command line
 
 ```bash
-./build/xrslam-pc/player/xrslam-pc-player -H -c configs/euroc.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
-```
-
-We also provide a GUI version and could start by using the following command line
-
-```bash
-./build/xrslam-pc/player/xrslam-pc-player -c configs/euroc.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
+./build/xrslam-pc/player/xrslam-pc-player -sc configs/euroc_slam.yaml -dc configs/euroc_sensor.yaml --tum trajectory.tum euroc:///data/EuRoC/MH_01_easy/mav0
 ```
 
 + Click the first button "Stopped" of the player to automatically execute the program on the whole sequence. (recommend)
@@ -38,11 +32,10 @@ cd data/EuRoC/MH_01_easy/mav0/state_groundtruth_estimate0
 evo_traj euroc data.csv --save_as_tum
 ```
 
-After converting the ground truth trajectory to the "tum" format,  you can evaluate the accuracy ( APE and ARE ) by
+After converting the ground truth trajectory to the "tum" format,  you can evaluate the accuracy by
 
 ```bash
 evo_ape tum data.tum $PROJECT/trajectory.tum -a
-evo_ape tum data.tum $PROJECT/trajectory.tum -r angle_deg
 ```
 
-You will get the RMSE of XRSLAM on MH_01 sequence, in which APE is 0.147 and ARE is 2.56.
+You will get the RMSE of XRSLAM on MH_01 sequence, in which APE is 0.109.

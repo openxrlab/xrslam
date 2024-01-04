@@ -31,7 +31,7 @@ class OpenCvImage : public Image {
                          std::vector<vector<2>> &next_keypoints,
                          std::vector<char> &result_status) const override;
 
-    void preprocess() override;
+    void preprocess(double clipLimit, int width, int height) override;
     void correct_distortion(const matrix<3> &intrinsics,
                             const vector<4> &coeffs);
     void release_image_buffer() override;
@@ -50,7 +50,7 @@ class OpenCvImage : public Image {
     typedef ceres::BiCubicInterpolator<Grid> Interpolator;
     std::vector<Interpolator> interpolator_levels;
 
-    static cv::CLAHE *clahe();
+    static cv::CLAHE *clahe(double clipLimit, int width, int height);
     static cv::GFTTDetector *gftt(size_t max_points);
     static cv::FastFeatureDetector *fast();
     static cv::ORB *orb();

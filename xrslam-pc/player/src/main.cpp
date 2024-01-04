@@ -87,9 +87,10 @@ int main(int argc, char *argv[]) {
     bool is_play = program.get<bool>("-p");
 
     // create slam with configuration files
+    void *yaml_config = nullptr;
     int create_succ =
         XRSLAMCreate(slam_config_path.c_str(), device_config_path.c_str(),
-                     license_path.c_str(), "XRSLAM PC");
+                     license_path.c_str(), "XRSLAM PC", &yaml_config);
     std::cout << "create SLAM success: " << create_succ << std::endl;
 #ifndef XRSLAM_PC_HEADLESS_ONLY
     Visualizer visualizer(is_play, device_config_path);
@@ -107,7 +108,7 @@ int main(int argc, char *argv[]) {
     }
 
     std::unique_ptr<DatasetReader> reader =
-        DatasetReader::create_reader(data_path);
+        DatasetReader::create_reader(data_path, yaml_config);
     if (!reader) {
         fprintf(stderr, "Cannot open \"%s\"\n", data_path.c_str());
         return EXIT_FAILURE;

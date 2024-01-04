@@ -1,6 +1,10 @@
 #include <tum_dataset_reader.h>
 
-TUMDatasetReader::TUMDatasetReader(const std::string &tum_path) {
+TUMDatasetReader::TUMDatasetReader(const std::string &tum_path,
+                                   void *yaml_config) {
+    config = std::shared_ptr<xrslam::extra::YamlConfig>(
+        reinterpret_cast<xrslam::extra::YamlConfig *>(yaml_config));
+
     TUMCameraCsv camera_csv;
     TUMImuCsv imu_csv;
 
@@ -9,9 +13,10 @@ TUMDatasetReader::TUMDatasetReader(const std::string &tum_path) {
 
     for (auto &item : camera_csv.items) {
         // printf("read image %lf\n", item.t);
-        image_data.emplace_back(item.t,
+        image_data.emplace_back(item.t + config->camera_time_offset(),
                                 tum_path + "/cam0/data/" + item.filename);
-        all_data.emplace_back(item.t, NextDataType::CAMERA);
+        all_data.emplace_back(item.t + config->camera_time_offset(),
+                              NextDataType::CAMERA);
     }
     num_images = image_data.size();
 
@@ -24,14 +29,14 @@ TUMDatasetReader::TUMDatasetReader(const std::string &tum_path) {
         all_data.emplace_back(item.t, NextDataType::ACCELEROMETER);
     }
 
-    std::sort(all_data.begin(), all_data.end(),
-              [](auto &a, auto &b) { return a.first < b.first; });
-    std::sort(image_data.begin(), image_data.end(),
-              [](auto &a, auto &b) { return a.first < b.first; });
-    std::sort(gyroscope_data.begin(), gyroscope_data.end(),
-              [](auto &a, auto &b) { return a.first < b.first; });
-    std::sort(accelerometer_data.begin(), accelerometer_data.end(),
-              [](auto &a, auto &b) { return a.first < b.first; });
+    std::stable_sort(all_data.begin(), all_data.end(),
+                     [](auto &a, auto &b) { return a.first < b.first; });
+    std::stable_sort(image_data.begin(), image_data.end(),
+                     [](auto &a, auto &b) { return a.first < b.first; });
+    std::stable_sort(gyroscope_data.begin(), gyroscope_data.end(),
+                     [](auto &a, auto &b) { return a.first < b.first; });
+    std::stable_sort(accelerometer_data.begin(), accelerometer_data.end(),
+                     [](auto &a, auto &b) { return a.first < b.first; });
 }
 
 DatasetReader::NextDataType TUMDatasetReader::next() {
@@ -56,17 +61,19 @@ std::pair<double, cv::Mat> TUMDatasetReader::read_image() {
 
     cv::Mat img;
     if (!image_undistorter) {
-        xrslam::matrix<3> K;
-        K << 190.97847715128717, 0, 254.93170605935475, 0, 190.9733070521226,
-            256.8974428996504, 0, 0, 1;
-        std::vector<double> dist_coeffs = {
-            0.0034003170790442797, 0.001766278153469831, -0.00266312569781606,
-            0.0003299517423931039};
+        xrslam::matrix<3> intrinsic = config->camera_intrinsic();
+        xrslam::vector<4> D = config->camera_distortion();
+        std::vector<double> distortion = {D[0], D[1], D[2], D[3]};
         image_undistorter = std::make_unique<xrslam::extra::ImageUndistorter>(
-            img_distorted.cols, img_distorted.rows, K, dist_coeffs,
+            img_distorted.cols, img_distorted.rows, intrinsic, distortion,
             "equidistant");
     }
-    image_undistorter->undistort_image(img_distorted, img);
+    if (config->camera_distortion_flag()) {
+        image_undistorter->undistort_image(img_distorted, img);
+    } else {
+        img = img_distorted.clone();
+    }
+
     image_height = img.rows;
     image_width = img.cols;
 

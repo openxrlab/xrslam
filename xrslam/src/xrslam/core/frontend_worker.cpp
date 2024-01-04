@@ -49,6 +49,8 @@ void FrontendWorker::work(std::unique_lock<std::mutex> &l) {
             } else {
                 sliding_window_tracker->map->create_virtual_object_manager();
             }
+            sliding_window_tracker->feature_tracking_map =
+                detail->feature_tracker->map;
             std::unique_lock lk(latest_state_mutex);
             auto [t, pose, motion] = sliding_window_tracker->get_latest_state();
             latest_state = {t, pending_frame_id, pose, motion};

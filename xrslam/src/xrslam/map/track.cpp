@@ -4,8 +4,7 @@
 
 namespace xrslam {
 
-Track::Track() = default;
-
+Track::Track() { tag(TT_STATIC) = true; }
 Track::~Track() = default;
 
 const vector<3> &Track::get_keypoint(Frame *frame) const {
@@ -17,6 +16,10 @@ void Track::add_keypoint(Frame *frame, size_t keypoint_index) {
     frame->tracks[keypoint_index] = this;
     frame->reprojection_error_factors[keypoint_index] =
         Solver::create_reprojection_error_factor(frame, this);
+    if (this->tag(TT_TRIANGULATED))
+        m_life++;
+    else
+        m_life = 1;
 }
 
 void Track::remove_keypoint(Frame *frame, bool suicide_if_empty) {
@@ -40,7 +43,7 @@ void Track::remove_keypoint(Frame *frame, bool suicide_if_empty) {
     }
 }
 
-std::optional<vector<3>> Track::triangulate() const {
+std::optional<vector<3>> Track::triangulate() {
     std::vector<matrix<3, 4>> Ps;
     std::vector<vector<3>> ps;
     for (const auto &[frame, keypoint_index] : keypoint_map()) {
@@ -65,6 +68,7 @@ std::optional<vector<3>> Track::triangulate() const {
         }
     }
     if (is_valid) {
+        m_life = 1;
         return hlandmark.hnormalized();
     } else {
         return {};

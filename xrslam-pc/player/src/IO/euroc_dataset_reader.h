@@ -7,7 +7,7 @@
 
 class EurocDatasetReader : public DatasetReader {
   public:
-    EurocDatasetReader(const std::string &filename);
+    EurocDatasetReader(const std::string &filename, void *yaml_config);
     NextDataType next() override;
 
     void get_image_resolution(int &width, int &height) override;
@@ -16,6 +16,7 @@ class EurocDatasetReader : public DatasetReader {
     std::pair<double, XRSLAMAcceleration> read_accelerometer() override;
 
   private:
+    std::shared_ptr<xrslam::extra::YamlConfig> config;
     std::deque<std::pair<double, NextDataType>> all_data;
     std::deque<std::pair<double, XRSLAMGyroscope>> gyroscope_data;
     std::deque<std::pair<double, XRSLAMAcceleration>> accelerometer_data;

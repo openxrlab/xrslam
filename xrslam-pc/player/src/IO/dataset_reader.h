@@ -9,6 +9,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "XRSLAM.h"
+#include "xrslam/extra/yaml_config.h"
 
 class DatasetReader {
   public:
@@ -21,7 +22,8 @@ class DatasetReader {
     virtual std::pair<double, XRSLAMAcceleration> read_accelerometer() = 0;
 
     static std::unique_ptr<DatasetReader>
-    create_reader(const std::string &filename, bool async = true);
+    create_reader(const std::string &filename, void *yaml_config,
+                  bool async = true);
 };
 
 #endif // XRSLAM_PC_DATASET_READER_H

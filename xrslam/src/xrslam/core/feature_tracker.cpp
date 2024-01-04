@@ -36,7 +36,9 @@ void FeatureTracker::work(std::unique_lock<std::mutex> &l) {
     frames.pop_front();
     l.unlock();
 
-    frame->image->preprocess();
+    frame->image->preprocess(config->feature_tracker_clahe_clip_limit(),
+                             config->feature_tracker_clahe_width(),
+                             config->feature_tracker_clahe_height());
 
     auto [latest_optimized_time, latest_optimized_frame_id,
           latest_optimized_pose, latest_optimized_motion] =

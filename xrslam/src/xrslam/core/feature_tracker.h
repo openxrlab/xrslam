@@ -29,7 +29,7 @@ class FeatureTracker : public Worker {
     std::optional<std::tuple<double, PoseState, MotionState>>
     get_latest_state() const;
 
-    std::unique_ptr<Map> map;
+    std::shared_ptr<Map> map;
     std::unique_ptr<Map> keymap;
 
   private:

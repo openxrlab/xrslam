@@ -54,6 +54,21 @@ matrix<3> find_homography_matrix(const std::vector<vector<2>> &points1,
                                  double confidence = 0.999,
                                  size_t max_iteration = 1000, int seed = 0);
 
+matrix<3> find_essential_matrix_parsac(const std::vector<vector<2>> &points1,
+                                       const std::vector<vector<2>> &points2,
+                                       std::vector<char> &inlier_mask,
+                                       double threshold = 1.0,
+                                       double confidence = 0.999,
+                                       size_t max_iteration = 1000,
+                                       int seed = 0);
+matrix<3> find_homography_matrix_parsac(const std::vector<vector<2>> &points1,
+                                        const std::vector<vector<2>> &points2,
+                                        std::vector<char> &inlier_mask,
+                                        double threshold = 1.0,
+                                        double confidence = 0.999,
+                                        size_t max_iteration = 1000,
+                                        int seed = 0);
+
 inline vector<4> triangulate_point(const matrix<3, 4> &P1,
                                    const matrix<3, 4> &P2,
                                    const vector<3> &point1,

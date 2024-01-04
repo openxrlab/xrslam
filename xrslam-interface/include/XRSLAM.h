@@ -182,10 +182,12 @@ typedef struct XRSLAMStringOutput {
  * intrinsics, extrinsics and so on.
  * @param[in] license_path  license path
  * @param[in] product_name  product name which user can define
+ * @param[out] config configuration of slam and device
  * @return 1 success, otherwise 0
  */
 int XRSLAMCreate(const char *slam_config_path, const char *device_config_path,
-                 const char *license_path, const char *product_name);
+                 const char *license_path, const char *product_name,
+                 void **config);
 
 /**
  * @brief push sensor data to SLAM system

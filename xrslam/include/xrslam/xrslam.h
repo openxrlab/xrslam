@@ -59,8 +59,11 @@ class Config {
 
     virtual vector<2> camera_resolution() const = 0;
     virtual matrix<3> camera_intrinsic() const = 0;
+    virtual vector<4> camera_distortion() const = 0;
     virtual quaternion camera_to_body_rotation() const = 0;
     virtual vector<3> camera_to_body_translation() const = 0;
+    virtual size_t camera_distortion_flag() const = 0;
+    virtual double camera_time_offset() const = 0;
     virtual quaternion imu_to_body_rotation() const = 0;
     virtual vector<3> imu_to_body_translation() const = 0;
 
@@ -74,6 +77,7 @@ class Config {
     virtual vector<3> output_to_body_translation() const;
 
     virtual size_t sliding_window_size() const;
+    virtual size_t sliding_window_subframe_size() const;
     virtual size_t sliding_window_force_keyframe_landmarks() const;
     virtual size_t sliding_window_tracker_frequent() const;
 
@@ -81,6 +85,9 @@ class Config {
     virtual size_t feature_tracker_max_keypoint_detection() const;
     virtual size_t feature_tracker_max_init_frames() const;
     virtual size_t feature_tracker_max_frames() const;
+    virtual double feature_tracker_clahe_clip_limit() const;
+    virtual size_t feature_tracker_clahe_width() const;
+    virtual size_t feature_tracker_clahe_height() const;
     virtual bool feature_tracker_predict_keypoints() const;
 
     virtual size_t initializer_keyframe_num() const;
@@ -98,7 +105,16 @@ class Config {
     virtual size_t solver_iteration_limit() const;
     virtual double solver_time_limit() const;
 
+    virtual double rotation_misalignment_threshold() const;
+    virtual double rotation_ransac_threshold() const;
+
     virtual int random() const;
+
+    virtual bool parsac_flag() const;
+    virtual double parsac_dynamic_probability() const;
+    virtual double parsac_threshold() const;
+    virtual double parsac_norm_scale() const;
+    virtual size_t parsac_keyframe_check_size() const;
 
     void log_config() const;
 };
@@ -118,7 +134,7 @@ class Image {
                             int level = 0) const = 0;
 
     virtual ~Image() = default;
-    virtual void preprocess() {}
+    virtual void preprocess(double clipLimit, int width, int height) {}
     virtual void release_image_buffer() = 0;
     virtual void detect_keypoints(std::vector<vector<2>> &keypoints,
                                   size_t max_points = 0,

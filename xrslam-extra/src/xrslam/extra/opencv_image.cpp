@@ -112,6 +112,27 @@ void OpenCvImage::track_keypoints(const Image *next_image,
                 }
             }
         }
+
+        {
+            std::vector<uchar> reverse_status;
+            std::vector<float> reverse_err;
+            std::vector<Point2f> reverse_pts = curr_cvpoints;
+            calcOpticalFlowPyrLK(
+                next_cvimage->image_pyramid, image_pyramid, next_cvpoints,
+                reverse_pts, reverse_status, reverse_err, Size(21, 21),
+                (int)level_num(),
+                TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 30, 0.01),
+                OPTFLOW_USE_INITIAL_FLOW);
+
+            for (size_t i = 0; i < reverse_status.size(); ++i) {
+                if (result_status[i]) {
+                    if (!reverse_status[i] ||
+                        cv::norm(curr_cvpoints[i] - reverse_pts[i]) > 0.5) {
+                        result_status[i] = 0;
+                    }
+                }
+            }
+        }
     }
 
     std::vector<size_t> l;
@@ -132,10 +153,9 @@ void OpenCvImage::track_keypoints(const Image *next_image,
     }
 }
 
-void OpenCvImage::preprocess() {
-    clahe()->apply(image, image);
+void OpenCvImage::preprocess(double clipLimit, int width, int height) {
+    clahe(clipLimit, width, height)->apply(image, image);
     image_pyramid.clear();
-
     buildOpticalFlowPyramid(image, image_pyramid, Size(21, 21),
                             (int)level_num(), true);
 }
@@ -156,8 +176,8 @@ void OpenCvImage::correct_distortion(const matrix<3> &intrinsics,
     image = new_image;
 }
 
-CLAHE *OpenCvImage::clahe() {
-    static Ptr<CLAHE> s_clahe = createCLAHE(6.0, cv::Size(8, 8));
+CLAHE *OpenCvImage::clahe(double clipLimit, int width, int height) {
+    static Ptr<CLAHE> s_clahe = createCLAHE(clipLimit, cv::Size(width, height));
     return s_clahe.get();
 }
 

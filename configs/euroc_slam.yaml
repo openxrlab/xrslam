@@ -5,14 +5,18 @@ output:
 
 sliding_window:
   size: 10
+  subframe_size: 3
   force_keyframe_landmarks: 35
 
 feature_tracker:
   min_keypoint_distance: 10.0 # [px]
-  max_keypoint_detection: 1000
+  max_keypoint_detection: 200
   max_init_frames: 60
   max_frames: 20
   predict_keypoints: true
+  clahe_clip_limit: 6.0
+  clahe_width: 8
+  clahe_height: 8
 
 initializer:
   keyframe_num: 8
@@ -26,3 +30,14 @@ initializer:
 solver:
   iteration_limit: 30
   time_limit: 1.0e6 # [s]
+
+rotation:
+  misalignment_threshold: 0.02
+  ransac_threshold: 10 # degree
+
+parsac:
+  use_flag: false
+  dynamic_probability: 0.15
+  threshold: 1.0
+  norm_scale: 1.0
+  keyframe_check_size: 1

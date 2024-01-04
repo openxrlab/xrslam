@@ -84,6 +84,7 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     m_output_to_body_rotation = Config::output_to_body_rotation();
     m_output_to_body_translation = Config::output_to_body_translation();
     m_sliding_window_size = Config::sliding_window_size();
+    m_sliding_window_subframe_size = Config::sliding_window_subframe_size();
     m_sliding_window_tracker_frequent =
         Config::sliding_window_tracker_frequent();
     m_sliding_window_force_keyframe_landmarks =
@@ -95,6 +96,10 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     m_feature_tracker_max_init_frames =
         Config::feature_tracker_max_init_frames();
     m_feature_tracker_max_frames = Config::feature_tracker_max_frames();
+    m_feature_tracker_clahe_clip_limit =
+        Config::feature_tracker_clahe_clip_limit();
+    m_feature_tracker_clahe_width = Config::feature_tracker_clahe_width();
+    m_feature_tracker_clahe_height = Config::feature_tracker_clahe_height();
     m_feature_tracker_predict_keypoints =
         Config::feature_tracker_predict_keypoints();
     m_initializer_keyframe_num = Config::initializer_keyframe_num();
@@ -106,6 +111,15 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     m_initializer_refine_imu = Config::initializer_refine_imu();
     m_solver_iteration_limit = Config::solver_iteration_limit();
     m_solver_time_limit = Config::solver_time_limit();
+
+    m_parsac_flag = Config::parsac_flag();
+    m_parsac_dynamic_probability = Config::parsac_dynamic_probability();
+    m_parsac_threshold = Config::parsac_threshold();
+    m_parsac_norm_scale = Config::parsac_norm_scale();
+
+    m_rotation_misalignment_threshold =
+        Config::rotation_misalignment_threshold();
+    m_rotation_ransac_threshold = Config::rotation_ransac_threshold();
     m_visual_localization_enable = Config::visual_localization_enable();
     m_visual_localization_ip = Config::visual_localization_config_ip();
     m_visual_localization_port = Config::visual_localization_config_port();
@@ -142,6 +156,19 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
         m_camera_intrinsic(1, 1) = intrinsic[1].as<double>();
         m_camera_intrinsic(0, 2) = intrinsic[2].as<double>();
         m_camera_intrinsic(1, 2) = intrinsic[3].as<double>();
+    }
+
+    if (auto node = find_node(device_config, "cam0.distortion", true)) {
+        assign_vector(m_camera_distortion, node);
+    }
+
+    if (auto node =
+            find_node(device_config, "cam0.camera_distortion_flag", true)) {
+        assign(m_camera_distortion_flag, node);
+    }
+
+    if (auto node = find_node(device_config, "cam0.time_offset", true)) {
+        assign(m_camera_time_offset, node);
     }
 
     if (auto node = find_node(device_config, "cam0.resolution", true)) {
@@ -197,6 +224,11 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     }
 
     if (auto node =
+            find_node(slam_config, "sliding_window.subframe_size", false)) {
+        assign(m_sliding_window_subframe_size, node);
+    }
+
+    if (auto node =
             find_node(slam_config, "sliding_window.tracker_frequent", false)) {
         assign(m_sliding_window_tracker_frequent, node);
     }
@@ -224,6 +256,21 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     if (auto node =
             find_node(slam_config, "feature_tracker.max_frames", false)) {
         assign(m_feature_tracker_max_frames, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "feature_tracker.clahe_clip_limit", false)) {
+        assign(m_feature_tracker_clahe_clip_limit, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "feature_tracker.clahe_width", false)) {
+        assign(m_feature_tracker_clahe_width, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "feature_tracker.clahe_height", false)) {
+        assign(m_feature_tracker_clahe_height, node);
     }
 
     if (auto node = find_node(slam_config, "feature_tracker.predict_keypoints",
@@ -281,11 +328,51 @@ YamlConfig::YamlConfig(const std::string &slam_config_filename,
     if (auto node = find_node(slam_config, "solver.time_limit", false)) {
         assign(m_solver_time_limit, node);
     }
+
+    if (auto node = find_node(slam_config, "parsac.parsac_flag", false)) {
+        assign(m_parsac_flag, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "parsac.dynamic_probability", false)) {
+        assign(m_parsac_dynamic_probability, node);
+    }
+
+    if (auto node = find_node(slam_config, "parsac.threshold", false)) {
+        assign(m_parsac_threshold, node);
+    }
+
+    if (auto node = find_node(slam_config, "parsac.norm_scale", false)) {
+        assign(m_parsac_norm_scale, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "parsac.keyframe_check_size", false)) {
+        assign(m_parsac_keyframe_check_size, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "rotation.misalignment_threshold", false)) {
+        assign(m_rotation_misalignment_threshold, node);
+    }
+
+    if (auto node =
+            find_node(slam_config, "rotation.ransac_threshold", false)) {
+        assign(m_rotation_ransac_threshold, node);
+    }
 }
 
 YamlConfig::~YamlConfig() = default;
 
 matrix<3> YamlConfig::camera_intrinsic() const { return m_camera_intrinsic; }
+
+vector<4> YamlConfig::camera_distortion() const { return m_camera_distortion; }
+
+size_t YamlConfig::camera_distortion_flag() const {
+    return m_camera_distortion_flag;
+}
+
+double YamlConfig::camera_time_offset() const { return m_camera_time_offset; }
 
 vector<2> YamlConfig::camera_resolution() const { return m_camera_resolution; }
 
@@ -335,6 +422,10 @@ vector<3> YamlConfig::output_to_body_translation() const {
 
 size_t YamlConfig::sliding_window_size() const { return m_sliding_window_size; }
 
+size_t YamlConfig::sliding_window_subframe_size() const {
+    return m_sliding_window_subframe_size;
+}
+
 size_t YamlConfig::sliding_window_tracker_frequent() const {
     return m_sliding_window_tracker_frequent;
 }
@@ -357,6 +448,18 @@ size_t YamlConfig::feature_tracker_max_init_frames() const {
 
 size_t YamlConfig::feature_tracker_max_frames() const {
     return m_feature_tracker_max_frames;
+}
+
+double YamlConfig::feature_tracker_clahe_clip_limit() const {
+    return m_feature_tracker_clahe_clip_limit;
+}
+
+size_t YamlConfig::feature_tracker_clahe_width() const {
+    return m_feature_tracker_clahe_width;
+}
+
+size_t YamlConfig::feature_tracker_clahe_height() const {
+    return m_feature_tracker_clahe_height;
 }
 
 bool YamlConfig::feature_tracker_predict_keypoints() const {
@@ -408,5 +511,27 @@ size_t YamlConfig::solver_iteration_limit() const {
 }
 
 double YamlConfig::solver_time_limit() const { return m_solver_time_limit; }
+
+bool YamlConfig::parsac_flag() const { return m_parsac_flag; }
+
+double YamlConfig::parsac_dynamic_probability() const {
+    return m_parsac_dynamic_probability;
+}
+
+double YamlConfig::parsac_threshold() const { return m_parsac_threshold; }
+
+double YamlConfig::parsac_norm_scale() const { return m_parsac_norm_scale; }
+
+size_t YamlConfig::parsac_keyframe_check_size() const {
+    return m_parsac_keyframe_check_size;
+}
+
+double YamlConfig::rotation_misalignment_threshold() const {
+    return m_rotation_misalignment_threshold;
+}
+
+double YamlConfig::rotation_ransac_threshold() const {
+    return m_rotation_ransac_threshold;
+}
 
 } // namespace xrslam::extra

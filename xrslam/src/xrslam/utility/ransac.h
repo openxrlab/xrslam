@@ -86,8 +86,8 @@ struct Ransac {
     template <class Data, class Sample, size_t... I>
     static void make_sample_impl(Data &&data, Sample &&sample, size_t idata,
                                  size_t isample, std::index_sequence<I...>) {
-        [[maybe_unused]] auto ret = {
-            (std::get<I>(sample)[isample] = std::get<I>(data)[idata])...};
+        [[maybe_unused]] auto ret = {((void *)&(
+            std::get<I>(sample)[isample] = std::get<I>(data)[idata]))...};
     }
 
     template <class Data, class Sample>

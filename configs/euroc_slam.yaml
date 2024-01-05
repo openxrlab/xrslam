@@ -36,7 +36,7 @@ rotation:
   ransac_threshold: 10 # degree
 
 parsac:
-  use_flag: false
+  parsac_flag: false
   dynamic_probability: 0.15
   threshold: 1.0
   norm_scale: 1.0

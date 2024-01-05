@@ -38,12 +38,6 @@ struct IMU_Parsac {
         LotBox lotbox(size);
         lotbox.seed(seed);
 
-        if (m_verbose) {
-            std::cout << "============== IMU PARSAC ================"
-                      << std::endl;
-            std::cout << "-- Matches Size: " << pts1.size() << std::endl;
-        }
-
         double K = log(std::max(1 - confidence, 1.0e-5));
 
         inlier_count = 0;
@@ -55,39 +49,22 @@ struct IMU_Parsac {
         }
 
         SetBins(20, 20);
-        if (m_verbose)
-            std::cout << "-- SetBins()" << std::endl;
 
         CreateBucket();
-        if (m_verbose)
-            std::cout << "-- CreateBucket()" << std::endl;
 
         BucketData(pts2);
-        if (m_verbose)
-            std::cout << "-- BucketData()" << std::endl;
 
         ConvertConfidencesBinToValidBin(binConfidences,
                                         m_validBinConfidencesPrior);
-        if (m_verbose)
-            std::cout << "-- ConvertConfidencesBinToValidBin()" << std::endl;
 
         ThresholdAndNormalizeConfidences(m_validBinConfidencesPrior);
-        if (m_verbose)
-            std::cout << "-- ThresholdAndNormalizeConfidences()" << std::endl;
 
         AccumulateConfidences(m_validBinConfidencesPrior,
                               m_validBinConfidencesAccumulatedPrior);
-        if (m_verbose)
-            std::cout << "-- AccumulateConfidences()" << std::endl;
 
         Sampler sampler(m_validBinConfidencesAccumulatedPrior);
-        if (m_verbose)
-            std::cout << "-- sampler()" << std::endl;
 
         if (!ComputePriorDistribution(pts1, pts2)) {
-            if (m_verbose)
-                std::cout << "-- ComputePriorDistribution()" << std::endl;
-            // std::cout << "IMU Process" << std::endl;
             inlier_mask = std::vector<char>(size, 1);
             return matrix<4>::Identity();
         }
@@ -96,8 +73,7 @@ struct IMU_Parsac {
         size_t iter_max = max_iteration;
         float scoreMax = -FLT_MAX, score;
         for (size_t iter = 0; iter < iter_max; ++iter) {
-            // if(m_verbose) std::cout << "iters: " << iter << " " << iter_max
-            // << std::endl;
+
             std::tuple<std::array<DataTypes, ModelDoF>...> tsample;
 
             lotbox.refill_all();
@@ -147,12 +123,9 @@ struct IMU_Parsac {
                 std::vector<std::vector<size_t>> validBinOutliers;
                 ConvertInliersListToValidBin(current_inlier_mask,
                                              validBinInliers);
-                // if(m_verbose) std::cout << "  --
-                // ConvertInliersListToValidBin()" << std::endl;
+
                 score = ComputeScore(validBinInliers, m_validBinConfidences);
 
-                // if(m_verbose) std::cout << "  -- ComputeScore()" <<
-                // std::endl;
                 if (score > scoreMax ||
                     score == scoreMax &&
                         (overlap_inlier_count > inlier_count)) {
@@ -160,7 +133,6 @@ struct IMU_Parsac {
                     model = current_model;
                     inlier_count = overlap_inlier_count;
                     validBinInliersBest = validBinInliers;
-                    // inlier_mask.swap(overlap_inlier_mask);
                     inlier_mask.swap(current_inlier_mask);
                     double inlier_ratio = inlier_count / (double)size;
                     double N = K / log(1 - pow(inlier_ratio, 5));
@@ -168,9 +140,7 @@ struct IMU_Parsac {
                         iter_max = (size_t)ceil(N);
                     }
                 }
-                // if(m_verbose) std::cout << "  -- finish update" << std::endl;
             }
-            // if(m_verbose) std::cout << "  -- finish iterate" << std::endl;
         }
 
         if (inlier_count < ModelDoF) {
@@ -178,14 +148,9 @@ struct IMU_Parsac {
             return matrix<4>::Identity();
         }
 
-        if (m_verbose)
-            std::cout << "-- Before ComputeScore()" << std::endl;
         ComputeScore(validBinInliersBest, m_validBinConfidences);
-        if (m_verbose)
-            std::cout << "-- ComputeScore()" << std::endl;
+
         ConvertConfidencesValidBinToBin(m_validBinConfidences, binConfidences);
-        if (m_verbose)
-            std::cout << "-- ConvertConfidencesValidBinToBin()" << std::endl;
 
         return model;
     }
@@ -253,7 +218,6 @@ struct IMU_Parsac {
     size_t m_nValidBins;
     float m_BinHeight;
     float m_BinWidth;
-    bool m_verbose = false;
 
     double m_dynamic_probability = 0;
     double m_norm_scale = 1.0;
@@ -303,10 +267,6 @@ struct IMU_Parsac {
     }
 
     void SetBins(const int nBinsX, const int nBinsY) {
-        // Some bug occurred! the m_nBinsX is set to be the nBinsX at unknown
-        // time！ if(m_nBinsX == nBinsX && m_nBinsY == nBinsY)
-        //     return;
-
         m_nBinsX = nBinsX;
         m_nBinsY = nBinsY;
         m_nBins = m_nBinsX * m_nBinsY;

@@ -107,9 +107,11 @@ struct OutputState {
                     @"configs/SENSESLAMSDK_165BA1A4-F959-4790-A891-C85DBF5D26EA"
                          ofType:@"lic"];
 
+            void *yaml_config = nil;
             int num = XRSLAMCreate([slam_config_content UTF8String],
                                    [device_config_content UTF8String],
-                                   [license_file UTF8String], "SenseSLAMSDK");
+                                   [license_file UTF8String], "SenseSLAMSDK",
+                                   &yaml_config);
             XRGlobalLocalizerCreate([slam_config_content UTF8String],
                                     [device_config_content UTF8String]);
             std::cout << "init xr slam: " << num << std::endl;

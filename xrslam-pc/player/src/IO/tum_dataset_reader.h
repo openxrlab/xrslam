@@ -8,7 +8,7 @@
 
 class TUMDatasetReader : public DatasetReader {
   public:
-    TUMDatasetReader(const std::string &filename);
+    TUMDatasetReader(const std::string &filename, void *yaml_config);
     NextDataType next() override;
     void get_image_resolution(int &width, int &height) override;
     std::pair<double, cv::Mat> read_image() override;
@@ -17,6 +17,7 @@ class TUMDatasetReader : public DatasetReader {
     size_t num_images;
 
   private:
+    std::shared_ptr<xrslam::extra::YamlConfig> config;
     std::deque<std::pair<double, NextDataType>> all_data;
     std::deque<std::pair<double, XRSLAMGyroscope>> gyroscope_data;
     std::deque<std::pair<double, XRSLAMAcceleration>> accelerometer_data;

@@ -1,10 +1,16 @@
 # Changelog
 
+## XRSLAM Release v0.6.0
+
+**Highlights:**
+* [ADD] XRSLAM example for ROS
+* [ADD] RD-VIO version of SLAM with IMU-PARSAC algorithm
+
 ## XRSLAM Release v0.5.0
 
 **Highlights:**
 * [CHANGE] Redefine the function call interface of XRSLAM
-* [CHANGE] Use the newly defined interface to call XRSLAM in the example of ios and PC.
+* [CHANGE] Use the newly defined interface to call XRSLAM in the example of iOS and PC.
 * [CHANGE] Refactoring the PC example.
 * [CHANGE] Unified the configuration file format
 * [ADD] Add API interface documentation

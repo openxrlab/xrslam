@@ -4,7 +4,7 @@
 int XRSLAMCreate(
     const char *slam_config_path,   // slam configuration file path
     const char *device_config_path, // device configuration file path
-    const char *license_path, const char *product_name) {
+    const char *license_path, const char *product_name, void **config) {
     if (xrslam::XRSLAMManager::Instance().CheckLicense(license_path,
                                                        product_name) == 0)
         return 0;
@@ -13,6 +13,7 @@ int XRSLAMCreate(
         std::make_shared<xrslam::extra::YamlConfig>(slam_config_path,
                                                     device_config_path);
     xrslam::XRSLAMManager::Instance().Init(yaml_config);
+    *config = static_cast<void *>(yaml_config.get());
     return 1;
 }
 

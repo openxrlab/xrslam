@@ -10,7 +10,15 @@
 
 namespace xrslam {
 
-enum TrackTag { TT_VALID = 0, TT_TRIANGULATED, TT_FIX_INVD };
+enum TrackTag {
+    TT_VALID = 0,
+    TT_TRIANGULATED,
+    TT_FIX_INVD,
+    TT_TRASH,
+    TT_STATIC,
+    TT_OUTLIER,
+    TT_TEMP
+};
 
 class Track : public Tagged<TrackTag>, public Identifiable<Track> {
     friend class Map;
@@ -57,7 +65,7 @@ class Track : public Tagged<TrackTag>, public Identifiable<Track> {
     void add_keypoint(Frame *frame, size_t keypoint_index);
     void remove_keypoint(Frame *frame, bool suicide_if_empty = true);
 
-    std::optional<vector<3>> triangulate() const;
+    std::optional<vector<3>> triangulate();
     double triangulation_angle(const vector<3> &p) const;
 
     vector<3> get_landmark_point() const;
@@ -66,6 +74,7 @@ class Track : public Tagged<TrackTag>, public Identifiable<Track> {
     std::unique_lock<std::mutex> lock() const { return map->lock(); }
 
     LandmarkState landmark;
+    size_t m_life = 0;
 
   private:
     std::map<Frame *, size_t, compare<Frame *>> keypoint_refs;

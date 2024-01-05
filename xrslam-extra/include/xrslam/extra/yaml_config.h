@@ -33,6 +33,9 @@ class YamlConfig : public Config {
 
     vector<2> camera_resolution() const override;
     matrix<3> camera_intrinsic() const override;
+    vector<4> camera_distortion() const override;
+    size_t camera_distortion_flag() const override;
+    double camera_time_offset() const override;
     quaternion camera_to_body_rotation() const override;
     vector<3> camera_to_body_translation() const override;
     quaternion imu_to_body_rotation() const override;
@@ -48,6 +51,7 @@ class YamlConfig : public Config {
     vector<3> output_to_body_translation() const override;
 
     size_t sliding_window_size() const override;
+    size_t sliding_window_subframe_size() const override;
     size_t sliding_window_tracker_frequent() const override;
     size_t sliding_window_force_keyframe_landmarks() const override;
 
@@ -55,6 +59,9 @@ class YamlConfig : public Config {
     size_t feature_tracker_max_keypoint_detection() const override;
     size_t feature_tracker_max_init_frames() const override;
     size_t feature_tracker_max_frames() const override;
+    double feature_tracker_clahe_clip_limit() const override;
+    size_t feature_tracker_clahe_width() const override;
+    size_t feature_tracker_clahe_height() const override;
     bool feature_tracker_predict_keypoints() const override;
 
     size_t initializer_keyframe_num() const override;
@@ -72,9 +79,21 @@ class YamlConfig : public Config {
     size_t solver_iteration_limit() const override;
     double solver_time_limit() const override;
 
+    bool parsac_flag() const override;
+    double parsac_dynamic_probability() const override;
+    double parsac_threshold() const override;
+    double parsac_norm_scale() const override;
+    size_t parsac_keyframe_check_size() const override;
+
+    double rotation_misalignment_threshold() const override;
+    double rotation_ransac_threshold() const override;
+
   private:
     vector<2> m_camera_resolution;
     matrix<3> m_camera_intrinsic;
+    vector<4> m_camera_distortion;
+    size_t m_camera_distortion_flag;
+    double m_camera_time_offset;
     quaternion m_camera_to_body_rotation;
     vector<3> m_camera_to_body_translation;
     quaternion m_imu_to_body_rotation;
@@ -89,6 +108,7 @@ class YamlConfig : public Config {
     vector<3> m_output_to_body_translation;
 
     size_t m_sliding_window_size;
+    size_t m_sliding_window_subframe_size;
     size_t m_sliding_window_tracker_frequent;
     size_t m_sliding_window_force_keyframe_landmarks;
 
@@ -96,6 +116,9 @@ class YamlConfig : public Config {
     size_t m_feature_tracker_max_keypoint_detection;
     size_t m_feature_tracker_max_init_frames;
     size_t m_feature_tracker_max_frames;
+    double m_feature_tracker_clahe_clip_limit;
+    size_t m_feature_tracker_clahe_width;
+    size_t m_feature_tracker_clahe_height;
     bool m_feature_tracker_predict_keypoints;
 
     size_t m_initializer_keyframe_num;
@@ -112,6 +135,15 @@ class YamlConfig : public Config {
 
     size_t m_solver_iteration_limit;
     double m_solver_time_limit;
+
+    bool m_parsac_flag;
+    double m_parsac_dynamic_probability;
+    double m_parsac_threshold;
+    double m_parsac_norm_scale;
+    size_t m_parsac_keyframe_check_size;
+
+    double m_rotation_misalignment_threshold;
+    double m_rotation_ransac_threshold;
 };
 
 } // namespace xrslam::extra

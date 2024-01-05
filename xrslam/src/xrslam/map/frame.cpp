@@ -114,7 +114,8 @@ void Frame::track_keypoints(Frame *next_frame, Config *config) {
         }
     }
     matrix<3> R = find_rotation_matrix(bearings, next_bearings, mask,
-                                       M_PI / 18.0); // TODO: make configurable
+                                       (M_PI / 180.0) *
+                                           config->rotation_ransac_threshold());
 
     std::vector<double> angles;
     for (size_t i = 0; i < mask.size(); ++i) {
@@ -129,7 +130,7 @@ void Frame::track_keypoints(Frame *next_frame, Config *config) {
     inspect_debug(feature_tracker_angle_misalignment, angle_misalignment) {
         angle_misalignment = misalignment;
     }
-    if (misalignment < 0.02) { // TODO: make configurable
+    if (misalignment < config->rotation_misalignment_threshold()) {
         next_frame->tag(FT_NO_TRANSLATION) = true;
     }
 
@@ -153,7 +154,9 @@ void Frame::track_keypoints(Frame *next_frame, Config *config) {
         config->feature_tracker_min_keypoint_distance());
     for (auto &[keypoint_index, track_length] : keypoint_index_track_length) {
         vector<2> pt = next_keypoints[keypoint_index];
-        if (filter.permit_point(pt)) {
+        Track *track = this->get_track(keypoint_index);
+        if (filter.permit_point(pt) &&
+            (!track || (track && !track->tag(TT_TRASH)))) {
             filter.preset_point(pt);
         } else {
             status[keypoint_index] = 0;

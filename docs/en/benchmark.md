@@ -4,7 +4,7 @@ We run our algorithm on EuRoC dataset on Ubuntu18.04 and macOS 10.14. And make c
 
 **XRSLAM**  showed significant improvements on many sequences on EuRoC dataset. **XRSLAM(w/ RD)** adopts a dynamic object removal strategy, which can be enabled in the configuration parameter `parsac_flag`. As shown in the following tables, the best results for visual-inertial algorithms are bolded. Comparing with other systems, Thanks to the additional stabilization effect, the significant drifts are canceled when using  the subframe strategy in our system.
 
-As a challenging dataset in real-world settings, ADVIO offers 23 diverse scenarios, encompassing indoor and outdoor environments, varying lighting conditions, and dynamic elements such as pedestrians and vehicles. Aided with the dynamic object removal scheme, XRSLAM(w. RD) showed significantly better RMSEs on ADVIO dataset.
+As a challenging dataset in real-world settings, ADVIO offers 23 diverse scenarios, encompassing indoor and outdoor environments, varying lighting conditions, and dynamic elements such as pedestrians and vehicles. Aided with the dynamic object removal scheme, XRSLAM(w/ RD) showed significantly better RMSEs on ADVIO dataset.
 
 **Tracking Accuracy (RMSE in meters) on the EuRoC Dataset.**
 | Algorithm   | MH-01 | MH-02 | MH-03 | MH-04 | MH-05 | V1-01 | V1-02 | V1-03 | V2-01 | V2-02 | V2-03 | AVG   |

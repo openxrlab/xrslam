@@ -10,7 +10,7 @@ Download data from the file server, and extract files to `$PROJECT/xrslam-test/d
 
 ```bash
 cd xrslam/
-cmake -B build  -D XRSLAM_TEST=ON && cmake --build build -j8
+cmake -B build -D XRSLAM_TEST=ON && cmake --build build -j8
 ```
 
 ## Run

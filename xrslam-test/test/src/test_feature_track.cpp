@@ -33,7 +33,9 @@ TEST(test_feature_track, feature_track) {
                                                     device_config_path);
     frame->K = yaml_config->camera_intrinsic();
     frame->image = read_image(filename1);
-    frame->image->preprocess();
+    frame->image->preprocess(yaml_config->feature_tracker_clahe_clip_limit(),
+                             yaml_config->feature_tracker_clahe_width(),
+                             yaml_config->feature_tracker_clahe_height());
     frame->detect_keypoints(yaml_config.get());
 
     ASSERT_EQ(frame->keypoint_num(), 164);
@@ -45,7 +47,9 @@ TEST(test_feature_track, feature_track) {
     std::unique_ptr<Frame> curr_frame = std::make_unique<Frame>();
     curr_frame->K = yaml_config->camera_intrinsic();
     curr_frame->image = read_image(filename2);
-    curr_frame->image->preprocess();
+    curr_frame->image->preprocess(yaml_config->feature_tracker_clahe_clip_limit(),
+                                  yaml_config->feature_tracker_clahe_width(),
+                                  yaml_config->feature_tracker_clahe_height());
     last_frame->track_keypoints(curr_frame.get(), yaml_config.get());
 
     ASSERT_FALSE(curr_frame->tag(FT_NO_TRANSLATION));

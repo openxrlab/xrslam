@@ -59,6 +59,9 @@ set(PRIVATE_HEADERS
   ${XRSLAM_SOURCE_DIR}/xrslam/utility/logger.h
   ${XRSLAM_SOURCE_DIR}/xrslam/utility/parsac.h
   ${XRSLAM_SOURCE_DIR}/xrslam/utility/imu_parsac.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/utility/client.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/utility/serialize.h
+  ${XRSLAM_SOURCE_DIR}/xrslam/utility/message.h
   ${XRSLAM_SOURCE_DIR}/xrslam/ar/virtual_object_manager.h
   ${XRSLAM_SOURCE_DIR}/xrslam/localizer/base64.h
   ${XRSLAM_SOURCE_DIR}/xrslam/localizer/base64_convert.h
@@ -131,6 +134,7 @@ target_link_libraries(xrslam-core
 PUBLIC
   options::modern-cpp
   XRPrimer::xrprimer
+  xrslam-liteviz
   ${OpenCV_LIBS}
 )
 

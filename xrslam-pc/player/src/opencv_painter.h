@@ -12,16 +12,16 @@ class OpenCvPainter : public xrslam::InspectPainter {
     OpenCvPainter(cv::Mat &canvas) : canvas(canvas) {}
 
     void set_image(const xrslam::Image *image) override {
-        const xrslam::extra::OpenCvImage *cvimage =
-            dynamic_cast<const xrslam::extra::OpenCvImage *>(image);
+        const xrslam::extra::OpenCvImage *cvimage = dynamic_cast<const xrslam::extra::OpenCvImage *>(image);
         if (cvimage->raw.channels() == 3)
             canvas = cvimage->raw.clone();
+        else if (cvimage->raw.channels() == 4)
+            cv::cvtColor(cvimage->raw, canvas, cv::COLOR_BGRA2BGR);
         else
             cv::cvtColor(cvimage->raw, canvas, cv::COLOR_GRAY2BGR);
     }
 
-    void point(const xrslam::point2i &p, const xrslam::color3b &c, int size = 1,
-               int style = 0) override {
+    void point(const xrslam::point2i &p, const xrslam::color3b &c, int size = 1, int style = 0) override {
         cv::Point center(p.x(), p.y());
         cv::Scalar color = CV_RGB(c.x(), c.y(), c.z());
         switch (style) {

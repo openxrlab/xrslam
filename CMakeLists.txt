@@ -10,6 +10,14 @@ else()
 endif()
 find_package(XRPrimer REQUIRED)
 
+set(CEREAL_INCLUDE_DIR ./thirdparty/cereal/include)
+include_directories(${CEREAL_INCLUDE_DIR})
+message(STATUS ${CEREAL_INCLUDE_DIR})
+
+include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(/home/xiaokun/ThirdParty/ceres-solver/internal)
+include_directories(/usr/include/suitesparse)
+
 include(SuperBuildDepends)
 
 option(XRSLAM_DEBUG "..." ON)
@@ -34,6 +42,7 @@ add_subdirectory(xrslam)
 add_subdirectory(xrslam-extra)
 add_subdirectory(xrslam-interface)
 add_subdirectory(xrslam-localization)
+add_subdirectory(xrslam-liteviz)
 
 if(XRSLAM_PC)
   add_subdirectory(xrslam-pc)

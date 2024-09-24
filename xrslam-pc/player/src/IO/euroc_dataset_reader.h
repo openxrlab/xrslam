@@ -37,13 +37,22 @@ struct CameraCsv {
         items.clear();
         if (FILE *csv = fopen(filename.c_str(), "r")) {
             char header_line[2048];
-            int ret = fscanf(csv, "%2047[^\r]\r\n", header_line);
+            #ifdef _WIN32
+                int ret = fscanf(csv, "%2047[^\r]\r\n", header_line);
+            #else
+                int ret = fscanf(csv, "%2047[^\n]\n", header_line);
+            #endif
             char filename_buffer[2048];
             CameraData item;
             while (!feof(csv)) {
                 memset(filename_buffer, 0, 2048);
+            #ifdef _WIN32
                 if (fscanf(csv, "%lf,%2047[^\r]\r\n", &item.t,
                            filename_buffer) != 2) {
+            #else
+                if (fscanf(csv, "%lf,%2047[^\n]\n", &item.t,
+                           filename_buffer) != 2) {
+            #endif
                     break;
                 }
                 item.t *= 1e-9;
@@ -87,12 +96,23 @@ struct ImuCsv {
         items.clear();
         if (FILE *csv = fopen(filename.c_str(), "r")) {
             char header_line[2048];
-            int ret = fscanf(csv, "%2047[^\r]\r\n", header_line);
+            #ifdef _WIN32
+                int ret = fscanf(csv, "%2047[^\r]\r\n", header_line);
+            #else
+                int ret = fscanf(csv, "%2047[^\n]\n", header_line);
+            #endif
             ImuData item;
-            while (!feof(csv) &&
-                   fscanf(csv, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", &item.t,
-                          &item.w.x, &item.w.y, &item.w.z, &item.a.x, &item.a.y,
-                          &item.a.z) == 7) {
+            #ifdef _WIN32
+                while (!feof(csv) &&
+                       fscanf(csv, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", &item.t,
+                              &item.w.x, &item.w.y, &item.w.z, &item.a.x,
+                              &item.a.y, &item.a.z) == 7) {
+            #else
+                while (!feof(csv) &&
+                       fscanf(csv, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", &item.t,
+                              &item.w.x, &item.w.y, &item.w.z, &item.a.x,
+                              &item.a.y, &item.a.z) == 7) {
+            #endif
                 item.t *= 1e-9;
                 items.emplace_back(std::move(item));
             }

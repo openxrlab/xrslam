@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 project(xrslam-library VERSION 0.5.0 LANGUAGES CXX)
 
+include(SuperBuildDepends)
+superbuild_depend(eigen)
+superbuild_depend(ceres-solver)
+superbuild_depend(spdlog)
+
 configure_file(cmake/version.h.in include/xrslam/version.h)
 
 set(XRSLAM_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -130,8 +135,11 @@ target_include_directories(xrslam-core
 target_link_libraries(xrslam-core
 PUBLIC
   options::modern-cpp
-  XRPrimer::xrprimer
-  ${OpenCV_LIBS}
+  depends::eigen
+  depends::spdlog
+  depends::ceres-solver
+  depends::opencv
+
 )
 
 set(XRSLAM_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")

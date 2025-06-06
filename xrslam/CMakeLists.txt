@@ -139,6 +139,7 @@ PUBLIC
   depends::spdlog
   depends::ceres-solver
   depends::opencv
+  xrslam-liteviz
 
 )
 

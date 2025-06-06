@@ -109,10 +109,27 @@ void XRSLAMManager::PushImage(XRSLAMImage *image) {
         int cols = config_->camera_resolution()[0];
         int rows = config_->camera_resolution()[1];
         opencv_image->t = image->timeStamp;
-        cv::Mat img = cv::Mat(rows, cols, CV_8UC1, image->data,
-                              image->stride); // gray img
-        opencv_image->image = img.clone();
+
+        cv::Mat img;
+        if(image->channel == 1){
+            img = cv::Mat(rows, cols, CV_8UC1, image->data, image->stride);
+            opencv_image->image = img.clone();
+        }
+        else if(image->channel == 3){
+            img = cv::Mat(rows, cols, CV_8UC3, image->data, image->stride);
+            cv::cvtColor(img, opencv_image->image, cv::COLOR_BGR2GRAY);
+        }
+        else if(image->channel == 4){
+            img = cv::Mat(rows, cols, CV_8UC4, image->data, image->stride);
+            cv::cvtColor(img, opencv_image->image, cv::COLOR_BGRA2GRAY);
+        }
+        else{
+            std::cerr << "Image channel is not supported!" << std::endl;
+            exit(-1);
+        }
+            
         opencv_image->raw = img.clone();
+
         std::lock_guard<std::mutex> lck(input_mutex_);
         cur_image_ = std::shared_ptr<xrslam::Image>(opencv_image);
     }
@@ -136,26 +153,40 @@ void XRSLAMManager::RunOneFrame() {
 void XRSLAMManager::GetResultBodyPose(XRSLAMPose *pose) const {
     std::tuple<double, Pose> latest_state = detail_->get_latest_pose();
     pose->timestamp = std::get<0>(latest_state);
-    Pose out_pose = std::get<1>(latest_state);
+    Pose latest_pose = std::get<1>(latest_state);
+    Pose body_pose;
+    body_pose.q = latest_pose.q * config_->imu_to_body_rotation();
+    body_pose.p = latest_pose.p + latest_pose.q * config_->imu_to_body_translation();
     for (int i = 0; i < 3; i++)
-        pose->translation[i] = out_pose.p(i);
-    pose->quaternion[0] = out_pose.q.x();
-    pose->quaternion[1] = out_pose.q.y();
-    pose->quaternion[2] = out_pose.q.z();
-    pose->quaternion[3] = out_pose.q.w();
+        pose->translation[i] = body_pose.p(i);
+    pose->quaternion[0] = body_pose.q.x();
+    pose->quaternion[1] = body_pose.q.y();
+    pose->quaternion[2] = body_pose.q.z();
+    pose->quaternion[3] = body_pose.q.w();
 }
 
 void XRSLAMManager::GetResultCameraPose(XRSLAMPose *pose) const {
     std::tuple<double, Pose> latest_state = detail_->get_latest_pose();
     pose->timestamp = std::get<0>(latest_state);
-    Pose out_pose = std::get<1>(latest_state);
+    Pose latest_pose = std::get<1>(latest_state);
+    Pose camera_pose;
+    camera_pose.q = latest_pose.q * config_->camera_to_body_rotation();
+    camera_pose.p = latest_pose.p + latest_pose.q * config_->camera_to_body_translation();
     for (int i = 0; i < 3; i++)
-        pose->translation[i] = out_pose.p(i);
-    pose->quaternion[0] = out_pose.q.x();
-    pose->quaternion[1] = out_pose.q.y();
-    pose->quaternion[2] = out_pose.q.z();
-    pose->quaternion[3] = out_pose.q.w();
+        pose->translation[i] = camera_pose.p(i);
+    pose->quaternion[0] = camera_pose.q.x();
+    pose->quaternion[1] = camera_pose.q.y();
+    pose->quaternion[2] = camera_pose.q.z();
+    pose->quaternion[3] = camera_pose.q.w();
 }
+
+void XRSLAMManager::GetInfoIntrinsics(XRSLAMIntrinsics *intrinsics) const {
+    intrinsics->fx = config_->camera_intrinsic()(0, 0);
+    intrinsics->fy = config_->camera_intrinsic()(1, 1);
+    intrinsics->cx = config_->camera_intrinsic()(0, 2);
+    intrinsics->cy = config_->camera_intrinsic()(1, 2);
+}
+
 
 void XRSLAMManager::GetResultState(XRSLAMState *state) const {
     SysState cur_state = detail_->get_system_state();
@@ -209,5 +240,10 @@ void XRSLAMManager::GetResultVersion(XRSLAMStringOutput *output) const {
     output->data = new char[output->str_length + 5];
     strcpy(output->data, XRSLAM_VERSION);
 }
+
+void XRSLAMManager::SetViewer(SLAMWindow* viewer){
+    detail_->set_viewer(viewer);
+}
+
 
 } // namespace xrslam

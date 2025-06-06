@@ -46,6 +46,7 @@ typedef struct XRSLAMImage {
     double timeStamp; /*!< timestamp in second. */
     int stride;       /*!< image stride, number of bytes per row. */
     int camera_id;    /*!< camera id. */
+    int channel;      /*!< image channel. */
     XRSLAMImageExtension *ext; /*!< ext info of image. */
 } XRSLAMImage;
 
@@ -105,7 +106,8 @@ typedef enum XRSLAMResultType {
     XRSLAM_RESULT_BIAS,          /*!< imu bias. */
     XRSLAM_RESULT_DEBUG_LOGS,    /*!< debug logs. */
     XRSLAM_RESULT_VERSION,       /*!< version. */
-    XRSLAM_RESULT_UNKNOWN
+    XRSLAM_RESULT_UNKNOWN,
+    XRSLAM_INFO_INTRINSICS
 } XRSLAMResultType;
 
 /**
@@ -118,6 +120,14 @@ typedef struct XRSLAMPose {
     double translation[3]; /*!< translation vector T. */
     double timestamp;      /*!< timestamp. */
 } XRSLAMPose;
+
+typedef struct XRSLAMIntrinsics {
+    double fx;
+    double fy;
+    double cx;
+    double cy;
+} XRSLAMIntrinsics;
+
 
 /**
  * @brief    slam state.
@@ -149,8 +159,11 @@ typedef struct XRSLAMFeature {
     double x, y;
 } XRSLAMFeature;
 typedef struct XRSLAMFeatures {
-    XRSLAMFeature *features;
-    int num_features;
+    struct Point{
+        double x; 
+        double y;
+    };
+    std::vector<Point> pos;
 } XRSLAMFeatures;
 
 /**
@@ -200,6 +213,8 @@ void XRSLAMPushSensorData(XRSLAMSensorType sensor_type, void *sensor_data);
  * @brief end one frame input and run slam
  */
 void XRSLAMRunOneFrame();
+
+void XRSLAMSetViewer(void *viewer);
 
 /**
  * @brief get SLAM results

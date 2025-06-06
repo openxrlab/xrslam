@@ -97,29 +97,31 @@ bool SlidingWindowTracker::track() {
         refine_subwindow();
     }
 
-    inspect_debug(sliding_window_landmarks, landmarks) {
-        std::vector<Landmark> points;
-        points.reserve(map->track_num());
+    // for viz
+    {
+        std::vector<vector3> mappoints;
+        mappoints.reserve(map->track_num());
         for (size_t i = 0; i < map->track_num(); ++i) {
             if (Track *track = map->get_track(i)) {
                 if (track->tag(TT_VALID)) {
-                    Landmark point;
-                    point.p = track->get_landmark_point();
-                    point.triangulated = track->tag(TT_TRIANGULATED);
-                    points.push_back(point);
+                    mappoints.push_back(track->get_landmark_point());
                 }
             }
         }
-        landmarks = std::move(points);
-    }
+        detail->get_viewer()->detail->update_mappoints(mappoints);
 
-    inspect_debug(sliding_window_current_bg, bg) {
-        bg = std::get<2>(get_latest_state()).bg;
+        std::vector<std::shared_ptr<VizFrame>> sw_keyframes;
+        for(size_t i = 0; i < map->frame_num(); ++i){
+            auto frame = map->get_frame(i);
+            Eigen::Vector4f intrinsic;
+            intrinsic << frame->K(0, 0), frame->K(1, 1), frame->K(0, 2), frame->K(1, 2);
+            Pose pose = frame->get_pose(frame->camera);
+            auto viz_frame = std::make_shared<VizFrame>(cv::Mat(), pose, intrinsic);
+            sw_keyframes.push_back(viz_frame);
+        }
+        detail->get_viewer()->detail->update_sliding_window(sw_keyframes);
     }
-
-    inspect_debug(sliding_window_current_ba, ba) {
-        ba = std::get<2>(get_latest_state()).ba;
-    }
+    
 
     return true;
 }

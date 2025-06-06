@@ -30,6 +30,7 @@ add_subdirectory(xrslam)
 add_subdirectory(xrslam-extra)
 add_subdirectory(xrslam-interface)
 add_subdirectory(xrslam-localization)
+add_subdirectory(xrslam-liteviz)
 
 if(XRSLAM_PC)
   add_subdirectory(xrslam-pc)

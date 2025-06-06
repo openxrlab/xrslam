@@ -96,6 +96,8 @@ xrslam-ros/src/CMakeLists.txt
 trajectory.tum
 results/
 
-
+build
 data
 run.sh
+imgui*
+thirdparty

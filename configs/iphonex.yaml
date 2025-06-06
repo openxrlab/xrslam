@@ -1,0 +1,52 @@
+%YAML:1.0
+imu:
+  # inertial sensor noise model parameters (static)
+  gyroscope_noise_density: 4.e-8       # [ rad / s / sqrt(Hz) ]
+  gyroscope_random_walk: 1.0e-10       # [ rad / s^2 / sqrt(Hz) ]
+  accelerometer_noise_density: 4.e-6    # [ m / s^2 / sqrt(Hz) ]
+  accelerometer_random_walk: 1.0e-8    # [ m / s^3 / sqrt(Hz) ]
+  accelerometer_bias: [0.0, 0.0, 0.0] # acc bias prior
+  gyroscope_bias: [0.0, 0.0, 0.0]     # gyro bias prior
+  extrinsic:
+    q_bi: [ 0.0, 0.0, 0.0, 1.0 ] # x y z w
+    p_bi: [ 0.0, 0.0, 0.0 ] # x y z [m]
+  noise:
+    cov_g: [
+      2.8791302399999997e-08, 0.0, 0.0,
+      0.0, 2.8791302399999997e-08, 0.0,
+      0.0, 0.0, 2.8791302399999997e-08]
+    cov_a: [
+      4.0e-6, 0.0, 0.0,
+      0.0, 4.0e-6, 0.0,
+      0.0, 0.0, 4.0e-6]
+    cov_bg: [
+      3.7608844899999997e-10, 0.0, 0.0,
+      0.0, 3.7608844899999997e-10, 0.0,
+      0.0, 0.0, 3.7608844899999997e-10]
+    cov_ba: [
+      9.0e-6, 0.0, 0.0,
+      0.0, 9.0e-6, 0.0,
+      0.0, 0.0, 9.0e-6]
+cam0:
+  # camera0 wrt. body frame
+  T_BS:
+    cols: 4
+    rows: 4
+    data: [0.0, -1.0, 0.0, 0.0229970087959,
+           -1.0, 0.0, 0.0, 0.0754115110747,
+           0.0, 0.0, -1.0, -0.0024726172229,
+           0.0, 0.0, 0.0, 1.0]
+  resolution: [640, 480]        # resolution of camera
+  camera_model: pinhole         # camera model
+  distortion_model: radtan      # distortion model
+  intrinsics: [524.742906796, 524.638736552, 322.496951979, 235.249899518] # fu, fv, cu, cv
+  camera_distortion_flag: 0     # use distortion model or not
+  distortion: [0.0, 0.0, 0.0, 0.0] # k1, k2, p1, p2, xi
+  camera_readout_time: 0.0      # camera readout time
+  time_offset: 0.0              # camera time delay wrt. IMU
+  extrinsic:
+    q_bc: [-0.7071068, 0.7071068, 0, 0] # x y z w
+    p_bc: [0.0229970087959, 0.0754115110747, -0.0024726172229] # x y z [m]
+  noise: [
+    0.5, 0.0,
+    0.0, 0.5] # [pixel^2]

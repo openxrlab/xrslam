@@ -42,6 +42,11 @@ void XRSLAMPushSensorData(XRSLAMSensorType sensor_type, // sensor type
     }
 }
 
+void XRSLAMSetViewer(void* viewer){
+    SLAMWindow* viewer_ptr = static_cast<SLAMWindow*>(viewer);
+    xrslam::XRSLAMManager::Instance().SetViewer(viewer_ptr);
+}
+
 void XRSLAMRunOneFrame() { xrslam::XRSLAMManager::Instance().RunOneFrame(); }
 
 void XRSLAMGetResult(XRSLAMResultType result_type, // result type
@@ -75,6 +80,10 @@ void XRSLAMGetResult(XRSLAMResultType result_type, // result type
     case XRSLAM_RESULT_VERSION:
         xrslam::XRSLAMManager::Instance().GetResultVersion(
             static_cast<XRSLAMStringOutput *>(result_data));
+        break;
+    case XRSLAM_INFO_INTRINSICS:
+        xrslam::XRSLAMManager::Instance().GetInfoIntrinsics(
+            static_cast<XRSLAMIntrinsics *>(result_data));
         break;
     case XRSLAM_RESULT_DEBUG_LOGS:
     case XRSLAM_RESULT_UNKNOWN:

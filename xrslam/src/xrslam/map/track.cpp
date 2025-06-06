@@ -1,6 +1,7 @@
 #include <xrslam/estimation/solver.h>
 #include <xrslam/geometry/stereo.h>
 #include <xrslam/map/track.h>
+#include <xrslam/optimizer/solver.h>
 
 namespace xrslam {
 
@@ -14,8 +15,9 @@ const vector<3> &Track::get_keypoint(Frame *frame) const {
 void Track::add_keypoint(Frame *frame, size_t keypoint_index) {
     keypoint_refs[frame] = keypoint_index;
     frame->tracks[keypoint_index] = this;
-    frame->reprojection_error_factors[keypoint_index] =
-        Solver::create_reprojection_error_factor(frame, this);
+    frame->reprojection_error_factors[keypoint_index] = Solver::create_reprojection_error_factor(frame, this);
+    frame->tiny_reprojection_error_factors[keypoint_index] = TinySolver::create_reprojection_error_factor(frame, this);
+
     if (this->tag(TT_TRIANGULATED))
         m_life++;
     else
@@ -30,6 +32,7 @@ void Track::remove_keypoint(Frame *frame, bool suicide_if_empty) {
     }
     frame->tracks[keypoint_index] = nullptr;
     frame->reprojection_error_factors[keypoint_index].reset();
+    frame->tiny_reprojection_error_factors[keypoint_index].reset();
     keypoint_refs.erase(frame);
     if (keypoint_refs.size() > 0) {
         if (landmark.has_value()) {

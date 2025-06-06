@@ -237,4 +237,12 @@ std::tuple<double, Pose> XRSLAM::Detail::get_latest_pose() {
     return {latest_timestamp_, latest_pose_};
 }
 
+void XRSLAM::Detail::set_viewer(SLAMWindow *viewer){
+    this->viewer = viewer;
+}
+
+SLAMWindow* XRSLAM::Detail::get_viewer(){
+    return this->viewer;
+}
+
 } // namespace xrslam

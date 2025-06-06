@@ -5,6 +5,8 @@
 #include <xrslam/map/map.h>
 #include <xrslam/map/track.h>
 #include <xrslam/utility/poisson_disk_filter.h>
+#include <xrslam/optimizer/tiny_reprojection_factor.h>
+
 
 namespace xrslam {
 
@@ -30,8 +32,8 @@ std::unique_ptr<Frame> Frame::clone() const {
     frame->preintegration = preintegration;
     frame->bearings = bearings;
     frame->tracks = std::vector<Track *>(bearings.size(), nullptr);
-    frame->reprojection_error_factors =
-        std::vector<std::unique_ptr<ReprojectionErrorFactor>>(bearings.size());
+    frame->reprojection_error_factors = std::vector<std::unique_ptr<ReprojectionErrorFactor>>(bearings.size());
+    frame->tiny_reprojection_error_factors = std::vector<std::unique_ptr<TinyReprojectionErrorFactor>>(bearings.size());
     frame->map = nullptr;
     return frame;
 }
@@ -40,6 +42,7 @@ void Frame::append_keypoint(const vector<3> &keypoint) {
     bearings.emplace_back(keypoint);
     tracks.emplace_back(nullptr);
     reprojection_error_factors.emplace_back(nullptr);
+    tiny_reprojection_error_factors.emplace_back(nullptr);
 }
 
 Track *Frame::get_track(size_t keypoint_index, Map *allocation_map) {
@@ -67,6 +70,7 @@ void Frame::detect_keypoints(Config *config) {
     bearings.resize(pkeypoints.size());
     tracks.resize(pkeypoints.size(), nullptr);
     reprojection_error_factors.resize(pkeypoints.size());
+    tiny_reprojection_error_factors.resize(pkeypoints.size());
     for (size_t i = old_keypoint_num; i < pkeypoints.size(); ++i) {
         bearings[i] = remove_k(pkeypoints[i], K);
     }

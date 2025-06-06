@@ -48,8 +48,11 @@ class SlidingWindowTracker {
     std::unique_ptr<Map> map;
     std::shared_ptr<Map> feature_tracking_map;
 
+    void set_detail(XRSLAM::Detail *detail) { this->detail = detail; }
   private:
     std::shared_ptr<Config> config;
+
+    XRSLAM::Detail *detail;
 };
 
 } // namespace xrslam

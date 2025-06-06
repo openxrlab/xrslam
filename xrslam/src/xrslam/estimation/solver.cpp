@@ -113,7 +113,7 @@ void Solver::add_factor(ReprojectionErrorFactor *rpefactor) {
     CeresReprojectionErrorFactor *rpecost =
         static_cast<CeresReprojectionErrorFactor *>(rpefactor);
     details->problem->AddResidualBlock(
-        rpecost, nullptr,
+        rpecost, details->cauchy_loss.get(),
         rpecost->frame->pose.q.coeffs().data(), rpecost->frame->pose.p.data(),
         rpecost->track->first_frame()->pose.q.coeffs().data(),
         rpecost->track->first_frame()->pose.p.data(),

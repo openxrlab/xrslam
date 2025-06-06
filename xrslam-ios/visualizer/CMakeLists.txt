@@ -67,7 +67,6 @@ target_link_libraries(${EXECUTABLE_NAME}
     PRIVATE
         xrslam
         xrslam-localization
-        XRPrimer::xrprimer
 )
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES

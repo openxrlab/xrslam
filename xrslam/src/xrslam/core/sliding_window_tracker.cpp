@@ -113,14 +113,6 @@ bool SlidingWindowTracker::track() {
         landmarks = std::move(points);
     }
 
-    inspect_debug(sliding_window_current_bg, bg) {
-        bg = std::get<2>(get_latest_state()).bg;
-    }
-
-    inspect_debug(sliding_window_current_ba, ba) {
-        ba = std::get<2>(get_latest_state()).ba;
-    }
-
     return true;
 }
 

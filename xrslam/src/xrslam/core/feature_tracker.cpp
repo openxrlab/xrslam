@@ -129,11 +129,8 @@ void FeatureTracker::work(std::unique_lock<std::mutex> &l) {
             frame->detect_keypoints(config.get());
         map->attach_frame(std::move(frame));
 
-        while (map->frame_num() >
-                   (is_initialized
-                        ? config->feature_tracker_max_frames()
-                        : config->feature_tracker_max_init_frames()) &&
-               map->get_frame(0)->id() < latest_optimized_frame_id) {
+        size_t max_frame_num = is_initialized? config->feature_tracker_max_frames(): config->feature_tracker_max_init_frames();
+        while (map->frame_num() > max_frame_num && map->get_frame(0)->id() < latest_optimized_frame_id) {
             map->erase_frame(0);
         }
 
@@ -144,15 +141,8 @@ void FeatureTracker::work(std::unique_lock<std::mutex> &l) {
                 painter->set_image(frame->image.get());
                 for (size_t i = 0; i < frame->keypoint_num(); ++i) {
                     if (Track *track = frame->get_track(i)) {
-                        color3b c = {0, 255, 0};
-                        painter->point(apply_k(frame->get_keypoint(i), frame->K)
-                                           .cast<int>(),
-                                       c, 5);
-                    } else {
-                        color3b c = {255, 0, 255};
-                        painter->point(apply_k(frame->get_keypoint(i), frame->K)
-                                           .cast<int>(),
-                                       c, 5, 1);
+                        color3b c = {255, 255, 0};
+                        painter->point(apply_k(frame->get_keypoint(i), frame->K).cast<int>(),c, 2, 1);
                     }
                 }
             }

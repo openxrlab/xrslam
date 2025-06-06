@@ -9,7 +9,7 @@ sliding_window:
   force_keyframe_landmarks: 35
 
 feature_tracker:
-  min_keypoint_distance: 20.0 # [px]
+  min_keypoint_distance: 25.0 # [px]
   max_keypoint_detection: 200
   max_init_frames: 60
   max_frames: 20
@@ -41,3 +41,12 @@ parsac:
   threshold: 1.0
   norm_scale: 1.0
   keyframe_check_size: 1
+
+backend:
+  backend_flag: true
+  voc_file: Vocabulary/ORBvoc.txt
+  orb_n_features: 1000
+  orb_scale_factor: 1.2
+  orb_n_levels: 8
+  orb_init_threshold_fast: 20
+  orb_min_threshold_fast: 7

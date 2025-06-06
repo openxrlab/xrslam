@@ -73,8 +73,8 @@ class Frame : public Tagged<FrameTag>, public Identifiable<Frame> {
     PreIntegrator keyframe_preintegration;
 
     std::vector<std::unique_ptr<Frame>> subframes;
-    std::vector<std::unique_ptr<ReprojectionErrorFactor>>
-        reprojection_error_factors;
+    std::vector<std::unique_ptr<ReprojectionErrorFactor>> reprojection_error_factors;
+
 
   private:
     std::vector<vector<3>> bearings;

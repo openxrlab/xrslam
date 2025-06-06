@@ -30,8 +30,7 @@ std::unique_ptr<Frame> Frame::clone() const {
     frame->preintegration = preintegration;
     frame->bearings = bearings;
     frame->tracks = std::vector<Track *>(bearings.size(), nullptr);
-    frame->reprojection_error_factors =
-        std::vector<std::unique_ptr<ReprojectionErrorFactor>>(bearings.size());
+    frame->reprojection_error_factors = std::vector<std::unique_ptr<ReprojectionErrorFactor>>(bearings.size());
     frame->map = nullptr;
     return frame;
 }

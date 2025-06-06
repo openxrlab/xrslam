@@ -39,7 +39,7 @@ class XRSLAMManager {
     void GetResultFeatures(XRSLAMFeatures *features) const;
     void GetResultBias(XRSLAMIMUBias *bias) const;
     void GetResultVersion(XRSLAMStringOutput *output) const;
-
+    void GetInfoIntrinsics(XRSLAMIntrinsics *intrinsics) const;
   private:
     XRSLAMManager();
 

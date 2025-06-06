@@ -44,13 +44,12 @@ void FrontendWorker::work(std::unique_lock<std::mutex> &l) {
             if (config->visual_localization_enable() &&
                 global_localization_state()) {
                 localizer = std::make_unique<Localizer>(config);
-                sliding_window_tracker->map->create_virtual_object_manager(
-                    localizer.get());
+                sliding_window_tracker->map->create_virtual_object_manager(localizer.get());
             } else {
                 sliding_window_tracker->map->create_virtual_object_manager();
             }
-            sliding_window_tracker->feature_tracking_map =
-                detail->feature_tracker->map;
+            sliding_window_tracker->feature_tracking_map = detail->feature_tracker->map;
+            sliding_window_tracker->set_detail(detail);
             std::unique_lock lk(latest_state_mutex);
             auto [t, pose, motion] = sliding_window_tracker->get_latest_state();
             latest_state = {t, pending_frame_id, pose, motion};

@@ -12,7 +12,6 @@
 #include <xrslam/map/map.h>
 #include <xrslam/map/track.h>
 #include <xrslam/xrslam.h>
-#include <xrslam/optimizer/solver.h>
 
 namespace xrslam {
 
@@ -87,10 +86,8 @@ std::unique_ptr<SlidingWindowTracker> Initializer::initialize() {
     map->get_frame(0)->tag(FT_FIX_POSE) = true;
 
     auto solver = Solver::create();
-    auto tinysolver = TinySolver::create();
     for (size_t i = 0; i < map->frame_num(); ++i) {
         solver->add_frame_states(map->get_frame(i));
-        tinysolver->add_frame_states(map->get_frame(i));
     }
     std::unordered_set<Track *> visited_tracks;
     for (size_t i = 0; i < map->frame_num(); ++i) {
@@ -118,7 +115,6 @@ std::unique_ptr<SlidingWindowTracker> Initializer::initialize() {
             if (frame == track->first_frame())
                 continue;
             solver->add_factor(frame->reprojection_error_factors[j].get());
-            tinysolver->add_factor(frame->tiny_reprojection_error_factors[j].get());
         }
     }
     for (size_t j = 1; j < map->frame_num(); ++j) {
@@ -129,13 +125,9 @@ std::unique_ptr<SlidingWindowTracker> Initializer::initialize() {
                                               frame_i->motion.ba, true, true)) {
             solver->put_factor(Solver::create_preintegration_error_factor(
                 frame_i, frame_j, frame_j->preintegration));
-            tinysolver->put_factor(TinySolver::create_preintegration_error_factor(
-                frame_i, frame_j, frame_j->preintegration));
         }
     }
-    solver->solve(true);
-
-    tinysolver->solve(true);
+    solver->solve();
 
     for (size_t i = 0; i < map->frame_num(); ++i) {
         map->get_frame(i)->tag(FT_KEYFRAME) = true;
@@ -346,10 +338,8 @@ bool Initializer::init_sfm() {
     // [3.1] bundle adjustment
     map->get_frame(0)->tag(FT_FIX_POSE) = true;
     auto solver = Solver::create();
-    auto tinysolver = TinySolver::create();
     for (size_t i = 0; i < map->frame_num(); ++i) {
         solver->add_frame_states(map->get_frame(i), false);
-        tinysolver->add_frame_states(map->get_frame(i), false);
     }
     std::unordered_set<Track *> visited_tracks;
     for (size_t i = 0; i < map->frame_num(); ++i) {
@@ -377,17 +367,16 @@ bool Initializer::init_sfm() {
             if (frame == track->first_frame())
                 continue;
             solver->add_factor(frame->reprojection_error_factors[j].get());
-            tinysolver->add_factor(frame->tiny_reprojection_error_factors[j].get());
         }
     }
-    if (!solver->solve(false)) {
+    if (!solver->solve()) {
         return false;
     }
 
-    // tinysolver->solve(true);
-
     // [3.2] cleanup invalid points
-    map->prune_tracks([](const Track *track) {return !track->tag(TT_VALID) || track->landmark.reprojection_error > 3.0; // TODO: make configurable
+    map->prune_tracks([](const Track *track) {
+        return !track->tag(TT_VALID) || track->landmark.reprojection_error >
+                                            3.0; // TODO: make configurable
     });
 
     return true;
@@ -425,10 +414,12 @@ void Initializer::solve_gyro_bias() {
         const quaternion &dq = frame_j->preintegration.delta.q;
         const matrix<3> &dq_dbg = frame_j->preintegration.jacobian.dq_dbg;
         A += dq_dbg.transpose() * dq_dbg;
-        b += dq_dbg.transpose() * logmap((pose_i.q * dq).conjugate() * pose_j.q);
+        b +=
+            dq_dbg.transpose() * logmap((pose_i.q * dq).conjugate() * pose_j.q);
     }
 
-    Eigen::JacobiSVD<matrix<3>> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    Eigen::JacobiSVD<matrix<3>> svd(A,
+                                    Eigen::ComputeFullU | Eigen::ComputeFullV);
     bg = svd.solve(b);
 }
 
@@ -451,7 +442,8 @@ void Initializer::solve_gravity_scale_velocity() {
         const PoseState camera_pose_i = frame_i->get_pose(frame_i->camera);
         const PoseState camera_pose_j = frame_j->get_pose(frame_j->camera);
 
-        A.block<3, 3>(i * 6, 0) = -0.5 * delta.t * delta.t * matrix<3>::Identity();
+        A.block<3, 3>(i * 6, 0) =
+            -0.5 * delta.t * delta.t * matrix<3>::Identity();
         A.block<3, 1>(i * 6, 3) = camera_pose_j.p - camera_pose_i.p;
         A.block<3, 3>(i * 6, 4 + i * 3) = -delta.t * matrix<3>::Identity();
         b.segment<3>(i * 6) = frame_i->pose.q * delta.p +

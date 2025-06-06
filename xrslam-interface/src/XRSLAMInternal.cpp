@@ -42,11 +42,6 @@ void XRSLAMPushSensorData(XRSLAMSensorType sensor_type, // sensor type
     }
 }
 
-void XRSLAMSetViewer(void* viewer){
-    SLAMWindow* viewer_ptr = static_cast<SLAMWindow*>(viewer);
-    xrslam::XRSLAMManager::Instance().SetViewer(viewer_ptr);
-}
-
 void XRSLAMRunOneFrame() { xrslam::XRSLAMManager::Instance().RunOneFrame(); }
 
 void XRSLAMGetResult(XRSLAMResultType result_type, // result type

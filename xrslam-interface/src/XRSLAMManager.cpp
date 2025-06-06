@@ -241,9 +241,4 @@ void XRSLAMManager::GetResultVersion(XRSLAMStringOutput *output) const {
     strcpy(output->data, XRSLAM_VERSION);
 }
 
-void XRSLAMManager::SetViewer(SLAMWindow* viewer){
-    detail_->set_viewer(viewer);
-}
-
-
 } // namespace xrslam

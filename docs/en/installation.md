@@ -9,40 +9,9 @@ We provide some tips for XRSLAM installation in this file.
 * C++17
 * GCC9/Clang13
 * CMake 3.15+
-* [XRPrimer](https://github.com/openxrlab/xrprimer)
-
-Clone XRPrimer to keep the same root directory as XRSLAM, then switch the branch to the specified OpenCV version.
-
-```bash
-git clone https://github.com/openxrlab/xrprimer.git
-cd xrprimer
-git checkout xrslam-opencv3.4.7
-```
-
-If your project folder structure is different, need to change the XRPrimer path.
-
-```
-xrprimer
-├──
-...
-xrslam
-├── xrslam
-├── xrslam-pc
-├── xrslam-ios
-├── xrslam-ros
-...
-```
-
 
 ### Linux/Mac
 
-- In XRPrimer, run
-
-  ```bash
-  cmake -S. -Bbuild -DBUILD_EXTERNAL=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_PRECOMPILED_HEADERS=OFF && cmake --build build --target install -j8
-  ```
-
-  to configure some common dependencies.
 - In XRSLAM, run
 
   ```bash
@@ -63,7 +32,6 @@ xrslam
 
 ### iOS
 
-- In XRPrimer, run `./build-ios.sh` to configure some common dependencies.
 - In XRSLAM, run `./build-ios.sh` to generate the XCode project using cmake.
   + If it is the first time to run its iOS version, `build-ios.conf` will be automatically generated, you need to assign the `IOS_DEVELOPMENT_TEAM` with your own development id, then run `./build-ios.sh` again to generate the xcode project.
   + It will cost about several minutes (Apple M1 Pro). Then the XCode project `xrslam-superbuild` will be automatically open. if not, you can also open this Xcode project manually by the path `project_path/build/iOS/xrslam-superbuild.xcodeproj`

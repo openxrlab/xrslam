@@ -3,40 +3,53 @@
 #include <thread>
 #include <mutex>
 #include <unistd.h>
-
 #include <dataset_reader.h>
 #include <trajectory_writer.h>
-
 #include <opencv2/opencv.hpp>
-#include <window.h>
+
 #include "XRSLAM.h"
 #include "opencv_painter.h"
+#include "visualizer.h"
 
-std::shared_ptr<SLAMWindow> viewer;
-// FrameMsg frame_msg;
+std::shared_ptr<SLAMViewer> viewer = nullptr;
+cv::Mat feature_tracker_cvimage;
 
-// void GetShowElements(FrameMsg& frame_msg) {
-//     // clear
-//     frame_msg.landmarks.clear();
-//     frame_msg.features.clear();
+void GetShowElements() {
 
-//     frame_msg.width = frame_msg.image.cols;
-//     frame_msg.height = frame_msg.image.rows;
+    XRSLAMIntrinsics intrinsics;
+    XRSLAMGetResult(XRSLAM_INFO_INTRINSICS, &intrinsics);
+    Eigen::Vector4f intrinsics_v(intrinsics.fx, intrinsics.fy, intrinsics.cx, intrinsics.cy);
 
-//     static size_t id = 0;
-//     frame_msg.id = id;
-//     ++id;
+    XRSLAMPose pose_c;
+    XRSLAMGetResult(XRSLAM_RESULT_CAMERA_POSE, &pose_c);
+    Eigen::Matrix4f pose_c_m = Eigen::Matrix4f::Identity();
+    pose_c_m.block<3, 3>(0, 0) = Eigen::Quaternionf(
+        pose_c.quaternion[3], 
+        pose_c.quaternion[0],
+        pose_c.quaternion[1], 
+        pose_c.quaternion[2]).toRotationMatrix();
+    pose_c_m.block<3, 1>(0, 3) = Eigen::Vector3f(
+        pose_c.translation[0], 
+        pose_c.translation[1],
+        pose_c.translation[2]);
 
-//     XRSLAMIntrinsics intrinsics;
-//     XRSLAMGetResult(XRSLAM_INFO_INTRINSICS, &intrinsics);
-//     frame_msg.intrinsics << intrinsics.fx, intrinsics.fy, intrinsics.cx, intrinsics.cy;
+    XRSLAMLandmarks landmarks;
+    XRSLAMGetResult(XRSLAM_RESULT_LANDMARKS, &landmarks);
+    std::vector<Eigen::Vector3f> points;
+    points.reserve(landmarks.num_landmarks);
+    for (int i = 0; i < landmarks.num_landmarks; ++i) {
+        XRSLAMLandmark &landmark = landmarks.landmarks[i];
+        points.emplace_back(landmark.x, landmark.y, landmark.z);
+    }
 
-//     // get pose
-//     XRSLAMPose pose_c;
-//     XRSLAMGetResult(XRSLAM_RESULT_CAMERA_POSE, &pose_c);
-//     frame_msg.pose.q = quaternion(pose_c.quaternion[3], pose_c.quaternion[0], pose_c.quaternion[1], pose_c.quaternion[2]);
-//     frame_msg.pose.p = vector3(pose_c.translation[0], pose_c.translation[1], pose_c.translation[2]);
-// }
+    SLAMData::Frame frame = SLAMData::Frame(cv::Mat(), intrinsics_v, pose_c_m);
+
+    viewer->data->update_frames({frame});
+    viewer->data->update_points(points);
+    viewer->data->update_poses(pose_c_m);
+    viewer->data->update_image(feature_tracker_cvimage);
+
+}
 
 typedef std::tuple<double, XRSLAMAcceleration, XRSLAMGyroscope> IMUData;
 
@@ -91,11 +104,9 @@ int main(int argc, char *argv[]) {
     // outputs.emplace_back(std::make_unique<ConsoleTrajectoryWriter>());
     DatasetReader::NextDataType next_type;
 
-    viewer = std::make_shared<SLAMWindow>("XRSLAM PC", 1280, 720, true);
-    viewer->run();
-    XRSLAMSetViewer(viewer.get());
+    viewer = std::make_shared<SLAMViewer>("XRSLAM PC", 1280, 720);
+    viewer->start();
 
-    cv::Mat feature_tracker_cvimage;
     std::unique_ptr<xrslam::InspectPainter> feature_tracker_painter;
     feature_tracker_painter = std::make_unique<OpenCvPainter>(feature_tracker_cvimage);
     inspect_debug(feature_tracker_painter, painter) {
@@ -120,7 +131,7 @@ int main(int argc, char *argv[]) {
         case DatasetReader::CAMERA: {
 
             {
-                auto &notifier = viewer->detail->notifier;
+                auto &notifier = viewer->notifier;
                 std::unique_lock<std::mutex> lock(notifier->mtx);
                 notifier->cv.wait(lock, [&notifier] { return notifier->ready;});
             }
@@ -139,17 +150,9 @@ int main(int argc, char *argv[]) {
                 XRSLAMState state;
                 XRSLAMGetResult(XRSLAM_RESULT_STATE, &state);
                 if (state == XRSLAM_STATE_TRACKING_SUCCESS) {
-                    {
-                        int cols = 0, rows = 0;
-                        // reader->get_image_resolution(cols, rows);
-                        // frame_msg.image = feature_tracker_cvimage;
-                        // frame_msg.scale = 1;
-                        // frame_msg.timestamp = t;
-                        // GetShowElements(frame_msg);
-                        // std::shared_ptr<VizFrame> keyframe = std::make_shared<VizFrame>(frame_msg);
-                        // viewer->detail->add_frame(keyframe);
-                        // viewer->detail->location() = keyframe->pose.p.cast<float>();
-                    }
+                    
+                    GetShowElements();
+
                     XRSLAMPose pose_b;
                     XRSLAMGetResult(XRSLAM_RESULT_BODY_POSE, &pose_b);
                     if (pose_b.timestamp > 0) {

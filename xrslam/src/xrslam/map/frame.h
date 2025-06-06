@@ -13,7 +13,6 @@ class Config;
 class Track;
 class Map;
 class ReprojectionErrorFactor;
-class TinyReprojectionErrorFactor; 
 
 enum FrameTag {
     FT_KEYFRAME = 0,
@@ -75,7 +74,6 @@ class Frame : public Tagged<FrameTag>, public Identifiable<Frame> {
 
     std::vector<std::unique_ptr<Frame>> subframes;
     std::vector<std::unique_ptr<ReprojectionErrorFactor>> reprojection_error_factors;
-    std::vector<std::unique_ptr<TinyReprojectionErrorFactor>>  tiny_reprojection_error_factors;
 
 
   private:

@@ -101,3 +101,10 @@ data
 run.sh
 imgui*
 thirdparty
+
+experiments
+*.tum
+logs
+eval_*.py
+*.sh
+*.log

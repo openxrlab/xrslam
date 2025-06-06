@@ -97,31 +97,21 @@ bool SlidingWindowTracker::track() {
         refine_subwindow();
     }
 
-    // for viz
-    {
-        std::vector<vector3> mappoints;
-        mappoints.reserve(map->track_num());
+    inspect_debug(sliding_window_landmarks, landmarks) {
+        std::vector<Landmark> points;
+        points.reserve(map->track_num());
         for (size_t i = 0; i < map->track_num(); ++i) {
             if (Track *track = map->get_track(i)) {
                 if (track->tag(TT_VALID)) {
-                    mappoints.push_back(track->get_landmark_point());
+                    Landmark point;
+                    point.p = track->get_landmark_point();
+                    point.triangulated = track->tag(TT_TRIANGULATED);
+                    points.push_back(point);
                 }
             }
         }
-        detail->get_viewer()->detail->update_mappoints(mappoints);
-
-        std::vector<std::shared_ptr<VizFrame>> sw_keyframes;
-        for(size_t i = 0; i < map->frame_num(); ++i){
-            auto frame = map->get_frame(i);
-            Eigen::Vector4f intrinsic;
-            intrinsic << frame->K(0, 0), frame->K(1, 1), frame->K(0, 2), frame->K(1, 2);
-            Pose pose = frame->get_pose(frame->camera);
-            auto viz_frame = std::make_shared<VizFrame>(cv::Mat(), pose, intrinsic);
-            sw_keyframes.push_back(viz_frame);
-        }
-        detail->get_viewer()->detail->update_sliding_window(sw_keyframes);
+        landmarks = std::move(points);
     }
-    
 
     return true;
 }

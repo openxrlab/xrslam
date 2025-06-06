@@ -4,7 +4,6 @@
 #include <xrslam/common.h>
 #include <xrslam/xrslam.h>
 #include <mutex>
-#include <window.h>
 namespace xrslam {
 
 class Config;
@@ -47,10 +46,6 @@ struct XRSLAM::Detail {
 
     size_t create_virtual_object();
     OutputObject get_virtual_object_pose_by_id(size_t id);
-
-    SLAMWindow* viewer;
-    void set_viewer(SLAMWindow *viewer);
-    SLAMWindow* get_viewer();
 
     void enable_global_localization();
     void disable_global_localization();

@@ -90,9 +90,9 @@ struct ImuCsv {
             int ret = fscanf(csv, "%2047[^\r]\r\n", header_line);
             ImuData item;
             while (!feof(csv) &&
-                   fscanf(csv, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", &item.t,
-                          &item.w.x, &item.w.y, &item.w.z, &item.a.x, &item.a.y,
-                          &item.a.z) == 7) {
+                    fscanf(csv, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", &item.t,
+                            &item.w.x, &item.w.y, &item.w.z, &item.a.x,
+                            &item.a.y, &item.a.z) == 7) {
                 item.t *= 1e-9;
                 items.emplace_back(std::move(item));
             }

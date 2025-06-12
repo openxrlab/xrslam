@@ -95,3 +95,16 @@ xrslam-ros/src/CMakeLists.txt
 # Output
 trajectory.tum
 results/
+
+build
+data
+run.sh
+imgui*
+thirdparty
+
+experiments
+*.tum
+logs
+eval_*.py
+*.sh
+*.log

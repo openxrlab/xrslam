@@ -4,7 +4,6 @@
 #include <xrslam/common.h>
 #include <xrslam/xrslam.h>
 #include <mutex>
-
 namespace xrslam {
 
 class Config;

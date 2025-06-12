@@ -5,6 +5,7 @@ project(xrslam-extra)
 add_compile_options(-fPIC)
 
 include(SuperBuildDepends)
+superbuild_extern(opencv)
 superbuild_depend(yaml-cpp)
 
 set(XRSLAM_EXTRA_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -21,15 +22,18 @@ target_link_libraries(xrslam-extra-common
     xrslam-core
 )
 
-add_library(xrslam-extra-opencv-image
-  ${XRSLAM_EXTRA_INCLUDE_DIR}/xrslam/extra/image_undistorter.h
-  ${XRSLAM_EXTRA_INCLUDE_DIR}/xrslam/extra/opencv_image.h
-  ${XRSLAM_EXTRA_SOURCE_DIR}/xrslam/extra/opencv_image.cpp
-)
-target_link_libraries(xrslam-extra-opencv-image
-  PUBLIC
-    xrslam-extra-common
-)
+if(TARGET depends::opencv)
+  add_library(xrslam-extra-opencv-image
+    ${XRSLAM_EXTRA_INCLUDE_DIR}/xrslam/extra/image_undistorter.h
+    ${XRSLAM_EXTRA_INCLUDE_DIR}/xrslam/extra/opencv_image.h
+    ${XRSLAM_EXTRA_SOURCE_DIR}/xrslam/extra/opencv_image.cpp
+  )
+  target_link_libraries(xrslam-extra-opencv-image
+    PUBLIC
+      xrslam-extra-common
+      depends::opencv
+  )
+endif()
 
 if(TARGET depends::yaml-cpp)
   add_library(xrslam-extra-yaml-config

@@ -76,6 +76,10 @@ void XRSLAMGetResult(XRSLAMResultType result_type, // result type
         xrslam::XRSLAMManager::Instance().GetResultVersion(
             static_cast<XRSLAMStringOutput *>(result_data));
         break;
+    case XRSLAM_INFO_INTRINSICS:
+        xrslam::XRSLAMManager::Instance().GetInfoIntrinsics(
+            static_cast<XRSLAMIntrinsics *>(result_data));
+        break;
     case XRSLAM_RESULT_DEBUG_LOGS:
     case XRSLAM_RESULT_UNKNOWN:
     default:

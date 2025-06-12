@@ -3,14 +3,10 @@ set(CMAKE_BUILD_TYPE Release)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 project(xrslam-superbuild)
 
-if(NOT IOS)
-  set(XRPrimer_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../xrprimer/install/lib/cmake")
-else()
-  set(XRPrimer_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../xrprimer/install/ios/lib/cmake")
-endif()
-find_package(XRPrimer REQUIRED)
-
+include(CMakeDependentOption)
 include(SuperBuildDepends)
+superbuild_option(cpp17)
+superbuild_option(modern-cpp)
 
 option(XRSLAM_DEBUG "..." ON)
 option(XRSLAM_ENABLE_DEBUG_INSPECTION "..." ON)

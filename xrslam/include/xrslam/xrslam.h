@@ -7,24 +7,39 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <xrslam/version.h>
+#include <chrono>
+#include <thread>
 
 namespace xrslam {
 
-template <int Rows = Eigen::Dynamic, int Cols = Rows, bool UseRowMajor = false,
-          typename T = double>
+template <int Rows = Eigen::Dynamic, int Cols = Rows, bool UseRowMajor = false, typename T = double>
 using matrix = typename std::conditional<
     Rows != 1 && Cols != 1,
-    Eigen::Matrix<T, Rows, Cols,
-                  UseRowMajor ? Eigen::RowMajor : Eigen::ColMajor>,
+    Eigen::Matrix<T, Rows, Cols, UseRowMajor ? Eigen::RowMajor : Eigen::ColMajor>,
     Eigen::Matrix<T, Rows, Cols>>::type;
 
-template <int Dimension = Eigen::Dynamic, bool RowVector = false,
-          typename T = double>
+template <int Dimension = Eigen::Dynamic, bool RowVector = false, typename T = double>
 using vector =
     typename std::conditional<RowVector, matrix<1, Dimension, false, T>,
                               matrix<Dimension, 1, false, T>>::type;
 
 using quaternion = Eigen::Quaternion<double>;
+
+using matrix6 = matrix<6, 6>;
+using matrix3 = matrix<3, 3>;
+using matrix2 = matrix<2, 2>;
+using matrix1 = matrix<1, 1>;
+using matrix6x3 = matrix<6, 3>;
+using matrix6x1 = matrix<6, 1>;
+using matrixX = matrix<-1, -1>;
+
+using vector6 = vector<6>;
+using vector5 = vector<5>;
+using vector4 = vector<4>;
+using vector3 = vector<3>;
+using vector2 = vector<2>;
+using vector1 = vector<1>;
+using vectorX = vector<-1>;
 
 struct Pose {
     Pose() {
@@ -172,6 +187,25 @@ class XRSLAM {
 
   private:
     std::unique_ptr<Detail> detail;
+};
+
+struct Timer{
+    Timer(){reset();}
+
+    void reset(){
+        t1 = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    }
+
+    double get_time(){
+        double t2 = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        return t2 - t1;
+    }
+
+    void sleep(double seconds){
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)(seconds * 1000)));
+    }
+
+    double t1;
 };
 
 } // namespace xrslam

@@ -5,7 +5,7 @@ if(NOT TARGET depends::liteviz)
   FetchContent_Declare(
     depends-liteviz
     GIT_REPOSITORY https://github.com/panxkun/liteviz.git
-    GIT_TAG        deb2dceb163cf16cab07a554e06be9dee67d3b2c
+    GIT_TAG        2b84345c2844ae067c5468911e5eb921d7f1125e
   )
   FetchContent_GetProperties(depends-liteviz)
   if(NOT depends-liteviz_POPULATED)

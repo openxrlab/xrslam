@@ -99,7 +99,7 @@ results/
 build
 data
 run.sh
-imgui*
+imgui.ini
 thirdparty
 
 experiments

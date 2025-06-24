@@ -42,7 +42,7 @@ void GetShowElements() {
         points.emplace_back(landmark.x, landmark.y, landmark.z);
     }
 
-    SLAMData::Frame frame = SLAMData::Frame(cv::Mat(), intrinsics_v, pose_c_m);
+    VisData::Frame frame = VisData::Frame(cv::Mat(), intrinsics_v, pose_c_m);
 
     viewer->data->update_frames({frame});
     viewer->data->update_points(points);
@@ -168,7 +168,10 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    sleep(99999);
+    while (viewer) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
     XRSLAMDestroy();
 
     return EXIT_SUCCESS;

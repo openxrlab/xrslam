@@ -84,20 +84,19 @@ public:
 
         grid->draw(gridShader, viewport);
 
-        Eigen::Vector4f cameraColor = Eigen::Vector4f(0.8f, 0.2f, 0.2f, 1.0f);
-        Eigen::Vector4f pointsColor = Eigen::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-        Eigen::Vector4f trajColor = Eigen::Vector4f(0.7f, 0.2f, 0.2f, 1.0f);
-
         auto frames = data->get_frames();
+        glLineWidth(cameraScale);
         for(auto & frame : frames) {
             frustum->setup(frame.intrinsics, 0.001);
             frustum->setColor(cameraColor);
             frustum->transform(frame.pose);
             frustum->draw(pointShader, viewer->viewport);
         }
+        glLineWidth(1.0f);
 
         auto points = data->get_points();
         pointCloud->setup(points, pointsColor);
+        pointCloud->setPointSize(pointsScale);
         pointCloud->draw(pointShader, viewport);
 
         auto poses = data->get_poses();
@@ -109,7 +108,10 @@ public:
                 traj_points.push_back(poses[i + 1].block<3, 1>(0, 3));
             }
             line->setup(traj_points, trajColor);
+
+            glLineWidth(trajScale);
             line->draw(pointShader, viewport);
+            glLineWidth(1.0f);
         }
 
         drawImage();
@@ -146,6 +148,16 @@ public:
             ImGui::Image(colorTexture->getTextureID(), ImVec2(w, h));
         }
 
+        if (ImGui::CollapsingHeader("Debug Settings")) {
+            ImGui::SliderFloat("Camera Scale", &cameraScale, 0.1f, 5.0f, "%.2f");
+            ImGui::SliderFloat("Points Scale", &pointsScale, 0.1f, 5.0f, "%.2f");
+            ImGui::SliderFloat("Trajectory Scale", &trajScale, 0.1f, 5.0f, "%.2f");
+            ImGui::ColorEdit4("Camera Color", cameraColor.data());
+            ImGui::ColorEdit4("Points Color", pointsColor.data());
+            ImGui::ColorEdit4("Trajectory Color", trajColor.data());
+            ImGui::ColorEdit4("Background Color", bgColor.data());
+        }
+
         ImGui::End();
         ImGui::PopStyleColor();
 
@@ -160,4 +172,14 @@ public:
     }
 
     std::shared_ptr<SLAMData> data = nullptr;
+    
+private:
+    
+    Eigen::Vector4f trajColor = Eigen::Vector4f(0.7f, 0.2f, 0.2f, 1.0f);
+    Eigen::Vector4f pointsColor = Eigen::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+    Eigen::Vector4f cameraColor = Eigen::Vector4f(0.8f, 0.2f, 0.2f, 1.0f);
+    float trajScale = 1.0f;
+    float pointsScale = 1.0f;
+    float cameraScale = 1.0f;
+
 };

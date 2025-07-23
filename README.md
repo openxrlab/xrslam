@@ -59,11 +59,15 @@ If you use this toolbox or benchmark in your research, please cite this project.
 ```
 Please refer to [[Porject Page](https://panxkun.github.io/RD-VIO-page/)] for more detail. And if you use the Robust Visual-Inertial Odometry in your research, please cite:
 ```bibtex
-@article{li2023rd,
-  title={RD-VIO: Robust Visual-Inertial Odometry for Mobile Augmented Reality in Dynamic Environments},
+@article{li2024rd,
+  title={RD-VIO: Robust visual-inertial odometry for mobile augmented reality in dynamic environments},
   author={Li, Jinyu and Pan, Xiaokun and Huang, Gan and Zhang, Ziyang and Wang, Nan and Bao, Hujun and Zhang, Guofeng},
-  journal={arXiv preprint arXiv:2310.15072},
-  year={2023}
+  journal={IEEE transactions on visualization and computer graphics},
+  volume={30},
+  number={10},
+  pages={6941--6955},
+  year={2024},
+  publisher={IEEE}
 }
 ```
 ## Contributing

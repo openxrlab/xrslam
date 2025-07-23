@@ -1,7 +1,18 @@
 #include <filesystem>
-#include <liteviz/viewer.h>
+#include <liteviz/core/detail.h>
 
-struct SLAMData{ // for visualization
+struct VisConfig{
+    
+    Eigen::Vector4f trajColor = Eigen::Vector4f(0.7f, 0.2f, 0.2f, 1.0f);
+    Eigen::Vector4f pointsColor = Eigen::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+    Eigen::Vector4f cameraColor = Eigen::Vector4f(0.8f, 0.2f, 0.2f, 1.0f);
+    float trajScale = 1.0f;
+    float pointsScale = 1.0f;
+    float cameraScale = 1.0f;
+    size_t panelWidth = 300;
+};
+
+struct VisData{ // for visualization
 
 struct Frame {
     cv::Mat image;
@@ -71,13 +82,15 @@ class SLAMViewer: public ViewerDetail {
 public:
     SLAMViewer(std::string title, int width, int height):
         ViewerDetail(title, width, height) {
-        std::cout << "SLAMViewer initialized." << std::endl;
 
-        data = std::make_shared<SLAMData>();
+        bgColor = Eigen::Vector4f(0.2f, 0.2f, 0.2f, 1.0f);
+
+        config = std::make_shared<VisConfig>();
+        data = std::make_shared<VisData>();
     }
 
     ~SLAMViewer() {
-        std::cout << "SLAMViewer destroyed." << std::endl;
+        viewer_thread.join();
     }
 
     void drawData() override {
@@ -85,18 +98,18 @@ public:
         grid->draw(gridShader, viewport);
 
         auto frames = data->get_frames();
-        glLineWidth(cameraScale);
+        glLineWidth(config->cameraScale);
         for(auto & frame : frames) {
             frustum->setup(frame.intrinsics, 0.001);
-            frustum->setColor(cameraColor);
+            frustum->setColor(config->cameraColor);
             frustum->transform(frame.pose);
             frustum->draw(pointShader, viewer->viewport);
         }
         glLineWidth(1.0f);
 
         auto points = data->get_points();
-        pointCloud->setup(points, pointsColor);
-        pointCloud->setPointSize(pointsScale);
+        pointCloud->setup(points, config->pointsColor);
+        pointCloud->setPointSize(config->pointsScale);
         pointCloud->draw(pointShader, viewport);
 
         auto poses = data->get_poses();
@@ -107,33 +120,29 @@ public:
                 traj_points.push_back(poses[i + 0].block<3, 1>(0, 3));
                 traj_points.push_back(poses[i + 1].block<3, 1>(0, 3));
             }
-            line->setup(traj_points, trajColor);
+            line->setup(traj_points, config->trajColor);
 
-            glLineWidth(trajScale);
+            glLineWidth(config->trajScale);
             line->draw(pointShader, viewport);
             glLineWidth(1.0f);
         }
-
-        drawImage();
-
-    }
-
-    void drawImage() {
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
         any_window_active = ImGui::IsAnyItemActive() ;
+        size_t widgetWidth = config->panelWidth - 10;
 
         ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 0.3f));
         ImGui::Begin("Configuration", nullptr,  window_flags); 
-        ImGui::SetWindowSize(ImVec2(300, 0));
+        ImGui::SetWindowSize(ImVec2(widgetWidth, 0));
+        
 
         if(notifier){
             std::lock_guard<std::mutex> lock(notifier->mtx);  
             const char* buttonText = isRunning ? "Running..." : "Paused";
-            if (ImGui::Button(buttonText, ImVec2(300, 0))){
+            if (ImGui::Button(buttonText, ImVec2(widgetWidth-10, 0))){
                 isRunning = !isRunning;
                 notifier->ready = isRunning;
             }
@@ -142,44 +151,35 @@ public:
 
         auto image = data->get_image();
         if(!image.empty()) {
-            size_t w = 300;
+            size_t w = widgetWidth - 10;
             size_t h = w * image.rows / image.cols;
             colorTexture->setup(image.data, Eigen::Vector2i(image.cols, image.rows));
-            ImGui::Image(colorTexture->getTextureID(), ImVec2(w, h));
+            ImGui::Image((void*)(intptr_t)colorTexture->getTextureID(), ImVec2(w, h));
         }
 
-        if (ImGui::CollapsingHeader("Debug Settings")) {
-            ImGui::SliderFloat("Camera Scale", &cameraScale, 0.1f, 5.0f, "%.2f");
-            ImGui::SliderFloat("Points Scale", &pointsScale, 0.1f, 5.0f, "%.2f");
-            ImGui::SliderFloat("Trajectory Scale", &trajScale, 0.1f, 5.0f, "%.2f");
-            ImGui::ColorEdit4("Camera Color", cameraColor.data());
-            ImGui::ColorEdit4("Points Color", pointsColor.data());
-            ImGui::ColorEdit4("Trajectory Color", trajColor.data());
-            ImGui::ColorEdit4("Background Color", bgColor.data());
-        }
+        // if (ImGui::CollapsingHeader("Debug Settings")) {
+        //     ImGui::SliderFloat("Camera Scale", &config->cameraScale, 0.1f, 5.0f, "%.2f");
+        //     ImGui::SliderFloat("Points Scale", &config->pointsScale, 0.1f, 5.0f, "%.2f");
+        //     ImGui::SliderFloat("Trajectory Scale", &config->trajScale, 0.1f, 5.0f, "%.2f");
+        //     ImGui::ColorEdit4("Camera Color", config->cameraColor.data());
+        //     ImGui::ColorEdit4("Points Color", config->pointsColor.data());
+        //     ImGui::ColorEdit4("Trajectory Color", config->trajColor.data());
+        //     ImGui::ColorEdit4("Background Color", bgColor.data());
+        // }
 
         ImGui::End();
         ImGui::PopStyleColor();
 
         ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());    
-    
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());   
+
     }
 
     void start(){
-        std::thread viewer_thread([this]() { this->run(); });
-        viewer_thread.detach();
+        viewer_thread = std::thread([this]() { this->run(); });
     }
 
-    std::shared_ptr<SLAMData> data = nullptr;
-    
-private:
-    
-    Eigen::Vector4f trajColor = Eigen::Vector4f(0.7f, 0.2f, 0.2f, 1.0f);
-    Eigen::Vector4f pointsColor = Eigen::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-    Eigen::Vector4f cameraColor = Eigen::Vector4f(0.8f, 0.2f, 0.2f, 1.0f);
-    float trajScale = 1.0f;
-    float pointsScale = 1.0f;
-    float cameraScale = 1.0f;
-
+    std::thread viewer_thread;
+    std::shared_ptr<VisData> data;
+    std::shared_ptr<VisConfig> config;
 };

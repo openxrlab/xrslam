@@ -6,6 +6,10 @@ include(SuperBuildDepends)
 superbuild_depend(argparse)
 superbuild_depend(liteviz)
 
+if(TARGET liteviz-core)
+  target_include_directories(liteviz-core PUBLIC ${LITEVIZ_DIR})
+endif()
+
 add_executable(xrslam-pc-player
   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/IO/dataset_reader.h
@@ -29,5 +33,5 @@ target_link_libraries(xrslam-pc-player
     xrslam
     depends::argparse
     depends::opencv
-    depends::liteviz
+    liteviz-core
 )

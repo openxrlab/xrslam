@@ -11,7 +11,7 @@
 #include "opencv_painter.h"
 #include "visualizer.h"
 
-std::shared_ptr<SLAMViewer> viewer = nullptr;
+std::shared_ptr<Viewer> viewer = nullptr;
 cv::Mat feature_tracker_cvimage;
 
 void GetShowElements() {
@@ -44,10 +44,10 @@ void GetShowElements() {
 
     VisData::Frame frame = VisData::Frame(cv::Mat(), intrinsics_v, pose_c_m);
 
-    viewer->data->update_frames({frame});
-    viewer->data->update_points(points);
-    viewer->data->update_poses(pose_c_m);
-    viewer->data->update_image(feature_tracker_cvimage);
+    viewer->data()->update_frames({frame});
+    viewer->data()->update_points(points);
+    viewer->data()->update_poses(pose_c_m);
+    viewer->data()->update_image(feature_tracker_cvimage);
 
 }
 
@@ -101,10 +101,10 @@ int main(int argc, char *argv[]) {
     }
 
     bool has_gyroscope = false, has_accelerometer = false;
-    // outputs.emplace_back(std::make_unique<ConsoleTrajectoryWriter>());
+    outputs.emplace_back(std::make_unique<ConsoleTrajectoryWriter>());
     DatasetReader::NextDataType next_type;
 
-    viewer = std::make_shared<SLAMViewer>("XRSLAM PC", 1280, 720);
+    viewer = std::make_shared<Viewer>("XRSLAM PC", 1280, 720);
     viewer->start();
 
     std::unique_ptr<xrslam::InspectPainter> feature_tracker_painter;
@@ -131,8 +131,8 @@ int main(int argc, char *argv[]) {
         case DatasetReader::CAMERA: {
 
             {
-                auto &notifier = viewer->notifier;
-                std::unique_lock<std::mutex> lock(notifier->mtx);
+                auto &notifier = viewer->_notifier;
+                std::unique_lock<std::mutex> lock(viewer->_notifier->mtx);
                 notifier->cv.wait(lock, [&notifier] { return notifier->ready;});
             }
 
